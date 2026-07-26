@@ -148,6 +148,21 @@
 
 ---
 
+## DEC-20260726-011
+
+- **date**: 2026-07-26
+- **decision**: 建立 Simulation Memory 作为 World Model Layer 5 — 五层架构完整闭环
+- **context**: World Model 已具备 State/Environment/Scenario/Counterfactual 四层，需要长期经验积累与持续进化能力
+- **options**:
+  - A: 使用传统数据库记录交易历史
+  - B: 建立四层经验记忆体系（World/Scenario/Counterfactual/Decision） + 自进化闭环
+- **chosen**: B
+- **reason**: 传统数据库只能存数据，不能形成经验。AQF-T 需要记住"在什么世界中，什么选择导致什么结果"，并在未来类似世界中被检索和使用。这使 World Model 从模拟器升级为具有经验人格的认知系统
+- **impact**: 建立四层记忆（World/Scenario/Counterfactual/Decision）；1024-dim Experience Embedding；Memory Importance Model I=f(R,C,U)；Experience Learning Loop 自进化闭环；三层治理（Short/Long/Wisdom）；World Model 五层架构全部完成
+- **milestone**: P5-WM-05 World Model Complete — AQF-T 获得 Observe→Understand→Imagine→Reason→Remember→Improve 完整认知循环
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

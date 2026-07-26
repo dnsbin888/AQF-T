@@ -266,6 +266,7 @@ Updated: 2026-07-26
 | AQFT_Environment_Model_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
 | AQFT_Scenario_Simulation_Engine_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
 | AQFT_Counterfactual_Intelligence_Engine_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
+| AQFT_Simulation_Memory_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
 
 ---
 
@@ -292,7 +293,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 46 |
+| FINAL | 47 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
