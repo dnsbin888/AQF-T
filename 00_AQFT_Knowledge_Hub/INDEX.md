@@ -19,6 +19,8 @@ AQF-T (Autonomous Quantitative Fusion Trading System) 是一套 AI 驱动的自�
 |------|------|------|
 | 系统全景图 | [SYSTEM_MAP.md](SYSTEM_MAP.md) | 完整架构一览 |
 | 模块注册表 | [MODULE_REGISTRY.md](MODULE_REGISTRY.md) | 所有模块索引 |
+| 系统状态 | [AQFT_SYSTEM_STATE.md](AQFT_SYSTEM_STATE.md) | 人机共读实时状态 |
+| 决策日志 | [AQFT_DECISION_LOG.md](AQFT_DECISION_LOG.md) | 架构决策记录 |
 | AI上下文 | [AI_CONTEXT.md](AI_CONTEXT.md) | AI Agent 快速理解项目 |
 | 版本管理 | [VERSION_CONTROL.md](VERSION_CONTROL.md) | 版本与冻结记录 |
 | 文档索引 | [../00_Project/AQFT_Document_Index.md](../00_Project/AQFT_Document_Index.md) | 全部文档状态 |
