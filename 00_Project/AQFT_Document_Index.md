@@ -286,6 +286,14 @@ Updated: 2026-07-26
 
 ---
 
+## 27_Human_AI_Collaboration_System — 人机协同治理
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Human_AI_Collaborative_Governance_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
+
+---
+
 ## 99_Archive — 历史归档
 
 | 文件 | 版本 | 状态 |
@@ -309,7 +317,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 49 |
+| FINAL | 50 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |

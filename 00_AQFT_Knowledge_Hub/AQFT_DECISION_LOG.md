@@ -191,6 +191,21 @@
 
 ---
 
+## DEC-20260726-014
+
+- **date**: 2026-07-26
+- **decision**: 建立 Human-AI Collaborative Governance — P5 最终治理层
+- **context**: P5 前四层已完成 Agent/World Model/Decision/Cross-Market，需要最终的人类-AI治理机制。AI 自主能力越强，越需要治理边界
+- **options**:
+  - A: 简单的人工审批界面
+  - B: 建立完整的人机协同治理体系
+- **chosen**: B
+- **reason**: AQF-T 的目标不是替代人类，而是建立 Aligned Intelligence。六级自主权限 (L0-L5)、Intent Engine (理解意图非命令)、Explanation Engine (100% 可解释推理链)、Trust Engine (AI 不自大)、Alignment Engine (目标一致)、Override System (人类最终控制权) — 这些构成完整的治理闭环
+- **impact**: 建立九大治理模块；六级自主权限 (Human Only → Full Autonomous)；Human-AI Collaboration Loop；AI Safety Layer 四重边界；Governance Dashboard 人机协作指标
+- **milestone**: 🏆 P5 Autonomous Intelligence COMPLETE — AQF-T V3.0.0 五层自主智能全部冻结
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
