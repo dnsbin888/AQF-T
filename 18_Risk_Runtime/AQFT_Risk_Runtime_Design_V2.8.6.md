@@ -1,551 +1,149 @@
-# AQFT Risk Runtime Design
+# AQFT Risk Runtime Design V3.6.0
 
 
-# AQF-T风险运行系统设计
+# AQF-T 风控运行系统详细设计
 
 
-Version:
+Version: V3.6.0 | Status: Detailed Engineering Design
+Date: 2026-07-26
 
-V2.8.6
-
-
-Status:
-
-Running System Design
-
-
-Classification:
-
-AQF-T实时风险控制运行体系设计文件
-
-
-Date:
-
-2026-07-26
+> 参考: FIA 2024 Automated Trading Risk Controls + Alpha Arena 3-Tier Escalation + ml4t/live SafeBroker
 
 
 ---
 
-# 第一章 Risk Runtime定位
+# 第一章 四层纵深防御 (Defense-in-Depth)
 
 
-## 1.1 Risk Runtime目标
-
-
-Risk Runtime负责：
-
-将AQF-T风险管理设计体系转换为实时风险控制能力。
-
-
-主要职责：
-
-- 风险检测
-- 风险计算
-- 风险评估
-- 风险决策
-- 风险限制
-- 风险预警
-- 风险恢复
-
-
-核心目标：
-
-在任何交易行为发生前，识别风险、评估风险、控制风险、阻止异常交易。
-
-
-
----
-
-## 1.2 风险控制原则
-
-
-AQF-T遵循Risk First Principle：
-
-
-任何交易请求必须经过Risk Runtime。
-
-
-禁止：
-
-- Strategy绕过Risk
-- Execution绕过Risk
-
-
-
----
-
-## 1.3 与AQF-T架构关系
-
-
-05_Risk
-
-      ↓
-
-13_Code_Framework
-
-      ↓
-
-18_Risk_Runtime  ← 本文件
-
-      ↓
-
-06_Execution
-
-      ↓
-
-Trading System
-
-
-
----
-
-# 第二章 Risk Runtime总体架构
-
+借鉴 FIA 2024 最佳实践，AQF-T Risk Runtime 采用四层独立风控:
 
 ```
-                 Risk Runtime
-                       │
-       ┌───────────────┼───────────────┐
-       │               │               │
- Risk Monitor   Risk Engine   Risk Decision
-       │               │               │
-       └───────────────┼───────────────┘
-                       ↓
-              Risk Control Service
-                       ↓
-             Execution Runtime
+Layer 1: Pre-Trade (下单前) → 限额检查 → 通过/拒绝
+Layer 2: Real-Time (实时) → NAV/回撤/风险评分 → 降仓/熔断
+Layer 3: Kill Switch (紧急) → 系统级停止 → 撤单+停策略
+Layer 4: Post-Trade (盘后) → 审计/合规/报告
 ```
 
+## 1.1 Layer 1: Pre-Trade 实时门控
 
-
----
-
-# 第三章 Risk Manager风险管理系统
-
-
-## 3.1 Risk Manager定位
-
-
-负责统一管理所有风险规则。
-
-
-包括：
-
-- 市场风险
-- 策略风险
-- 仓位风险
-- 流动性风险
-- 操作风险
-
-
-
----
-
-## 3.2 Risk Lifecycle
-
-
-风险状态：
-
-
-NORMAL → WARNING → LIMITED → BLOCKED → RECOVERING → NORMAL
-
-
-
----
-
-# 第四章 Risk Engine风险计算引擎
-
-
-## 4.1 风险计算流程
-
-
-Trading Signal → Position State → Market Condition → Risk Calculation → Risk Score
-
-
-
----
-
-## 4.2 风险指标体系
-
-
-### 市场风险
-
-Volatility / Beta / Market Exposure
-
-
-### 仓位风险
-
-Position Size / Concentration / Leverage
-
-
-### 流动性风险
-
-Volume Impact / Spread / Liquidity Score
-
-
-### 策略风险
-
-Strategy Drawdown / Signal Failure / Performance Drift
-
-
-
----
-
-# 第五章 Risk Decision Engine
-
-
-## 5.1 风险决策定位
-
-
-根据风险结果决定交易是否允许。
-
-
-
----
-
-## 5.2 决策输出
-
-
-统一格式：
-
-- risk_decision — APPROVE / ADJUST / REJECT
-- risk_score — 风险评分
-- reason — 决策理由
-- timestamp — 时间戳
-- version — 规则版本
-
-
-
----
-
-## 5.3 决策流程
-
-
-Trading Request → Risk Evaluation → Risk Score → Decision → Execution Permission
-
-
-
----
-
-# 第六章 Risk Limit系统
-
-
-## 6.1 Limit Manager
-
-
-管理交易边界。
-
-
-包括：
-
-- 单笔限制 — 最大交易金额 / 最大仓位
-- 账户限制 — 最大风险暴露 / 最大回撤
-- 策略限制 — 策略资金比例 / 策略风险额度
-
-
-
----
-
-## 6.2 Limit配置
-
-
-统一管理：
-
-- max_position — 最大仓位
-- max_drawdown — 最大回撤
-- max_loss — 最大亏损
-- max_exposure — 最大风险暴露
-
-
-
----
-
-# 第七章 Real-Time Risk Monitor
-
-
-## 7.1 实时监控内容
-
-
-### Portfolio
-
-当前资产 / 当前仓位 / 盈亏状态
-
-
-### Market
-
-波动率 / 流动性
-
-
-### Strategy
-
-信号质量 / 策略表现
-
-
-
----
-
-## 7.2 风险告警
-
-
-触发流程：
-
-Normal → Threshold Trigger → Alert → Action
-
-
-Action包括：
-
-- Warning — 预警
-- Reduce Position — 降低仓位
-- Stop Trading — 停止交易
-
-
-
----
-
-# 第八章 Risk Event系统
-
-
-## 8.1 Risk Event来源
-
-
-包括：
-
-- Market Event
-- Position Event
-- Strategy Event
-- Execution Event
-
-
-
----
-
-## 8.2 Event处理流程
-
-
-Receive Event → Risk Analysis → Generate Decision → Publish Result
-
-
-
----
-
-# 第九章 Risk API设计
-
-
-### 风险检查接口
-
-POST /risk/check
-
-输入：signal / position / market_state
-
-输出：decision（APPROVE / ADJUST / REJECT）+ risk_score
-
-
-### 风险状态接口
-
-GET /risk/status
-
-
-### 风险报告接口
-
-GET /risk/report
-
-
-
----
-
-# 第十章 Risk Runtime监控体系
-
-
-监控指标：
-
-
-### 风险指标
-
-VaR / Drawdown / Exposure / Volatility
-
-
-### 系统指标
-
-Risk Latency / Decision Accuracy / Reject Rate
-
-
-
----
-
-# 第十一章 风险异常恢复
-
-
-流程：
-
-Risk Failure → Detect → Activate Safe Mode → Block New Orders → Restart Risk Service → Health Check → Resume
-
-
-
----
-
-# 第十二章 Emergency Control（紧急控制）
-
-
-## 12.1 Kill Switch
-
-
-提供紧急停止交易能力。
-
-
-触发条件：
-
-- 系统异常
-- 市场极端波动
-- 风控失效
-
-
-
----
-
-## 12.2 Safe Mode
-
-
-进入SAFE MODE：
-
-- 禁止新增仓位
-- 允许风险平仓
-- 保留监控
-
-
-
----
-
-# 第十三章 Risk Runtime目录结构
-
+借鉴 ml4t/live SafeBroker 模式。每个订单在提交前强制执行:
 
 ```
-18_Risk_Runtime/
-
-├── manager/
-│   └── risk_manager.py
-
-├── engine/
-│   └── risk_engine.py
-
-├── evaluator/
-│   └── risk_evaluator.py
-
-├── limits/
-│   └── risk_limit.py
-
-├── decision/
-│   └── risk_decision.py
-
-├── monitor/
-│   └── risk_monitor.py
-
-├── event/
-│   └── risk_event.py
-
-├── api/
-│   └── risk_api.py
-
-├── emergency/
-│   └── kill_switch.py
-
-├── reports/
-│   └── risk_report.py
-
-└── tests/
+✅ 单笔上限 (fat-finger): max_order_value, max_order_shares
+✅ 价格偏离: max_price_deviation_pct (防误操作)
+✅ 数据新鲜度: max_data_staleness_seconds (防过期数据)
+✅ 频率限制: max_orders_per_minute
+✅ 仓位上限: max_position_value, max_total_exposure
+✅ 并发仓位: max_positions
+✅ T+1 限制 (A股特有)
+✅ 涨跌停限制 (A股特有)
 ```
 
+## 1.2 Layer 2: Real-Time 监控
 
+```
+每10秒扫描:
+  - NAV计算 (当前权益 vs 峰值权益)
+  - Drawdown监控 (当前回撤 vs 阈值)
+  - 日亏损累计 (当日盈亏 vs max_daily_loss)
+  - 风险评分更新 (Risk Score公式)
 
----
+触发动作:
+  Tier 0: DD < 5% → 仅监控
+  Tier 1: DD ≥ 5% → 强制平仓该策略 + 暂停该策略
+  Tier 2: DD ≥ 10% → 系统级熔断
+```
 
-# 第十四章 Risk Runtime测试体系
+## 1.3 Layer 3: Kill Switch
 
+```
+激活条件:
+  - DD ≥ 10% (自动)
+  - 日亏损 ≥ 5% (自动)
+  - 连续5笔亏损 (自动)
+  - 手动触发
 
-### Unit Test
+执行:
+  ① 撤销所有未成交订单
+  ② 停止所有策略
+  ③ 市价清仓所有持仓
+  ④ 断开Broker下单通道
+  ⑤ 通知发出
+  ⑥ 状态持久化(重启后仍保持)
 
-验证风险计算和风险规则。
+恢复: 必须人工确认 + 最低冷却30分钟
+```
 
+## 1.4 Layer 4: Post-Trade
 
-### Integration Test
-
-验证：Strategy Runtime → Risk Runtime → Execution Runtime
-
-
-### Stress Test
-
-模拟极端行情、黑天鹅事件、高频交易压力。
-
-
-### Failure Test
-
-验证风控服务故障、数据异常、网络中断。
-
-
-
----
-
-# 第十五章 AQF-T风险闭环
-
-
-完整流程：
-
-
-Data Runtime → AI Runtime → Strategy Runtime → Risk Runtime → Execution Runtime → Trading Result → Risk Feedback → Model Learning
-
-
-形成安全智能交易闭环。
-
-
-
----
-
-# 第十六章 P3-05完成标准
-
-
-| 能力 | 状态 |
-|------|------|
-| 实时风险计算 | ✅ |
-| 风险规则执行 | ✅ |
-| 交易审批控制 | ✅ |
-| 风险限制管理 | ✅ |
-| 风险告警 | ✅ |
-| Kill Switch | ✅ |
-| 异常恢复 | ✅ |
-| 风险报告 | ✅ |
-
-
+```
+每日盘后:
+  ✅ 订单对账 (信号→订单→成交)
+  ✅ 风控日志审计
+  ✅ 限额合规检查
+  ✅ 生成风控日报
+```
 
 ---
 
-# 第十七章 Risk Runtime冻结声明
+# 第二章 状态持久化 (借鉴 SafeBroker)
 
 
-本文件定义：
+风控状态必须跨重启持久化:
 
-AQF-T风险运行系统。
+```
+RiskState (持久化到数据文件):
+  trading_date: 当前交易日
+  session_start_equity: 当日初始权益
+  daily_pnl: 当日累计盈亏
+  peak_nav: 历史峰值NAV
+  kill_switch_active: bool
+  kill_switch_reason: str
+  active_positions: snapshot
+  pending_orders: snapshot
 
+启动恢复:
+  加载RiskState → 对账 → 不一致 → fail_on_reconciliation_mismatch → 人工介入
+```
 
-后续：
+---
 
-交易执行；
-
-模拟交易；
-
-生产部署；
-
-
-必须基于本风险控制体系。
-
-
-
-Version:
-
-V2.8.6
-
-
-Status:
-
-Running System Design
+# 第三章 Shadow Mode (推荐部署模式)
 
 
+借鉴行业最佳实践。首次部署必须先进入 Shadow Mode:
+
+```
+Shadow Mode:
+  ✅ 所有风控检查完整运行
+  ✅ 订单标记为虚拟成交 (不提交真实Broker)
+  ✅ VirtualPortfolio 本地跟踪持仓/资金
+  ✅ 零资金风险
+
+退出条件:
+  Shadow Mode ≥ 1个月 + 无风控逻辑bug + 人工审批
+```
+
+---
+
+# 第四章 API
+
+
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| POST /risk/check | POST | Pre-Trade检查 |
+| GET /risk/status | GET | 实时风控状态 |
+| POST /risk/kill_switch | POST | 手动触发Kill Switch |
+| POST /risk/kill_switch/clear | POST | 清除Kill Switch(需授权) |
+| GET /risk/report/daily | GET | 风控日报 |
+| GET /risk/report/reconciliation | GET | 对账报告 |
+
+---
+
+# 第五章 设计冻结声明
+
+
+本文件定义 AQF-T Risk Runtime V3.6.0。借鉴 FIA 2024 四层纵深防御 + Alpha Arena 三级升级 + SafeBroker 状态持久化 + Shadow Mode 部署模式。
+
+Version: V3.6.0 | Status: Detailed Engineering Design
 END OF AQFT RISK RUNTIME DESIGN

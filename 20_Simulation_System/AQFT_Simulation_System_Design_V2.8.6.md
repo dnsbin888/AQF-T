@@ -1,410 +1,191 @@
-# AQFT Simulation System Design
+# AQFT Simulation System Design V3.6.0
 
 
-# AQF-T模拟交易验证系统设计
+# AQF-T 模拟交易系统详细设计
 
 
-Version:
+Version: V3.6.0 | Status: Detailed Engineering Design
+Date: 2026-07-26
 
-V2.8.6
-
-
-Status:
-
-Running System Design
-
-
-Classification:
-
-AQF-T模拟交易验证体系设计文件
-
-
-Date:
-
-2026-07-26
+> 参考: DolphinDB 模拟撮合引擎 + Backtrader Broker模型 + 行业统一引擎架构
 
 
 ---
 
-# 第一章 Simulation System定位
+# 第一章 统一引擎架构
 
 
-## 1.1 系统目标
+借鉴行业最佳实践: **回测与模拟交易共享同一撮合核心**，通过插件化数据源和时钟实现切换。
 
+```
+同一引擎核心:
+  ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+  │ Data Feed   │────▶│ Strategy     │────▶│ Risk Check  │
+  │ (历史/实时)  │     │ Engine       │     │ (Pre-Trade) │
+  └─────────────┘     └──────────────┘     └──────┬──────┘
+                                                   │
+  ┌─────────────┐     ┌──────────────┐             │
+  │ Performance │◀────│ Portfolio    │◀────────────┘
+  │ Report      │     │ Manager      │
+  └─────────────┘     └──────┬───────┘
+                              │
+                    ┌─────────┴─────────┐
+                    │  Matching Engine  │
+                    │  (同一撮合核心)    │
+                    └───────────────────┘
 
-Simulation System负责建立接近真实市场环境的AQF-T验证平台。
-
-核心验证链：
-
-Data Runtime → AI Runtime → Strategy Runtime → Risk Runtime → Execution Runtime → Simulation Environment → Performance Evaluation → Optimization
-
-
-
-## 1.2 核心能力
-
-| 模块 | 能力 |
-|------|------|
-| Backtest Engine | 历史策略验证 |
-| Market Simulator | 市场环境模拟 |
-| Broker Simulator | 模拟交易接口 |
-| Paper Trading | 实时模拟交易 |
-| Performance Engine | 收益风险评价 |
-| Optimization Engine | 参数优化 |
-| Report System | 自动报告 |
-
-
-
-## 1.3 与AQF-T架构关系
-
-
-P3 Running System（全部6个Runtime）→ 20_Simulation_System（本文件）→ P3-08 Production Runtime
-
-
+回测模式: HistoricalDataFeed + BatchClock → 同一撮合核心 → 历史绩效
+模拟模式: RealtimeDataFeed + RealtimeClock → 同一撮合核心 → 模拟绩效
+```
 
 ---
 
-# 第二章 Simulation System总体架构
+# 第二章 撮合引擎 (借鉴 DolphinDB 订单簿匹配)
 
 
-Historical Data → Backtest Engine → Strategy Validation → Performance Analysis
-                                                              ↓
-Real-time Data → Market Simulator → Paper Trading → Risk Simulation → Execution Simulation → Evaluation → Optimization → Report
+## 2.1 撮合层级
 
+| 层级 | 模式 | 适用 |
+|:---:|------|------|
+| L1 | 理想撮合: 按行情价直接成交 | 快速验证 |
+| L2 | 滑点撮合: 市价±随机滑点 | 日常模拟 |
+| L3 | 盘口撮合: 按买卖一档成交 | 打板模拟 |
+| L4 | 订单簿撮合: 按深度逐档成交 | 大单模拟 |
 
+AQF-T 默认使用 **L3 盘口撮合**（游资打板场景需要精确的封板/炸板模拟）。
 
----
+## 2.2 撮合规则
 
-# 第三章 Backtest Engine历史回测引擎
+```
+市价单 BUY:
+  fill_price = ask1 × (1 + slippage)
+  成交概率 = 95% (正常), 10% (涨停封死)
 
+市价单 SELL:
+  fill_price = bid1 × (1 - slippage)
+  成交概率 = 95% (正常), 10% (跌停封死)
 
-## 3.1 回测定位
+限价单 BUY:
+  成交条件: price ≤ 当前价
+  fill_price = min(limit_price, ask1)
 
-使用历史数据验证策略有效性。
+限价单 SELL:
+  成交条件: price ≥ 当前价
+  fill_price = max(limit_price, bid1)
+```
 
+## 2.3 A股特有撮合规则
 
-## 3.2 回测模式
+```
+涨停封死: BUY → fill_probability = 0.05 (几乎买不到)
+跌停封死: SELL → fill_probability = 0.05 (几乎卖不出)
+T+1: 当日买入 → 标记locked → 次日才可卖
+```
 
-- Vectorized Backtest — 快速批量回测
-- Event-Driven Backtest — 事件驱动回测（接近实盘）
-- Walk-Forward Backtest — 滚动优化回测
+## 2.4 滑点模型
 
-
-## 3.3 回测流程
-
-Load Historical Data → Set Initial Capital → Run Strategy → Simulate Execution → Record Trades → Calculate Performance
-
-
-
-## 3.4 回测约束
-
-- 考虑交易成本（手续费/印花税/滑点）
-- 考虑流动性限制
-- 防止前视偏差
-- 防止幸存者偏差
-
-
-
----
-
-# 第四章 Market Simulator市场环境模拟
-
-
-## 4.1 模拟市场数据
-
-
-- 历史行情回放
-- 实时行情模拟
-- 极端行情生成
-- 多市场环境
-
-
-## 4.2 市场状态模拟
-
-
-- Bull Market
-- Bear Market
-- Sideways
-- High Volatility
-- Crash Scenario
-
-
+| 模型 | 公式 | 场景 |
+|------|------|------|
+| 固定 | ±5bps | 流动性好的大票 |
+| 成交量比例 | slippage = order_size/avg_volume × 0.1 | 小票 |
+| 波动率自适应 | slippage = base × (1 + volatility/avg_vol) | 高波动 |
 
 ---
 
-# 第五章 Broker Simulator模拟交易接口
+# 第三章 模拟交易模式
 
 
-## 5.1 模拟Broker
+借鉴行业 Shadow Mode 最佳实践:
 
-实现与真实Broker相同的接口，使用模拟成交逻辑。
-
-
-## 5.2 模拟内容
-
-
-- 模拟下单/撤单
-- 模拟成交（市价/限价）
-- 模拟持仓管理
-- 模拟资金管理
-- 模拟手续费
-
-
-## 5.3 成交模拟规则
-
-- Market Order → 当前价成交
-- Limit Order → 达到限价成交
-- 考虑成交量约束
-- 模拟滑点
-
-
+```
+Paper Trading:
+  行情: 真实实时行情 (QMT/akshare)
+  撮合: 本地模拟撮合引擎
+  资金: 虚拟资金
+  风控: 完整风控链路运行
+  目的: 验证策略逻辑+风控有效性, 零资金风险
+  要求: ≥ 1个月 + 与回测偏差 < 30%
+```
 
 ---
 
-# 第六章 Paper Trading实时模拟交易
-
-
-## 6.1 Paper Trading定位
-
-使用实时行情数据，模拟真实交易流程，但不产生真实成交。
-
-
-## 6.2 Paper Trading流程
-
-Real-time Data → AI Runtime → Strategy Runtime → Risk Runtime → Execution Runtime → Simulator Broker → Performance Tracking
-
-
-
-## 6.3 与真实交易对比
-
-| 环节 | 真实交易 | Paper Trading |
-|------|---------|---------------|
-| 行情 | 真实 | 真实 |
-| AI | 真实 | 真实 |
-| 策略 | 真实 | 真实 |
-| 风控 | 真实 | 真实 |
-| 执行 | 真实Broker | 模拟Broker |
-| 成交 | 真实 | 模拟 |
-| 资金 | 真实 | 虚拟 |
-
-
-
----
-
-# 第七章 Portfolio Simulator投资组合模拟
-
-
-## 7.1 组合模拟
-
-
-- 多股票组合
-- 仓位管理模拟
-- 资金分配模拟
-- 再平衡模拟
-
-
-
----
-
-# 第八章 Risk Simulator风险模拟
-
-
-## 8.1 风险场景模拟
-
-
-- 最大回撤测试
-- 黑天鹅事件
-- 流动性枯竭
-- 连续跌停
-- 市场熔断
-
-
-
----
-
-# 第九章 Execution Simulator执行模拟
-
-
-## 9.1 执行模拟
-
-
-- 订单延迟模拟
-- 部分成交模拟
-- 滑点模拟
-- 网络中断模拟
-
-
-
----
-
-# 第十章 Performance Evaluation性能评价
-
-
-## 10.1 核心指标
-
-
-- Total Return — 总收益
-- Annual Return — 年化收益
-- Sharpe Ratio — 夏普比率
-- Max Drawdown — 最大回撤
-- Win Rate — 胜率
-- Profit Factor — 盈亏比
-- Calmar Ratio — 卡尔玛比率
-
-
-## 10.2 风险指标
-
-- Volatility — 波动率
-- VaR — 风险价值
-- CVaR — 条件风险价值
-- Beta — 市场相关性
-
-
-## 10.3 评价报告
-
-自动生成包含所有指标的综合评价报告。
-
-
-
----
-
-# 第十一章 Optimization Engine参数优化
-
-
-## 11.1 优化方式
-
-
-- Grid Search — 网格搜索
-- Bayesian Optimization — 贝叶斯优化
-- Genetic Algorithm — 遗传算法
-- AI Optimization — AI自动优化
-
-
-## 11.2 优化约束
-
-- 防止过拟合
-- 样本外验证
-- 滚动窗口验证
-- 参数稳定性检验
-
-
-
----
-
-# 第十二章 Simulation API设计
-
-
-- POST /backtest/run — 运行回测
-- GET /backtest/result — 回测结果
-- POST /paper/start — 启动模拟交易
-- POST /paper/stop — 停止模拟交易
-- GET /paper/status — 模拟状态
-- GET /performance/report — 性能报告
-- POST /optimize/run — 运行优化
-
-
-
----
-
-# 第十三章 Simulation目录结构
+# 第四章 虚拟组合管理 (借鉴 Backtrader Broker)
 
 
 ```
-20_Simulation_System/
+VirtualPortfolio:
+  cash: float                         # 可用资金
+  frozen_cash: float                  # 冻结资金(挂单中)
+  positions: {symbol: Position}
+  total_value: float                  # 总权益
+  peak_value: float                   # 历史峰值(算回撤)
+  realized_pnl: float
+  unrealized_pnl: float
 
-├── backtest/
-│   ├── vectorized_backtest.py
-│   ├── event_driven_backtest.py
-│   └── walk_forward.py
-
-├── market_simulator/
-│   ├── market_data_sim.py
-│   └── scenario_generator.py
-
-├── broker_simulator/
-│   └── simulated_broker.py
-
-├── paper_trading/
-│   └── paper_trading_engine.py
-
-├── portfolio_simulator/
-│   └── portfolio_sim.py
-
-├── risk_simulator/
-│   └── risk_scenario_sim.py
-
-├── execution_simulator/
-│   └── execution_sim.py
-
-├── performance/
-│   ├── metrics_calculator.py
-│   └── benchmark_compare.py
-
-├── evaluation/
-│   ├── strategy_evaluator.py
-│   └── risk_evaluator.py
-
-├── optimization/
-│   ├── grid_search.py
-│   ├── bayesian_opt.py
-│   └── genetic_opt.py
-
-├── reports/
-│   └── report_generator.py
-
-└── tests/
+每笔成交后更新:
+  ① 扣除手续费
+  ② 更新持仓/均价
+  ③ 更新现金
+  ④ 更新权益曲线
+  ⑤ 检查回撤是否触发熔断
 ```
 
+---
 
+# 第五章 审计轨迹
+
+
+借鉴行业标准，每笔模拟成交记录 8 项元数据:
+
+```
+SimulationRecord:
+  timestamp: 精确成交时间
+  symbol: 标的
+  side: BUY/SELL
+  fill_price: 成交价(含滑点)
+  fill_quantity: 成交股数
+  fee_detail: {commission, stamp_tax, transfer_fee}
+  position_before: 持仓快照前
+  position_after: 持仓快照后
+  cash_after: 成交后资金
+  slippage_bps: 滑点(基点)
+```
 
 ---
 
-# 第十四章 Simulation测试体系
+# 第六章 回测模式
 
 
-- Backtest Accuracy Test — 回测准确性
-- Paper Trading Test — 模拟交易完整性
-- Performance Calc Test — 指标计算正确性
-- Stress Scenario Test — 极端场景覆盖
+```
+Backtest:
+  输入: 历史数据 (3年+), 初始资金, 策略参数
+  约束: T+1 + 涨跌停 + 真实费率 + 滑点
+  输出: 权益曲线 + 绩效指标 + 交易明细
 
-
-
----
-
-# 第十五章 P3-07完成标准
-
-
-| 能力 | 状态 |
-|------|------|
-| 历史回测（Vectorized/Event-Driven/Walk-Forward） | ✅ |
-| 市场环境模拟（牛/熊/震荡/高波动/崩盘） | ✅ |
-| 模拟Broker（下单/成交/持仓/资金/手续费） | ✅ |
-| Paper Trading（实时行情+模拟执行） | ✅ |
-| 风险场景模拟（黑天鹅/流动性/熔断） | ✅ |
-| 性能评价（Sharpe/Drawdown/Win Rate/Calmar） | ✅ |
-| 参数优化（Grid/Bayesian/Genetic/AI） | ✅ |
-| 自动报告 | ✅ |
-
-
+评价指标:
+  年化收益 / 夏普比率 / 最大回撤 / 胜率 / 盈亏比 / Calmar比率
+```
 
 ---
 
-# 第十六章 Simulation System冻结声明
+# 第七章 API
 
 
-本文件定义AQF-T模拟交易验证体系。
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| POST /simulation/start | POST | 启动模拟交易 |
+| POST /simulation/stop | POST | 停止 |
+| GET /simulation/status | GET | 模拟状态 |
+| GET /simulation/portfolio | GET | 虚拟组合 |
+| POST /backtest/run | POST | 运行回测 |
+| GET /backtest/result/{id} | GET | 回测结果 |
 
-后续生产部署前，所有策略、模型、参数必须经过本模拟系统验证。
+---
 
-
-
-Version:
-
-V2.8.6
-
-
-Status:
-
-Running System Design
+# 第八章 设计冻结声明
 
 
+本文件定义 AQF-T Simulation System V3.6.0。借鉴 DolphinDB 订单簿撮合引擎 + Backtrader Broker 组合管理 + 行业统一引擎架构(回测=模拟=同一核心)。
+
+Version: V3.6.0 | Status: Detailed Engineering Design
 END OF AQFT SIMULATION SYSTEM DESIGN
