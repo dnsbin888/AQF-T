@@ -78,6 +78,20 @@
 
 ---
 
+## DEC-20260726-006
+
+- **date**: 2026-07-26
+- **decision**: 建立 World Model V3.0.0 五层认知架构
+- **context**: 24_World_Model_System 已有目录骨架和概要设计文档，但缺少宪法级架构
+- **options**:
+  - A: 直接进入代码实现
+  - B: 先建立 World Model 宪法级架构文档
+- **chosen**: B
+- **reason**: World Model 是 AQF-T 从量化系统跃迁为自主智能系统的核心。必须架构先行，定义五层模型（State → Dynamics → Scenario → Counterfactual → Memory）后再工程化
+- **impact**: 确立 AQF-T V3.0.0 认知架构基线；定义 Market State Vector 10 维状态空间；建立 Counterfactual Engine 作为核心差异化能力
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
