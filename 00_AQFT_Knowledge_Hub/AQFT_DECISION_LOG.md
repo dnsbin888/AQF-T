@@ -134,6 +134,20 @@
 
 ---
 
+## DEC-20260726-010
+
+- **date**: 2026-07-26
+- **decision**: 建立 Counterfactual Intelligence Engine 作为 World Model Layer 4 — AQF-T 核心认知壁垒
+- **context**: Scenario Engine 已具备未来生成能力，系统需要从"预测智能"跃迁到"推理智能"，实现 Self-Reflection
+- **options**:
+  - A: 使用传统 Backtest 作为决策评估
+  - B: 建立反事实推理引擎，通过 do(A') 干预模拟替代世界
+- **chosen**: B
+- **reason**: Backtest 只能回答"这个策略过去表现如何"，无法回答"如果当时做了不同选择会怎样"。反事实推理让 AQF-T 具备自我反思能力，这是从量化系统跃迁为自主智能系统的关键
+- **impact**: 建立五大核心能力（World Clone / Action Intervention / Causal Reasoning / Alternative Simulation / Outcome Comparison）；五种干预类型（Decision/Timing/Risk/Strategy/Market）；因果推理依赖 Market Causal Graph；Counterfactual → Update Policy → Future Improvement 形成 Self-Reflection Loop
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
