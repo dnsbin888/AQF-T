@@ -1,372 +1,198 @@
-# AQFT Multi-Agent Trading Intelligence System
+# AQFT Multi-Agent Trading System Design V3.6.0
 
 
-# AQF-T多智能体交易系统设计
+# AQF-T 多智能体交易系统详细设计
 
 
-Version:
+Version: V3.6.0 | Status: Detailed Engineering Design
+Date: 2026-07-26
 
-V2.8.6 → V3.0.0 Bridge
-
-
-Status:
-
-Autonomous Intelligence Design
-
-
-Classification:
-
-AQF-T多智能体协作体系设计文件
-
-
-Date:
-
-2026-07-26
+> 参考: TradingGroup(2025) 五Agent+自反思+数据合成 / HedgeAgents 会议协调 / Jarvis LangGraph+NATS
 
 
 ---
 
-# 第一章 Multi-Agent System定位
+# 第一章 架构
 
 
-## 1.1 系统目标
+借鉴 2025 年三套标杆系统：
 
+```
+TradingGroup 五Agent链:  News→Report→Forecast→Style→Decision
+HedgeAgents 会议机制:     BAC预算会/ESC经验分享会/EMC极端行情会
+Jarvis 基础设施:          LangGraph Supervisor + NATS JetStream + Redis + PostgreSQL
+```
 
-Multi-Agent Trading Intelligence System负责将AQF-T从单一智能交易系统升级为智能体组织协作系统。
+AQF-T 融合架构:
 
-
-核心跃迁：
-
-P4: Single Autonomous System → P5: Multi-Agent Cooperative Intelligence
-
-
-
-## 1.2 与AQF-T架构关系
-
-
-P4 Self Governance → 23_Agent_Intelligence_System ← 本文件 → 24_World_Model_System
-
-
+```
+                    Supervisor Agent (LangGraph Orchestrator)
+                         │
+    ┌────────┬───────┬───┴───┬───────┬────────┐
+    │        │       │       │       │        │
+ Market  Sentiment Forecast  Risk   Decision  Analyst
+ Agent    Agent    Agent    Agent    Agent    Agent
+ (感知)   (情绪)   (预测)   (风控)   (决策)   (复盘)
+    │        │       │       │       │        │
+    └────────┴───────┴───┬───┴───────┴────────┘
+                         │
+              Event Bus (NATS/Redis Pub-Sub)
+                         │
+              Shared Memory (向量检索 + 经验库)
+```
 
 ---
 
-# 第二章 Agent Architecture智能体架构
+# 第二章 五Agent分工 (借鉴 TradingGroup)
+
+
+## 2.1 Market Agent (感知)
+
+```
+职责: 市场状态感知 + 题材识别 + 涨停梯队
+输入: Data Runtime → 实时行情+涨停+龙虎榜
+输出: MarketContext → 所有Agent
+模式: 每Tick运行,广播
+```
+
+## 2.2 Sentiment Agent (情绪)
+
+```
+职责: 情绪周期判断 + 题材热度评分
+输入: MarketContext + 新闻舆情 + 社交情绪
+处理: 情绪值公式 + 四阶段分类
+输出: SentimentReport (冰点/回暖/高潮/退潮 + 情绪值 + 题材热度)
+模式: 每分钟
+```
+
+## 2.3 Forecast Agent (预测)
+
+```
+职责: 趋势预测 + 龙头识别
+输入: MarketContext + SentimentReport + 技术指标
+模型: LightGBM + LLM推理
+输出: ForecastOutput (方向+概率+龙头标的)
+模式: 每5分钟
+
+借鉴 TradingGroup Hybrid Gate:
+  rule_gate: RSI>80 → 强制SELL (硬拦截)
+  llm_gate: LLM判断是否追涨 (软判断)
+  final = rule_gate AND llm_gate
+```
+
+## 2.4 Risk Agent (风控)
+
+```
+职责: 风险评估 + 限额检查
+借鉴 TradingGroup 动态风险管理:
+  stop_loss = ATR-20 × 2 × style_coefficient
+  take_profit = ATR-20 × 3 × style_coefficient
+  style_coefficient: aggressive=1.0 | balanced=0.8 | conservative=0.6
+输出: RiskAssessment (APPROVE/ADJUST/REJECT + 动态止盈止损)
+模式: 实时(每10秒)
+```
+
+## 2.5 Decision Agent (决策)
+
+```
+职责: 综合决策 + 信号输出
+输入: ForecastOutput + SentimentReport + RiskAssessment
+融合: 加权投票 + LLM推理
+输出: TradingSignal
+模式: 事件驱动(上游Agent输出即触发)
+
+借鉴 HedgeAgents 会议模式:
+  BAC (Budget Allocation): 每日盘前,资金分配
+  EMC (Extreme Market): 极端行情时,紧急决策
+  ESC (Experience Sharing): 每周,经验分享+策略调整
+```
+
+---
+
+# 第三章 自反思机制 (借鉴 TradingGroup 核心创新)
 
 
 ```
-              Multi-Agent Trading System
-                         │
-    ┌────────────────────┼────────────────────┐
-    │                    │                    │
-Market Agent       Strategy Agent        Risk Agent
-    │                    │                    │
-    └────────────────────┼────────────────────┘
-                         │
-              Execution Agent / Analyst Agent
-                         │
-                   Supervisor Agent
-                         │
-                 Agent Communication Layer
+Self-Reflection Loop:
+
+每个Agent决策后:
+  ① 记录: 输入+输出+逻辑链(Chain-of-Thought)
+  ② 标注: 实际结果 → 成功/失败
+  ③ 提取: 成功模式 + 失败根因
+  ④ 注入: 下次类似场景的LLM上下文中
+
+示例:
+  Forecast Agent 预测 BUY → 实际下跌
+  → 反思: "当时RSI=85超买+北向流出+情绪退潮, 不应买入"
+  → 下次 RSI>80+情绪退潮 → LLM上下文中包含此教训
 ```
 
-
-
 ---
 
-# 第三章 Agent Constitution智能体宪法
-
-
-## 3.1 Agent基本原则
-
-
-每个Agent必须遵守：
-
-- 风险优先 — 任何Agent不得绕过Risk Agent
-- 可解释 — 每个决策必须提供推理链
-- 可审计 — 所有Agent行为全程记录
-- 可约束 — Supervisor Agent拥有最高协调权
-- 可进化 — Agent能力可通过学习持续提升
-
-
-
-## 3.2 Agent权限边界
-
-
-Agent可以：分析市场 / 生成信号 / 建议策略 / 自我优化
-
-
-Agent禁止：绕过Risk Agent / 修改安全规则 / 独立执行交易 / 删除审计记录
-
-
-
----
-
-# 第四章 Market Agent市场智能体
-
-
-## 4.1 职责
-
-
-- 市场状态感知
-- 行情模式识别
-- 异常检测
-- 市场预测
-- 环境信息发布
-
-
-## 4.2 输出
-
-
-Market State Vector → Strategy Agent / Risk Agent
-
-
-
----
-
-# 第五章 Strategy Agent策略智能体
-
-
-## 5.1 职责
-
-
-- 策略生成
-- 策略选择
-- 信号产出
-- 策略评价
-
-
-## 5.2 输出
-
-
-Trading Signal → Risk Agent → Execution Agent
-
-
-
----
-
-# 第六章 Risk Agent风险智能体
-
-
-## 6.1 职责
-
-
-- 风险评估
-- 风险审批
-- 风险监控
-- 紧急控制
-
-
-## 6.2 权限
-
-
-最高否决权。
-
-
-输出：
-
-APPROVE / ADJUST / REJECT → Execution Agent
-
-
-
----
-
-# 第七章 Execution Agent执行智能体
-
-
-## 7.1 职责
-
-
-- 订单管理
-- 执行优化
-- Broker连接
-- 成交反馈
-
-
-## 7.2 约束
-
-
-只执行经Risk Agent批准的指令。
-
-
-
----
-
-# 第八章 Analyst Agent分析智能体
-
-
-## 8.1 职责
-
-
-- 绩效分析
-- 策略回顾
-- 风险报告
-- 知识提取
-
-
-## 8.2 输出
-
-
-Performance Report / Risk Report / Knowledge Update
-
-
-
----
-
-# 第九章 Supervisor Agent监督智能体
-
-
-## 9.1 职责
-
-
-- Agent协调
-- 冲突仲裁
-- 资源分配
-- 系统健康管理
-- 人工交互接口
-
-
-## 9.2 协调机制
-
-
-Agent A提议 → Agent B异议 → Supervisor Agent仲裁 → 最终决策
-
-
-
----
-
-# 第十章 Agent Communication Layer通信层
-
-
-## 10.1 通信协议
-
-
-统一消息格式：
-
-- agent_id — 发送方
-- target_id — 接收方
-- message_type — PROPOSAL / DECISION / ALERT / QUERY
-- content — 消息内容
-- priority — 优先级
-- timestamp — 时间戳
-
-
-## 10.2 通信模式
-
-
-- Broadcast — 广播（Market Agent → 所有Agent）
-- Request-Response — 请求响应（Strategy → Risk）
-- Publish-Subscribe — 发布订阅（Event → 订阅者）
-
-
-
----
-
-# 第十一章 Agent Coordination协作机制
-
-
-## 11.1 协作流程
-
-
-Market Agent 发布市场状态 → Strategy Agent 生成信号 → Risk Agent 评估审批 → Execution Agent 执行 → Analyst Agent 分析反馈
-
-
-## 11.2 冲突解决
-
-
-多Agent意见不一致时：Supervisor Agent 协调 → 基于风险优先原则仲裁
-
-
-
----
-
-# 第十二章 Agent Evaluation智能体评价
-
-
-每个Agent定期评价：
-
-- 决策准确率
-- 响应延迟
-- 协作贡献度
-- 稳定性
-
-
-低绩效Agent：自动降权 / 触发优化 / 人工审查
-
-
-
----
-
-# 第十三章 Agent目录结构
+# 第四章 数据合成管道 (借鉴 TradingGroup PEFT)
 
 
 ```
-23_Agent_Intelligence_System/
+Agent决策日志 → 自动标注(方向准确率/超额收益) → 筛选高质量轨迹 → 
+  → LLM微调数据 → PEFT(LoRA)训练 → 模型升级
 
-├── market_agent/
-│   └── market_agent.py
-
-├── strategy_agent/
-│   └── strategy_agent.py
-
-├── risk_agent/
-│   └── risk_agent.py
-
-├── execution_agent/
-│   └── execution_agent.py
-
-├── analyst_agent/
-│   └── analyst_agent.py
-
-├── supervisor_agent/
-│   └── supervisor_agent.py
-
-├── communication_layer/
-│   ├── message_bus.py
-│   └── protocol.py
-
-└── tests/
+目标: 从交易经验中持续提升模型能力
+周期: 每500条高质量轨迹 → 一次LoRA微调
 ```
 
+---
 
+# 第五章 基础设施 (借鉴 Jarvis 生产栈)
+
+
+```
+LLM推理: Ollama(本地,Qwen3-8B) → 云端API fallback
+Agent框架: LangGraph (有向图编排 + interrupt()人工审批)
+消息总线: Redis Pub-Sub (轻量级, 够用)
+状态存储: PostgreSQL (对话历史 + 交易审计 + RLS行级安全)
+向量检索: pgvector (经验检索, 按租户隔离)
+```
 
 ---
 
-# 第十四章 P5-01完成标准
+# 第六章 人工审批网关
 
 
-| 能力 | 状态 |
-|------|------|
-| Agent宪法 | ✅ |
-| Market Agent | ✅ |
-| Strategy Agent | ✅ |
-| Risk Agent（最高否决权） | ✅ |
-| Execution Agent | ✅ |
-| Analyst Agent | ✅ |
-| Supervisor Agent（协调仲裁） | ✅ |
-| Agent通信协议 | ✅ |
-| Agent评价体系 | ✅ |
+借鉴 Jarvis LangGraph interrupt():
 
+```
+Decision Agent 输出 TradingSignal
+  → LangGraph interrupt()
+  → 人工审批界面:
+      信号详情 + AI推理链 + 风险评估 + 历史类似案例
+  → 人工: APPROVE / REJECT / MODIFY
+  → 继续执行或回退
 
+可配置: L0(纯人工) / L2(人工审批) / L4(自动+监控)
+```
 
 ---
 
-# 第十五章 Multi-Agent System冻结声明
+# 第七章 API
 
 
-本文件定义AQF-T多智能体交易协作体系。
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| POST /agent/council/decide | POST | 多Agent联合决策 |
+| GET /agent/{name}/status | GET | 单个Agent状态 |
+| GET /agent/reflection/report | GET | 自反思报告 |
+| POST /agent/approval/{decision_id} | POST | 人工审批 |
 
-从P5-01开始，AQF-T从单一自主系统进入多智能体组织协作阶段。这是AQF-T V3.0的起点。
+---
 
-
-
-Version:
-
-V2.8.6 → V3.0.0 Bridge
-
-
-Status:
-
-Autonomous Intelligence Design
+# 第八章 设计冻结声明
 
 
+本文件定义 AQF-T Multi-Agent System V3.6.0。
+
+借鉴 TradingGroup 五Agent+自反思+数据合成 / HedgeAgents 会议协调 / Jarvis LangGraph+NATS 生产栈。
+
+核心创新: 自反思机制(决策→结果→标注→教训→下次注入) + 数据合成管道(500条轨迹→LoRA微调) + Hybrid Gate(规则硬拦截+LLM软判断)。
+
+Version: V3.6.0 | Status: Detailed Engineering Design
 END OF AQFT MULTI-AGENT TRADING SYSTEM DESIGN
