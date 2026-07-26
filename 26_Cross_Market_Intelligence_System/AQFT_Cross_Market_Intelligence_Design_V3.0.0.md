@@ -1,382 +1,118 @@
-# AQFT Cross-Market Intelligence Design V3.0.0
+# AQFT Cross-Market Intelligence Design V3.6.0
 
 
-# AQF-T 全球跨市场智能设计
+# AQF-T 跨市场智能系统详细设计
 
 
-Version:
+Version: V3.6.0 | Status: Detailed Engineering Design
+Date: 2026-07-26
 
-V3.0.0
-
-
-Status:
-
-Engineering Design
-
-
-Classification:
-
-AQF-T 全球金融世界智能层 — 从单市场到全球市场宇宙
-
-
-Date:
-
-2026-07-26
+> 参考: 2025前沿研究(分位数关联/地缘政治风险传导/新兴市场传染) + A股特有传导链
 
 
 ---
 
-# 第一章 模块定位
+# 第一章 定位
 
 
-## 1.1 定义
+Cross-Market Intelligence 回答"外部世界如何影响A股"。A股游资必须理解的三条传导链：
+
+```
+传导链1 (美股→A股):
+  NASDAQ暴跌 → 全球Risk-Off → 北向资金流出 → A股成长股承压 → 题材退潮
+
+传导链2 (汇率→A股):
+  美联储加息 → 美元走强 → 人民币贬值 → 外资流出 → A股权重股承压
+
+传导链3 (商品→A股):
+  原油暴涨 → 通胀预期 → 周期股上涨 → 成长股资金被抽 → 题材切换
+```
+
+---
+
+# 第二章 A股关键外部信号
 
 
-Cross-Market Intelligence 不预测单一资产。
+借鉴 2025 年学术研究发现的A股传导规律:
+
+| 外部信号 | A股影响 | 传导时滞 | 监测指标 |
+|---------|--------|:---:|------|
+| 美联储利率决议 | 北向资金方向 | T+1 | 联邦基金利率/CEM FedWatch |
+| 美元指数(DXY) | 人民币汇率→外资 | 实时 | USD/CNY |
+| VIX恐慌指数 | 市场风险偏好 | 实时 | VIX > 25 → Risk-Off |
+| 美债10Y收益率 | 成长股估值 | T+1 | US10Y |
+| 原油价格 | 周期股/通胀预期 | T+2 | WTI/Brent |
+| 美股期货(盘前) | A股开盘方向 | 9:00前 | ES/NQ |
+| 港股/A50期货 | A股日内方向 | 盘中 | HSI/富时A50 |
+| 地缘政治事件 | 全市场Risk-Off | 即时 | 新闻+社交情绪 |
+
+---
+
+# 第三章 冲击传播模型
 
 
-它回答：
+借鉴 2025 年 QQ(分位数-on-分位数)关联研究:
 
-"一个市场的变化如何影响另一个市场？"
+```
+外部冲击 → Risk Assessment:
 
+正常市场 (分位数 50%):
+  美联储+25bp → A股影响: -0.5%   (线性, 可预测)
 
+极端市场 (分位数 5%/95%):
+  美联储+25bp → A股影响: -3~5%   (非线性, 恐慌放大)
+  
+关键发现: 极端分位数下敏感度是中位数的 5-10倍
+→ AQF-T 必须在Vix>25或北向单日流出>50亿时切换到高警戒模式
+```
 
-## 1.2 核心思想：Single Market → Connected Market Universe
+---
 
-
-传统量化：
-
-股票价格 → 股票模型 → 交易
-
-
-AQF-T：
-
-Global Financial World → Market Relationship → Capital Transmission → Cross-Market Scenario → Decision
-
-
-
-## 1.3 全球市场宇宙
+# 第四章 游资特化信号
 
 
 ```
-        Global Market Universe
+游资决策需要的跨市场信号:
 
-    US Equity ── Dollar ── Interest Rate
-        │           │           │
-    Commodity ──── China Equity ──── Bond
-        │           │           │
-    Emerging ──── FX ──── Crypto
+盘前(8:00-9:15):
+  ✅ 美股收盘: 纳指/标普涨跌 + 中概股表现
+  ✅ A50期货: 预示A股开盘方向
+  ✅ 美元/人民币: 北向资金方向预判
+  ✅ 全球Risk: VIX是否异常
+
+盘中:
+  ✅ 北向资金实时: 每30秒更新
+  ✅ 港股联动: 同题材港股表现
+  ✅ A50期货日内: 外资态度
+
+触发规则:
+  北向单日净流出 > 50亿 → 降仓至50%
+  VIX > 30 → 暂停Dragon Strategy
+  中概股隔夜暴跌 > 3% → A股开盘谨慎
 ```
 
+---
 
+# 第五章 API
+
+
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| GET /cross_market/overview | GET | 全球市场全景 |
+| GET /cross_market/north_bound | GET | 北向资金实时 |
+| GET /cross_market/alert | GET | 跨市场预警 |
+| POST /cross_market/impact | POST | 外部事件影响评估 |
 
 ---
 
-# 第二章 架构位置
+# 第六章 设计冻结声明
 
 
-```
-                 Human-AI Collaboration  (P5-05)
-                         ↑
-              Cross-Market Intelligence  ⭐ 本模块 (P5-04)
-                         ↑
-               AGI Decision Layer  (P5-03)
-                         ↑
-                 World Model  (P5-02)
-                         ↑
-                 Market Data
-```
+本文件定义 AQF-T Cross-Market Intelligence V3.6.0。
 
+借鉴 2025 年QQ分位数关联研究 + A股三大传导链 + 游资跨市场决策信号。
 
+核心: 极端市场状态下风险传导是非线性的(5-10倍放大)。
 
----
-
-# 第三章 核心目标
-
-
-## 3.1 五大问题
-
-
-### 外部冲击识别
-
-美联储加息 → 美元上涨 → 人民币压力 → 北向资金流出 → A股成长股调整
-
-
-### 市场联动分析
-
-NASDAQ ↓ → A股科技股？分析历史相关性 / 传导速度 / 当前环境
-
-
-### 全球资本流向
-
-钱正在流向哪里？Equity/Bond/Currency/Commodity/Crypto
-
-
-### 风险传染检测
-
-Bank Crisis → Liquidity Freeze → Global Risk Off → Equity Selloff
-
-
-### 跨市场机会发现
-
-美元下降 → 商品上涨 → 资源股机会 → A股周期板块
-
-
-
----
-
-# 第四章 Global Market World Model
-
-
-扩展 World Model：
-
-单市场 → 全球市场
-
-
-```
-GlobalWorldState:
-
-  Markets: China_A / US_Equity / Europe / Japan / Emerging
-  Macro: Inflation / Rate / GDP / Currency
-  Capital: Fund Flow / ETF Flow / Foreign Capital
-  Risk: VIX / Credit Spread / Liquidity
-```
-
-
-
----
-
-# 第五章 Cross-Market Graph Engine ⭐
-
-
-金融关系图。
-
-
-Market Graph：
-
-Node: Market/Asset
-
-Edge: Influence Relationship
-
-Weight: 0-1
-
-
-
-示例：
-
-Fed Rate →(0.85) USD →(0.72) RMB →(0.65) A Share → Growth Sector
-
-
-
----
-
-# 第六章 Transmission Engine
-
-
-市场冲击传播模型。
-
-
-$$M_{t+1} = f(M_t, C, E)$$
-
-
-| 变量 | 含义 |
-|------|------|
-| M_t | 当前市场状态 |
-| C | 跨市场连接 |
-| E | 环境条件 |
-
-
-示例：
-
-输入 US 10Y Yield +50bp → Interest Rate↑ → Dollar↑ → Foreign Capital↓ → China Growth Stock Pressure
-
-输出 Impact Score: A股成长 -35%
-
-
-
----
-
-# 第七章 Capital Flow Intelligence
-
-
-监测全球资金迁移：
-
-
-Risk On → Equity → Emerging Market → China
-
-Risk Off → Dollar → US Treasury → Cash
-
-
-输出 Capital Regime: Risk Seeking (P: 0.72, C: 0.85)
-
-
-
----
-
-# 第八章 Correlation Engine
-
-
-AQF-T 不使用简单相关。
-
-
-传统：Correlation = 0.6（固定值）
-
-
-AQF-T：动态相关 = Correlation + Environment + Regime + Time Lag
-
-
-示例：
-
-正常：NASDAQ ↔ A股科技 0.65
-
-危机：NASDAQ ↔ A股科技 0.90
-
-
-
----
-
-# 第九章 Contagion Detector
-
-
-风险传播检测。
-
-
-输入 Market Shock → 输出 Contagion Risk Report:
-
-
-Origin: US Banking Stress
-
-Propagation: US → Dollar → Asia → China Equity
-
-Probability: 0.32
-
-Warning Level: Medium
-
-
-
----
-
-# 第十章 Cross-Market Scenario Engine
-
-
-连接 24_World_Model Scenario Engine，生成 Global Scenario Universe。
-
-
-Scenario A: Fed Cut (P: 0.55) → Global Liquidity Expansion → A股 Bull
-
-Scenario B: Dollar Surge (P: 0.20) → Risk Off → A股 Bear
-
-
-
----
-
-# 第十一章 Agent Interface
-
-
-```
-cross_market.analyze(
-  market="China_A",
-  shock="Fed_Rate_Hike"
-)
-```
-
-
-返回：
-
-- impact: -0.25
-- affected_assets: [Technology, Growth]
-- risk: High
-- recommended_action: Reduce Exposure
-
-
-
----
-
-# 第十二章 与现有模块关系
-
-
-| 模块 | 作用 |
-|------|------|
-| 24 World Model | 全球状态基础 |
-| Scenario Engine | 全球未来模拟 |
-| Counterfactual Engine | 跨市场因果分析 |
-| 25 Decision Intelligence | 最终决策 |
-| 18 Risk Runtime | 全球风险 |
-| 22 Evolution | 学习跨市场规律 |
-| 23 Agent | 调用分析 |
-
-
-
----
-
-# 第十三章 验证体系
-
-
-- Transmission Accuracy: 外部冲击方向判断 ≥ 85%
-- Lead Time: 风险提前预警 ≥ 5 trading days
-- Cross Market Prediction: Sharpe 优于单市场模型
-- Contagion Detection: 重大事件提前识别 ≥ 70%
-
-
-
----
-
-# 第十四章 演化路线
-
-
-| 版本 | 能力 |
-|------|------|
-| V3.0.0 | Cross Market Architecture |
-| V3.1.0 | Global Market Graph |
-| V3.2.0 | Capital Flow Intelligence |
-| V3.3.0 | Global Scenario Simulation |
-| V4.0.0 | Global Financial Intelligence |
-
-
-
----
-
-# 第十五章 完成标准
-
-
-| 能力 | 状态 |
-|------|------|
-| Global Market World Model | ✅ |
-| Cross-Market Graph Engine | ✅ |
-| Transmission Engine 冲击传播 | ✅ |
-| Capital Flow Intelligence | ✅ |
-| Dynamic Correlation Engine | ✅ |
-| Contagion Detector 风险传染 | ✅ |
-| Cross-Market Scenario Engine | ✅ |
-| Agent Interface | ✅ |
-
-
-
----
-
-# 第十六章 冻结声明
-
-
-本文件定义 AQF-T Cross-Market Intelligence V3.0.0。
-
-
-AQF-T 从 Autonomous Market Intelligence 升级为 Autonomous Global Market Intelligence。
-
-
-完整认知：
-
-Observe Local → Understand Global → Simulate Futures → Reason Actions → Decide → Learn Globally
-
-
-
-Version:
-
-V3.0.0
-
-
-Status:
-
-Engineering Design
-
-
+Version: V3.6.0 | Status: Detailed Engineering Design
 END OF AQFT CROSS-MARKET INTELLIGENCE DESIGN
