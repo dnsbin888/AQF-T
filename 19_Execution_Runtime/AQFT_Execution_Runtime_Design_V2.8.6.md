@@ -1,328 +1,160 @@
-# AQFT Execution Runtime Design
+# AQFT Execution Runtime Design V3.6.0
 
 
-# AQF-T交易执行运行系统设计
+# AQF-T 交易执行运行系统详细设计
 
 
-Version:
+Version: V3.6.0 | Status: Detailed Engineering Design
+Date: 2026-07-26
 
-V2.8.6
-
-
-Status:
-
-Running System Design
-
-
-Classification:
-
-AQF-T实时交易执行运行体系设计文件
-
-
-Date:
-
-2026-07-26
+> 参考: Backtrader Broker模型 + DolphinDB低延迟CEP + 行业Broker Adapter模式
 
 
 ---
 
-# 第一章 Execution Runtime定位
+# 第一章 架构
 
 
-## 1.1 Execution Runtime目标
+```
+Risk Decision (APPROVE/ADJUST) → Order Manager → Execution Engine → Broker Gateway → Market
+                                                      │
+                                               Execution Monitor
+                                                      │
+                                               Feedback → Data/Experience
+```
 
-
-Execution Runtime负责将AQF-T执行体系转换为实时交易执行能力。
-
-
-主要职责：
-
-- 订单生命周期管理
-- 执行策略优化
-- Broker/API抽象
-- 成交监控
-- 滑点控制
-- 执行反馈闭环
-
-
-核心运行链：
-
-Strategy Signal → Risk Approval → Order Execution → Broker Interface → Trade Result → Feedback
-
-
+核心原则: 执行层不修改决策。只负责安全、高效地把订单送达市场。
 
 ---
 
-## 1.2 与AQF-T架构关系
+# 第二章 订单管理 (借鉴 Backtrader Broker)
 
 
-06_Execution（设计层）→ execution/（代码框架层）→ 19_Execution_Runtime（运行层）← 本文件 → Broker / Market → Feedback System
+## 2.1 完整订单状态机
 
+```
+CREATED → PRE_CHECK → SUBMITTED → ACCEPTED → PARTIALLY_FILLED → FILLED → SETTLED
+    │         │           │           │               │             │
+    │         │           │           │               │             └→ 结算完成
+    │         │           │           │               └→ 继续等待剩余
+    │         │           │           └→ 部分成交(大单拆分)
+    │         │           └→ REJECTED(交易所拒单)
+    │         └→ REJECTED(Pre-Check失败: T+1/涨跌停/资金)
+    └→ CANCELLED(用户/策略撤单)
 
+异常终点: FAILED / EXPIRED
+```
 
----
+## 2.2 Pre-Check (下单前7项检查)
 
-## 1.3 执行原则
-
-
-- Risk Runtime审批通过后执行
-- 所有订单必须记录
-- 异常自动保护
-- 执行结果必须反馈
-
-
-
----
-
-# 第二章 Execution Runtime总体架构
-
-
-Order Manager → Execution Engine → Broker Interface → Execution Monitor → Feedback System
-
-
-
----
-
-# 第三章 Order Manager订单管理系统
-
-
-## 3.1 订单生命周期
-
-
-CREATED → VALIDATED → SUBMITTED → ACCEPTED → PARTIALLY_FILLED → FILLED → COMPLETED
-
-
-异常状态：REJECTED / CANCELLED / FAILED / EXPIRED
-
-
+借鉴 FIA 2024 标准:
+```
+① 风控审批: risk_decision = APPROVE/ADJUST
+② T+1: SELL方向 → 持仓可卖数量 ≥ 卖出数量
+③ 涨跌停: BUY → 非涨停封死 / SELL → 非跌停封死
+④ 资金: BUY → 可用资金 ≥ 价格×数量 + 预估费
+⑤ 仓位: SELL → 持仓 ≥ 卖出数量
+⑥ 手数: 股数 % 100 == 0
+⑦ 交易时段: 9:30-11:30 | 13:00-15:00
+```
 
 ---
 
-## 3.2 订单数据结构
+# 第三章 Broker 适配 (借鉴行业多Broker模式)
 
 
-- order_id / symbol / side(BUY/SELL) / quantity / price
-- type(MARKET/LIMIT/STOP) / status
-- risk_approval / strategy_signal / timestamp
+借鉴 vnpy/WonderTrader 的 Broker Adapter 模式:
 
+```
+BrokerInterface (统一抽象):
+  connect()
+  disconnect()
+  submit_order(order) → OrderResult
+  cancel_order(order_id)
+  query_order(order_id) → Order
+  query_position(symbol) → Position
+  query_account() → Account
+  subscribe_quote(symbols)
 
+实现:
+  QMTLiveAdapter: xtquant → 真实下单 (实盘)
+  PaperTradeAdapter: 本地模拟撮合 (模拟交易)
+  BacktestAdapter: 历史数据回放 (回测)
 
----
+切换: 修改 config/system.yaml → execution.mode
+```
 
-## 3.3 订单安全验证
+## 3.1 QMT实盘适配
 
-
-提交前必须验证：
-
-- Risk状态 APPROVED
-- 资金可用
-- 仓位未超限
-- 交易时段有效
-- 订单参数合法
-
-
-
----
-
-# 第四章 Execution Engine执行引擎
-
-
-## 4.1 执行策略
-
-
-- Market Order — 市价执行
-- Limit Order — 限价执行
-- TWAP — 时间加权均价
-- VWAP — 成交量加权均价
-- Smart Execution — 智能执行
-
-
+```
+连接: xtquant.XtQuantTrader(path, session_id)
+行情: xtdata.subscribe_quote() / get_market_data()
+下单: trader.order_stock(account, stock_code, order_type, price, volume)
+撤单: trader.cancel_order_stock(account, order_id)
+查询: query_stock_asset() / query_stock_positions() / query_stock_orders()
+```
 
 ---
 
-## 4.2 执行流程
+# 第四章 执行算法
 
 
-Receive Order → Validate → Select Strategy → Execute → Monitor Fill → Confirm → Report
+| 算法 | 适用 | 说明 |
+|------|------|------|
+| Market | 游资追涨/止损 | 市价成交,速度优先 |
+| Limit | 低吸/埋伏 | 限价成交,价格优先 |
+| TWAP | 大单(>50万) | 时间加权,拆分执行 |
+| VWAP | 大单+流动性好 | 成交量加权 |
 
-
-
----
-
-# 第五章 Broker Interface交易接口层
-
-
-## 5.1 Broker Abstract Layer
-
-
-提供统一交易接口，隔离具体券商实现。
-
-
-## 5.2 支持接口
-
-
-- Market Data API — 行情订阅
-- Order API — 下单/撤单/改单
-- Account API — 账户/持仓/资金
-- Trade API — 成交查询
-
-
-## 5.3 接口原则
-
-
-统一抽象 / 可替换 / 可扩展 / 支持QMT等国内券商 / 支持未来多市场
-
-
+游资场景以 Market Order 为主。大单自动降级为 TWAP。
 
 ---
 
-# 第六章 Order Router订单路由
+# 第五章 连接管理
 
 
-市价单→快速通道 / 限价单→标准通道 / 大单→TWAP/VWAP / 风控紧急单→优先通道
-
-
-
----
-
-# 第七章 Execution Monitor执行监控
-
-
-监控：订单状态 / 成交进度 / 延迟 / 异常订单 / Broker连接状态
-
-
-告警触发：订单超时 / Broker断开 / 成交价异常 / 重复订单
-
-
+```
+心跳检测: 每5秒 ping Broker
+重连策略: 断开 → 1s/3s/10s/30s/60s 指数退避重连
+超时: 连续5次失败 → 告警 + 暂停新订单 + 保留行情
+恢复: 重连成功 → 健康检查 → 同步订单状态 → 恢复执行
+```
 
 ---
 
-# 第八章 Slippage Control滑点控制
+# 第六章 监控
 
 
-- 超过阈值→暂停执行
-- 严重滑点→撤单重发
-- 连续滑点→切换执行方式
-- 极端滑点→暂停策略
+借鉴行业低延迟监控:
 
-
-
----
-
-# 第九章 Settlement结算系统
-
-
-Trade Confirmation → Position Update → P&L Calculation → Cash Update → Record
-
-
+| 指标 | 告警阈值 |
+|------|:---:|
+| 订单延迟(提交→接受) | > 100ms |
+| 成交延迟(提交→成交) | > 5s (Market单) |
+| 滑点 | > 50bps |
+| 拒单率 | > 5% |
+| Broker连接 | 断开>10s |
 
 ---
 
-# 第十章 Execution Feedback执行反馈
+# 第七章 API
 
 
-反馈至各模块：成交价/量 / 滑点 / 手续费 / 执行延迟
-
-
-闭环：Execution Result → Data Runtime → AI Learning → Strategy Optimization → Risk Calibration
-
-
-
----
-
-# 第十一章 Emergency Handler紧急处理
-
-
-紧急情况：Broker断开 / 重复成交 / 订单状态异常 / 持仓异常
-
-
-处理流程：Detect → Cancel All Orders → Stop Execution → Alert → Manual Review
-
-
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| POST /execution/order | POST | 提交订单 |
+| GET /execution/order/{id} | GET | 查询订单 |
+| POST /execution/order/{id}/cancel | POST | 撤单 |
+| GET /execution/position | GET | 当前持仓 |
+| GET /execution/account | GET | 账户信息 |
+| GET /execution/trades | GET | 成交记录 |
 
 ---
 
-# 第十二章 Execution API设计
+# 第八章 设计冻结声明
 
 
-- POST /order/create — 创建订单
-- POST /order/cancel — 撤销订单
-- GET /order/status — 查询订单
-- GET /position — 查询持仓
-- GET /account — 查询账户
-- GET /execution/report — 执行报告
+本文件定义 AQF-T Execution Runtime V3.6.0。借鉴 Backtrader Broker 订单管理 + vnpy/WonderTrader Broker Adapter 模式 + DolphinDB CEP 低延迟架构 + FIA 2024 Pre-Trade标准。
 
-
-
----
-
-# 第十三章 Execution Runtime目录结构
-
-
-19_Execution_Runtime/
-├── order/       (order_manager / order_validator)
-├── broker/      (broker_abstract / qmt_adapter / simulator_adapter)
-├── executor/    (execution_engine / market_executor / smart_executor)
-├── router/      (order_router)
-├── monitor/     (execution_monitor)
-├── slippage/    (slippage_control)
-├── settlement/  (settlement)
-├── feedback/    (execution_feedback)
-├── emergency/   (emergency_handler)
-├── api/         (execution_api)
-└── tests/
-
-
-
----
-
-# 第十四章 Execution Runtime测试体系
-
-
-- Unit Test — 订单管理和执行逻辑
-- Integration Test — Risk Runtime → Execution Runtime → Broker
-- Simulation Test — 模拟Broker完整执行流程
-- Stress Test — 高并发下单和极端行情
-
-
-
----
-
-# 第十五章 P3-06完成标准
-
-
-| 能力 | 状态 |
-|------|------|
-| 订单生命周期管理 | ✅ |
-| 执行策略(Market/Limit/TWAP/VWAP/Smart) | ✅ |
-| Broker抽象层 | ✅ |
-| 订单路由 | ✅ |
-| 滑点控制 | ✅ |
-| 结算系统 | ✅ |
-| 执行反馈 | ✅ |
-| 紧急处理 | ✅ |
-
-
-
----
-
-# 第十六章 Execution Runtime冻结声明
-
-
-本文件定义AQF-T交易执行运行体系。
-
-后续模拟交易、生产部署、实盘运行必须基于本执行运行体系。
-
-
-
-Version:
-
-V2.8.6
-
-
-Status:
-
-Running System Design
-
-
+Version: V3.6.0 | Status: Detailed Engineering Design
 END OF AQFT EXECUTION RUNTIME DESIGN
