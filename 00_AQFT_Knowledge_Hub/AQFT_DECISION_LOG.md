@@ -120,6 +120,20 @@
 
 ---
 
+## DEC-20260726-009
+
+- **date**: 2026-07-26
+- **decision**: 建立 Scenario Simulation Engine 作为 World Model Layer 3
+- **context**: Market World Model 理解当下，Environment Model 理解环境，但系统需要"想象未来"的能力
+- **options**:
+  - A: 使用单一预测模型（传统量化路线）
+  - B: 建立多分支未来世界树（AQF-T 路线）
+- **chosen**: B
+- **reason**: 单一预测在复杂金融市场中不可靠。多分支情景树 + 概率分布更适合不确定环境下的决策。三种生成方法（Historical Replay / Dynamics Simulation / Generative）互补覆盖
+- **impact**: 建立 Future World Tree 结构；定义 Scenario Object（10 字段）；Probability Engine 概率校准；Extreme Scenario Generator 连接 Risk Runtime；Agent API scenario.simulate()
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
