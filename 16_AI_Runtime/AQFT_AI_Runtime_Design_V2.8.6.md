@@ -1,565 +1,240 @@
-# AQFT AI Runtime Design
+# AQFT AI Runtime Design V3.6.0
 
 
-# AQF-T人工智能运行系统设计
+# AQF-T AI 运行系统详细设计
 
 
-Version:
-
-V2.8.6
-
-
-Status:
-
-Running System Design
-
-
-Classification:
-
-AQF-T AI实时运行体系设计文件
-
-
-Date:
-
-2026-07-26
+Version: V3.6.0
+Status: Detailed Engineering Design
+Classification: AQF-T AI 实时运行体系设计文件
+Date: 2026-07-26
 
 
 ---
 
-# 第一章 AI Runtime定位
+# 第一章 定位
 
 
-## 1.1 AI Runtime目标
-
-
-AI Runtime负责：
-
-将AQF-T AI工程体系转换为实时运行能力。
-
-
-主要职责：
-
-- AI模型加载
-- 推理服务运行
-- 多模型管理
-- AI结果融合
-- 模型监控
-- 在线反馈学习
-
-
-目标实现完整AI运行闭环：
-
-Data → Feature → AI Model → Prediction → Decision Support → Learning Feedback
-
-
-
----
-
-## 1.2 与AQF-T架构关系
-
-
-03_AI_Brain
-
-      ↓
-
-11_AI_Implementation
-
-      ↓
-
-16_AI_Runtime  ← 本文件
-
-      ↓
-
-Strategy Runtime
-
-      ↓
-
-Risk Runtime
-
-      ↓
-
-Execution Runtime
-
-
-
----
-
-# 第二章 AI Runtime总体架构
-
+AI Runtime 将 03_AI_Brain 的设计变为可运行的推理服务。管理四引擎 (Prediction/Sentiment/RiskIntelligence/Fusion) 的模型加载、在线推理、结果输出和持续学习。
 
 ```
-                 AI Runtime
-                      │
-        ┌─────────────┼─────────────┐
-        │             │             │
- Model Manager   Inference Engine  Learning Engine
-        │             │             │
-        └─────────────┼─────────────┘
-                      ↓
-              AI Service Layer
-                      ↓
-              Strategy System
+Data Runtime (特征数据) → AI Runtime (推理) → Strategy (信号生成)
 ```
 
-
-
 ---
 
-# 第三章 AI Model Runtime
+# 第二章 模型加载
 
 
-## 3.1 Model Loader
-
-
-负责：
-
-- 模型加载
-- 模型初始化
-- 模型版本确认
-
-
-加载流程：
-
-Model Registry → Model Loader → Runtime Memory → Inference Ready
-
-
-
----
-
-## 3.2 模型版本管理
-
-
-所有模型必须记录：
-
-- Model ID
-- Version
-- Training Date
-- Dataset Version
-- Feature Version
-- Performance Score
-
-
-示例：
-
-- Prediction_Model_v1.2.0
-- Sentiment_Model_v2.0.1
-- Risk_Model_v1.5.0
-
-
-
----
-
-# 第四章 Inference Engine
-
-
-## 4.1 推理引擎定位
-
-
-负责：
-
-实时AI预测。
-
-
-输入：
-
-Feature Vector
-
-
-输出：
-
-Prediction Result
-
-
-
----
-
-## 4.2 推理流程
-
-
-Feature Input → Preprocessing → Model Inference → Post Processing → Prediction Output
-
-
-
----
-
-## 4.3 推理类型
-
-
-### Batch Inference
-
-用于：历史回测、模型评估
-
-
-### Real-time Inference
-
-用于：实时行情、实时策略
-
-
-### Online Inference
-
-用于：持续学习、模型更新
-
-
-
----
-
-# 第五章 Prediction Runtime
-
-
-## 5.1 Prediction Engine
-
-
-对应：
-
-03_AI_Brain Prediction Engine
-
-
-负责生成：
-
-- 趋势预测
-- 涨跌概率
-- 风险预测
-
-
-
----
-
-## 5.2 Prediction Output
-
-
-统一格式：
-
-- model — 模型标识
-- prediction — 预测结果
-- confidence — 置信度
-- timestamp — 时间戳
-- version — 模型版本
-
-
-
----
-
-# 第六章 Sentiment AI Runtime
-
-
-## 6.1 NLP Runtime
-
-
-负责：
-
-新闻和市场情绪分析。
-
-
-流程：
-
-News Data → NLP Model → Sentiment Score → Market Emotion
-
-
-
----
-
-## 6.2 情绪输出
-
-
-包括：
-
-- Positive
-- Neutral
-- Negative
-
-
-以及：
-
-Sentiment Score（0~1）
-
-
-
----
-
-# 第七章 Risk Intelligence Runtime
-
-
-对应：
-
-Risk Intelligence Engine
-
-
-功能：
-
-AI辅助风险预测。
-
-
-输入：
-
-市场波动、流动性、历史风险
-
-
-输出：
-
-- Risk Probability
-- Risk Level
-- Warning Signal
-
-
-
----
-
-# 第八章 AI Fusion Runtime
-
-
-## 8.1 Fusion Engine
-
-
-负责：
-
-多个AI模型结果融合。
-
-
-支持：
-
-
-### Weighted Fusion
-
-Result = Σ(weight × prediction)
-
-
-### Voting Fusion
-
-多个模型投票。
-
-
-### Stacking Fusion
-
-模型二级学习。
-
-
-
----
-
-# 第九章 Learning Runtime
-
-
-## 9.1 Feedback Loop
-
-
-实现：
-
-Prediction → Trading Result → Performance Evaluation → Model Update → New Prediction
-
-
-
----
-
-## 9.2 Learning数据
-
-
-包括：
-
-- 预测结果
-- 实际收益
-- 错误样本
-- 市场环境
-
-
-
----
-
-# 第十章 AI Runtime服务接口
-
-
-提供：
-
-
-### Prediction API
-
-POST /ai/predict
-
-输入：Feature Vector
-
-输出：Prediction Result
-
-
-### Model Status
-
-GET /ai/model/status
-
-
-### AI Health
-
-GET /ai/health
-
-
-
----
-
-# 第十一章 AI Runtime监控
-
-
-监控：
-
-
-### 模型状态
-
-Loading / Running / Failed
-
-
-### 性能指标
-
-Accuracy / Precision / Recall / Latency
-
-
-### 数据漂移
-
-检测：Feature Drift / Prediction Drift
-
-
-
----
-
-# 第十二章 AI异常恢复
-
-
-异常流程：
-
-Model Failure → Detect → Fallback Model → Restart → Health Check → Resume
-
-
-
----
-
-# 第十三章 AI Runtime目录结构
-
+## 2.1 加载流程
 
 ```
-16_AI_Runtime/
-
-├── model_manager/
-│   ├── loader.py
-│   └── registry.py
-
-├── inference/
-│   ├── predictor.py
-│   └── engine.py
-
-├── prediction/
-│   └── prediction_service.py
-
-├── sentiment/
-│   └── nlp_runtime.py
-
-├── risk/
-│   └── risk_ai_service.py
-
-├── fusion/
-│   ├── weighted.py
-│   ├── voting.py
-│   └── stacking.py
-
-├── learning/
-│   └── feedback_loop.py
-
-├── monitoring/
-│   └── ai_monitor.py
-
-├── api/
-│   └── ai_api.py
-
-└── tests/
+系统启动 → Model Registry 读取 → 下载模型文件 → 校验版本 → 加载到内存 → Warmup推理 → READY
 ```
 
+## 2.2 模型清单
 
+| 引擎 | 模型类型 | 文件 | 加载方式 | 内存估算 |
+|------|---------|------|---------|:---:|
+| Prediction | LightGBM | prediction_v1.lgb | joblib/pickle | 50MB |
+| Sentiment | XGBoost | sentiment_v1.xgb | joblib/pickle | 30MB |
+| Risk Intelligence | LightGBM | risk_ai_v1.lgb | joblib/pickle | 30MB |
+| Fusion | 逻辑回归+规则 | — | 代码逻辑 | < 5MB |
 
----
+> 模型文件统一存放: models/
 
-# 第十四章 AI Runtime测试体系
+## 2.3 加载验证
 
-
-### Model Test
-
-验证模型加载。
-
-
-### Inference Test
-
-验证预测正确性。
-
-
-### Performance Test
-
-验证延迟和吞吐。
-
-
-### Stability Test
-
-验证长期运行能力。
-
-
+```
+加载后立即验证:
+  ✅ 模型文件完整性 (MD5校验)
+  ✅ 版本号匹配
+  ✅ 空推理测试 (随机输入 → 有效输出)
+  → 通过: READY
+  → 失败: 回退到上一版本 → 告警
+```
 
 ---
 
-# 第十五章 AI Runtime与交易闭环
+# 第三章 在线推理
 
 
-完整流程：
+## 3.1 推理 Pipeline
 
+```
+Feature Vector (来自 Data Runtime)
+       │
+       ▼
+  ┌─────────────┐
+  │ Preprocessing│  特征标准化/缺失值填充/归一化
+  └─────────────┘
+       │
+       ▼
+  ┌─────────────┐
+  │ Model Predict│  LightGBM/XGBoost predict()
+  └─────────────┘
+       │
+       ▼
+  ┌─────────────┐
+  │ Postprocess  │  概率校准/阈值判断/格式转换
+  └─────────────┘
+       │
+       ▼
+  PredictionOutput (发送到 Strategy)
+```
 
-Market Data → Data Runtime → Feature Store → AI Runtime → Prediction → Strategy Runtime → Risk Runtime → Execution Runtime → Trading Result → Learning Feedback → AI Update
+## 3.2 四引擎并发调用
 
+```
+Real-time Market Event
+       │
+       ├──→ Prediction Engine (并行)
+       ├──→ Sentiment Engine (并行)
+       └──→ Risk Intelligence (并行)
+               │
+               ▼
+          Fusion Engine (汇总)
+               │
+               ▼
+          FusionOutput
+```
 
-形成AQF-T智能进化闭环。
+## 3.3 推理性能要求
 
-
+```
+单次推理延迟: < 50ms (P50), < 200ms (P99)
+并发能力: 支持10路并发推理
+批推理: 支持批量预测(用于回测, 1000条 < 5秒)
+```
 
 ---
 
-# 第十六章 P3-03完成标准
+# 第四章 推理调度
 
 
-| 能力 | 状态 |
-|------|------|
-| 模型自动加载 | ✅ |
-| 实时推理服务 | ✅ |
-| 多模型管理 | ✅ |
-| AI融合计算 | ✅ |
-| AI监控 | ✅ |
-| 异常恢复 | ✅ |
-| 反馈学习接口 | ✅ |
+## 4.1 盘中调度
 
+```
+Market Tick (每3秒)
+  → Sentiment 更新 (每分钟一次, 减少计算)
+  → Prediction 更新 (每5分钟一次)
+  → Risk Intelligence (每10秒一次, 实时性要求高)
+```
 
+## 4.2 事件驱动推理
+
+```
+以下事件触发立即推理:
+  - 涨停板事件 (需要立即评估 Dragon Strategy 可行性)
+  - 炸板事件 (需要立即评估卖出)
+  - Regime 切换事件 (需要立即更新策略配置)
+  - 人工查询 (即时响应)
+```
+
+## 4.3 盘后批推理
+
+```
+盘后 (15:00后):
+  - 全量股票 Prediction 更新 (批量)
+  - Sentiment 日终评估
+  - 模型漂移检测
+  - 龙虎榜分析
+```
 
 ---
 
-# 第十七章 AI Runtime冻结声明
+# 第五章 模型热切换
 
 
-本文件定义：
+## 5.1 切换流程
 
-AQF-T人工智能运行系统。
+```
+新模型就绪 → 加载到备用Slot → 影子模式运行(1天) → 对比结果 → 切换
+```
 
+## 5.2 影子模式
 
-后续：
+```
+新模型加载后:
+  - 旧模型继续提供线上推理
+  - 新模型同步接收输入, 输出记录到日志(不影响线上)
+  - 24小时后对比: 新模型输出 vs 旧模型输出 vs 实际结果
+  - 通过对比 → 切换为主模型
+  - 未通过 → 卸载新模型 + 记录原因
+```
 
-策略运行；
+---
 
-风险运行；
-
-交易模拟；
-
-自动执行；
-
-
-必须基于本AI Runtime体系。
-
-
-
-Version:
-
-V2.8.6
+# 第六章 模型监控
 
 
-Status:
+## 6.1 运行指标
 
-Running System Design
+| 指标 | 告警阈值 | 说明 |
+|------|:---:|------|
+| 推理延迟 P99 | > 500ms | 性能下降 |
+| 推理错误率 | > 1% | 模型异常 |
+| Prediction Drift | 分布变化 > 0.15 | 数据漂移 |
+| Sentiment 偏离 | 与实际情绪周期不一致 > 2天 | 情绪模型失效 |
+| 内存使用 | > 80% | 资源不足 |
+
+## 6.2 模型健康状态
+
+```
+HEALTHY → 指标正常
+WARNING → 单项指标超阈值
+DEGRADED → 多项指标异常 + 降低置信度
+FAILED → 停止使用 + 回退到上一版本
+```
+
+---
+
+# 第七章 持续学习接口
 
 
+## 7.1 反馈数据流
+
+```
+Trading Result → Experience Engine → 错误分析 → 训练数据生成 → 重训练触发
+```
+
+## 7.2 重训练触发条件
+
+```
+自动触发:
+  ✅ 模型漂移 > 阈值 (持续3天)
+  ✅ 预测准确率下降 > 10%
+  ✅ 新增训练数据 > 30天
+
+手动触发:
+  POST /ai/model/retrain
+```
+
+---
+
+# 第八章 API
+
+
+| 端点 | 方法 | 功能 |
+|------|:---:|------|
+| POST /ai/predict | POST | 趋势预测 |
+| POST /ai/sentiment | POST | 情绪分析 |
+| POST /ai/risk | POST | AI风险预测 |
+| POST /ai/fusion | POST | 综合决策 |
+| GET /ai/model/status | GET | 所有模型状态 |
+| POST /ai/model/switch | POST | 模型热切换 |
+| POST /ai/model/retrain | POST | 触发重训练 |
+| GET /ai/health | GET | 服务健康 |
+
+---
+
+# 第九章 设计冻结声明
+
+
+本文件定义 AQF-T AI Runtime V3.6.0 详细设计。
+
+四引擎并发推理(50ms延迟) + 模型热切换(影子模式) + 实时模型监控 + 持续学习接口。AI Runtime 是 AQF-T 的"大脑皮层"。
+
+Version: V3.6.0
+Status: Detailed Engineering Design
 END OF AQFT AI RUNTIME DESIGN
