@@ -1,0 +1,27 @@
+# AQF-T Ignore Rules
+
+# Python
+__pycache__/
+*.pyc
+
+# Data
+data/
+*.csv
+*.xlsx
+
+# Models
+models/
+*.pkl
+*.h5
+
+# Logs
+logs/
+*.log
+
+# Temporary
+*.tmp
+*.temp
+
+# System
+Thumbs.db
+.DS_Store
