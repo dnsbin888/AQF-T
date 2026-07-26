@@ -1,0 +1,297 @@
+# AQF-T Document Index
+
+# AQF-T 文档索引
+
+Version: V2.8.6-FINAL
+Updated: 2026-07-26
+
+---
+
+## 索引说明
+
+本文档追踪 AQF-T 项目下所有正式文档的状态。
+
+状态标记：
+
+- ✅ FINAL — 已冻结，不再修改
+- 📝 DRAFT — 草稿，待完善
+- ⏳ PLANNED — 已规划，待生成
+- 📦 ARCHIVED — 已归档至 99_Archive
+
+---
+
+## 00_Project — 项目管理
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Document_Index.md | V2.8.6 | ✅ FINAL |
+| AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 00_AQFT_Knowledge_Hub — 知识管理中心
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| INDEX.md | V1.0.0 | ✅ FINAL |
+| SYSTEM_MAP.md | V1.0.0 | ✅ FINAL |
+| MODULE_REGISTRY.md | V1.0.0 | ✅ FINAL |
+| AI_CONTEXT.md | V1.0.0 | ✅ FINAL |
+| VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
+
+---
+
+## 01_Architecture — 系统架构
+
+### 01_System_Architecture — 系统总体架构
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_System_Architecture_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史草稿，内容截断） |
+| AQFT_System_Architecture_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL |
+
+### 02_Data_Flow — 数据流架构
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Data_Flow_Architecture_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### 03_Module_Architecture — 模块架构
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Module_Architecture_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### 04_Deployment_Architecture — 部署架构
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Deployment_Architecture_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 02_Constitution — 系统宪法
+
+### AQF-T_System_Constitution — 系统宪法
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
+| AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
+
+---
+
+## 03_AI_Brain — AI 智能层
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 04_Strategy — 策略体系
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Strategy_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 05_Risk — 风险控制
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Risk_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 06_Execution — 交易执行
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Execution_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 07_Data — 数据体系
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Data_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 08_Parameter — 参数治理
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Parameter_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 09_Test — 测试体系
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Test_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 10_Engineering — 软件工程
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Software_Engineering_Standard_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 11_AI_Implementation — AI工程实现
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_AI_Engineering_Implementation_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 12_Data_Engineering — 数据工程实现
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Data_Engineering_Implementation_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 13_Code_Framework — 代码基础框架
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Code_Framework_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 14_Runtime — 运行系统基础
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Runtime_Foundation_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 15_Data_Runtime — 数据运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Data_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 16_AI_Runtime — AI运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_AI_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 17_Strategy_Runtime — 策略运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Strategy_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 18_Risk_Runtime — 风险运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Risk_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 19_Execution_Runtime — 执行运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Execution_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 20_Simulation_System — 模拟交易验证系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Simulation_System_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 21_Production_Runtime — 生产运行系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Production_Runtime_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 22_Evolution_System — 自进化系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Monitoring_Intelligence_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Auto_Optimization_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Self_Learning_Engine_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Autonomous_Decision_Evolution_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Knowledge_Evolution_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Self_Governance_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+---
+
+## 23_Agent_Intelligence_System — 多智能体交易系统
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Multi_Agent_Trading_System_Design_V2.8.6.md | V2.8.6 → V3.0.0 | ✅ FINAL |
+
+---
+
+## 24_World_Model_System — 世界模型市场仿真
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_World_Model_Market_Simulation_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
+
+---
+
+## 99_Archive — 历史归档
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📦 ARCHIVED |
+
+---
+
+## 根目录文件
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| README.md | V2.8.6 | ✅ FINAL |
+| VERSION.md | V2.8.6 | ✅ FINAL |
+| CHANGELOG.md | V2.8.6 | ✅ FINAL |
+| .gitignore | V2.8.6 | ✅ FINAL |
+
+---
+
+## 文档统计
+
+| 类别 | 数量 |
+|------|------|
+| FINAL | 41 |
+| DRAFT | 2 |
+| PLANNED | 10+ |
+| ARCHIVED | 0 |
+
+---
+
+*索引更新时间：2026-07-26*
