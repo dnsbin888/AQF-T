@@ -1,0 +1,35 @@
+# AQF-T V3.1.0 System Configuration
+system:
+  name: "AQF-T"
+  version: "3.1.0"
+  mode: "development"  # development | simulation | production
+
+server:
+  host: "127.0.0.1"
+  port: 8080
+  api_prefix: "/api/v1"
+
+database:
+  type: "sqlite"
+  path: "data/aqft.db"
+
+logging:
+  level: "INFO"
+  dir: "logs"
+
+modules:
+  ai_brain:
+    enabled: true
+  strategy:
+    enabled: true
+  risk:
+    enabled: true
+    kill_switch_active: true
+  execution:
+    enabled: false  # disabled until paper trading validated
+  world_model:
+    enabled: true
+  decision:
+    enabled: true
+  agent:
+    enabled: true
