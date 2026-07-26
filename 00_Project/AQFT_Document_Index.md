@@ -294,6 +294,14 @@ Updated: 2026-07-26
 
 ---
 
+## 28_Autonomous_Intelligence_Runtime — P6 自主智能运行时
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Autonomous_Intelligence_Runtime_Architecture_V3.1.0.md | V3.1.0 | ✅ FINAL |
+
+---
+
 ## 99_Archive — 历史归档
 
 | 文件 | 版本 | 状态 |
@@ -317,7 +325,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 50 |
+| FINAL | 52 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
