@@ -177,6 +177,20 @@
 
 ---
 
+## DEC-20260726-013
+
+- **date**: 2026-07-26
+- **decision**: 建立 Cross-Market Intelligence 作为 AQF-T 全球金融认知层
+- **context**: World Model 解决了单市场内部运行规律，但金融市场相互关联。需要理解"一个市场变化如何影响另一个"
+- **options**:
+  - A: 保持单市场 World Model，通过数据接口获取外部信息
+  - B: 建立独立的全球跨市场智能层
+- **chosen**: B
+- **reason**: 美联储加息→美元→人民币→北向资金→A股，这种传导链无法在单市场模型中捕捉。Cross-Market Graph Engine + Transmission Engine 形成全球冲击传播模型，使 AQF-T 具备"站在全球视角理解 A 股"的能力
+- **impact**: 建立 Global Market Graph (节点+加权边)；Transmission Engine M(t+1)=f(M,C,E)；Capital Flow Intelligence 全球资金监测；Dynamic Correlation (环境自适应)；Contagion Detector 风险传染预警
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

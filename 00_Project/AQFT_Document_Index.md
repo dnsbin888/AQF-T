@@ -278,6 +278,14 @@ Updated: 2026-07-26
 
 ---
 
+## 26_Cross_Market_Intelligence_System — 全球跨市场智能
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Cross_Market_Intelligence_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
+
+---
+
 ## 99_Archive — 历史归档
 
 | 文件 | 版本 | 状态 |
@@ -301,7 +309,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 48 |
+| FINAL | 49 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
