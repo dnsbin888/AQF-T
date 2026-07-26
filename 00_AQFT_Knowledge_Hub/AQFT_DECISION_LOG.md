@@ -106,6 +106,20 @@
 
 ---
 
+## DEC-20260726-008
+
+- **date**: 2026-07-26
+- **decision**: 建立 Environment Model 作为 World Model 的环境认知层
+- **context**: Market World Model 解决了 State，但相同 State 可能属于完全不同的 Environment。需要建立高层环境语义理解
+- **options**:
+  - A: 跳过 Environment，直接进入 Scenario
+  - B: 先建立 Environment Model
+- **chosen**: B
+- **reason**: State ≠ Environment。例如"指数上涨+放量"在牛市中与在熊市反弹中含义完全不同。必须先建立环境认知层，Scenario Engine 才能生成有意义的情景
+- **impact**: 建立五层环境模型（Regime/Macro/Capital/Policy/Memory）；Environment Memory 实现"历史上有没有类似世界"检索；512-dim Environment Embedding 连接 Market World Model → Scenario Engine
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
