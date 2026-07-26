@@ -163,6 +163,20 @@
 
 ---
 
+## DEC-20260726-012
+
+- **date**: 2026-07-26
+- **decision**: 建立 AGI Decision Architecture V3.0.0 — 从世界认知到自主行动
+- **context**: World Model 已解决"市场是什么/未来怎样/不同选择会怎样/过去经验是什么"，需要解决最后一个问题："现在应该做什么？"
+- **options**:
+  - A: 使用传统 Signal → Buy/Sell 决策模型
+  - B: 建立预期效用决策优化引擎 + 多Agent投票 + 可解释推理链
+- **chosen**: B
+- **reason**: 传统模型只回答"有没有信号"，AQF-T 需要回答"在当前世界理解下，什么行动具有最高长期效用"。六级行动空间替代简单的 Buy/Sell；预期效用函数 U(A) 替代单纯收益最大化；Decision Council 替代单一模型判断
+- **impact**: 建立 Decision Reasoning Pipeline (Think→Act→Learn)；六级行动空间 (Observe/Hold/Increase/Reduce/Hedge/Exit)；预期效用优化 U(A)=Return-Risk+Knowledge-Uncertainty；Multi-Agent Decision Council；100% 可解释 Reasoning Trace；Self-Improving Decision Loop
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

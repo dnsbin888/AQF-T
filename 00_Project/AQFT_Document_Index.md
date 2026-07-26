@@ -270,6 +270,14 @@ Updated: 2026-07-26
 
 ---
 
+## 25_Decision_Intelligence_System — 自主决策智能
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_AGI_Decision_Architecture_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
+
+---
+
 ## 99_Archive — 历史归档
 
 | 文件 | 版本 | 状态 |
@@ -293,7 +301,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 47 |
+| FINAL | 48 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
