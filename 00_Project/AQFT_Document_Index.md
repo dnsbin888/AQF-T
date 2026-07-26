@@ -262,6 +262,7 @@ Updated: 2026-07-26
 |------|------|------|
 | AQFT_World_Model_Market_Simulation_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
 | AQFT_World_Model_Architecture_V3.0.0.md | V3.0.0 | ✅ FINAL |
+| AQFT_Market_World_Model_Design_V3.0.0.md | V3.0.0 | ✅ FINAL |
 
 ---
 
@@ -288,7 +289,7 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 42 |
+| FINAL | 43 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |

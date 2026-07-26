@@ -92,6 +92,20 @@
 
 ---
 
+## DEC-20260726-007
+
+- **date**: 2026-07-26
+- **decision**: 建立 Market World Model 作为 V3.0.0 第一实现核心
+- **context**: World Model Architecture V3.0.0 定义了五层认知架构，需要从 Layer 1+2 开始工程化设计
+- **options**:
+  - A: 从 Scenario Simulation 开始（Layer 3）
+  - B: 从 Market World Model 开始（Layer 1+2）
+- **chosen**: B
+- **reason**: 全部上层（Scenario/Counterfactual/Memory）依赖市场状态的内部表示。先建立 Market World Model（State Encoder + Regime Detector + Dynamics + Causal Graph），上层才有基础
+- **impact**: 定义 MarketWorldState 对象（7维 × 10+子维度）；建立 10 种 Market Regime Universe；引入 Causal Market Graph 作为反事实推理的因果基础
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
