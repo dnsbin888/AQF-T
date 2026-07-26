@@ -206,6 +206,20 @@
 
 ---
 
+## DEC-20260726-015
+
+- **date**: 2026-07-26
+- **decision**: 正式启动 V3.1.0 P6 — Autonomous Intelligence Runtime Engineering
+- **context**: V3.0.0 完成 35 模块 50+ 文档的架构设计。系统需要从 Design Intelligence 进入 Running Intelligence
+- **options**:
+  - A: 继续扩展 P5 增加理论模块
+  - B: 进入 P6 Runtime 工程化，让 World Model + Decision + Agent 首次运行
+- **chosen**: B
+- **reason**: 设计已经足够完整。继续增加理论模块会延迟验证。P6 的核心价值是让系统"活起来"——接入真实数据、运行 World Model、产生真实决策、接受人类协作、建立能力基准
+- **impact**: P6 五层运行时 (Data/Sim/Decision/Human/Evaluation) + Runtime Orchestrator + Intelligence Monitor；V3.1.0 宪法级架构；版本路线 V2.8.6→V3.0.0→V3.1.0→V4.0.0
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
