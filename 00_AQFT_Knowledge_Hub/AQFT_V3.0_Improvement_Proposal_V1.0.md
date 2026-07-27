@@ -294,3 +294,17 @@ Phase 3 (高级):
 ---
 
 *AQF-T V3.0 Improvement Proposal V1.0 — COMPLETE*
+
+---
+
+## Architect Review — APPROVED ✅
+
+Priority adjusted:
+  Phase 1: Outcome Analysis > Cold Start > Failure Library > Market Clock
+  Phase 2: LimitUp ★★★★★ > Opponent > Quant > Agent
+  Phase 3: Adversarial + Calibration
+
+C-009 candidate: Intelligence Expansion Rule — any new module must add info value + decision value + respect Immutable Core + fit Runtime Budget.
+
+Key principle: Memory > Execution Enhancement > Advanced AI.
+V3.0 核心任务: 让AQF-T从自己的交易经历中成长。
