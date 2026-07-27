@@ -105,6 +105,7 @@ Updated: 2026-07-26
 | AQFT_Strategy_Runtime_Boundary_C004_V1.0.md | V1.0.0 | ✅ FINAL（Strategy边界宪法） |
 | AQFT_Portfolio_Authority_Boundary_C005_V1.0.md | V1.0.0 | ✅ FINAL（Portfolio边界宪法） |
 | AQFT_Position_Authority_Boundary_C006_V1.0.md | V1.0.0 | ✅ FINAL（Position边界宪法） |
+| AQFT_Order_Execution_Boundary_C007_V1.0.md | V1.0.0 | ✅ FINAL（Order边界宪法） |
 
 ---
 
@@ -425,7 +426,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 101 |
+| FINAL | 102 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
