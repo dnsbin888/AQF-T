@@ -128,12 +128,22 @@ Updated: 2026-07-26
 
 | 文件 | 版本 | 状态 |
 |------|------|------|
-| 01_Architecture/AQFT_Execution_Intelligence_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 02_Strategy_Runtime/AQFT_Strategy_Runtime_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 03_Portfolio/AQFT_Portfolio_Manager_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 04_Position/AQFT_Position_Engine_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 05_Order/AQFT_Order_Planner_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 06_QMT/AQFT_QMT_Adapter_Interface_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 01_Architecture/AQFT_Execution_Intelligence_Architecture_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 02_Strategy_Runtime/AQFT_Strategy_Runtime_Design_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 03_Portfolio/AQFT_Portfolio_Manager_Design_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 04_Position/AQFT_Position_Engine_Design_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 05_Order/AQFT_Order_Planner_Design_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 06_QMT/AQFT_QMT_Adapter_Interface_Design_V1.0.md | V1.0.0 | ✅ APPROVED |
+
+### Observation_Intelligence — 执行观察智能层 (V3.0 Phase 1)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| 01_Architecture/AQFT_Execution_Observation_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 02_Execution_Event/Execution_Event_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 03_Performance_Analyzer/Execution_Performance_Analyzer_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 04_Drift_Detection/Execution_Drift_Detection_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 05_Feedback_Interface/Memory_Feedback_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Reasoning_Engine — 推理引擎 (V2.9.3)
 
@@ -428,7 +438,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 104 |
+| FINAL | 109 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
