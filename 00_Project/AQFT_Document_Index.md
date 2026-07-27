@@ -33,6 +33,8 @@ Updated: 2026-07-26
 | AQFT_V2.9.0_World_Model_Freeze_Review.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.1_Decision_Intelligence_Freeze_Review.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.1_Decision_Intelligence_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.2_Memory_System_Freeze_Review.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.2_Memory_System_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -101,6 +103,14 @@ Updated: 2026-07-26
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### Memory_System — 记忆系统 (V2.9.2)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Memory_System_Architecture_V2.9.2.md | V2.9.2 | ✅ FROZEN |
+| AQFT_Memory_Retrieval_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Memory_Consolidation_Pattern_Learning_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
 
 ### Decision_Intelligence — 决策智能 (V2.9.1)
 
@@ -377,7 +387,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 73 |
+| FINAL | 78 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
