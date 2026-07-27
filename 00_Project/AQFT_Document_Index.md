@@ -108,6 +108,7 @@ Updated: 2026-07-26
 | AQFT_Position_Authority_Boundary_C006_V1.0.md | V1.0.0 | ✅ FINAL（Position边界宪法） |
 | AQFT_Order_Execution_Boundary_C007_V1.0.md | V1.0.0 | ✅ FINAL（Order边界宪法） |
 | AQFT_QMT_Adapter_Boundary_C008_V1.0.md | V1.0.0 | ✅ FINAL（QMT Adapter边界宪法） |
+| AQFT_Market_Context_Boundary_C010_V1.0.md | V1.0.0 | ✅ FINAL（Market Context边界宪法） |
 
 ---
 
@@ -466,7 +467,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 127 |
+| FINAL | 128 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
