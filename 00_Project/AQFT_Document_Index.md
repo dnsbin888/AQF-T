@@ -166,7 +166,12 @@ Updated: 2026-07-26
 | LimitUp_Intelligence/02_Board_Type_Model/LimitUp_Board_Type_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | LimitUp_Intelligence/03_OrderFlow_Model/LimitUp_OrderFlow_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | LimitUp_Intelligence/04_Decision_Interface/LimitUp_Decision_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| LimitUp_Intelligence/05_Test_Cases/LimitUp_Validation_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| LimitUp_Intelligence/05_Test_Cases/LimitUp_Validation_V1.0.md | V1.0.0 | ✅ APPROVED |
+| Opponent_Model/01_Architecture/AQFT_Opponent_Model_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Opponent_Model/02_Participant_State/Participant_State_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Opponent_Model/03_Behavior_Inference/Participant_Behavior_Inference_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Opponent_Model/04_Decision_Interface/Opponent_Model_Decision_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Opponent_Model/05_Test_Cases/Opponent_Model_Validation_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Reflection_Intelligence — 反思智能层 (V3.0 Phase 1)
 
@@ -478,7 +483,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 134 |
+| FINAL | 139 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
