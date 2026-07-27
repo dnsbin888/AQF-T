@@ -85,6 +85,7 @@ Updated: 2026-07-26
 |------|------|------|
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
+| AQFT_CC_Execution_Constraint_V1.0.md | V1.0.0 | ✅ FINAL（CC最高约束） |
 
 ---
 
@@ -360,7 +361,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 57 |
+| FINAL | 58 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 6 |
 | PLANNED | 10+ |
