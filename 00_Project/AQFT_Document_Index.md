@@ -157,6 +157,16 @@ Updated: 2026-07-26
 | 04_Knowledge_Router/Experience_Knowledge_Router_V1.0.md | V1.0.0 | ✅ APPROVED |
 | 05_Memory_Integration/Memory_Experience_Interface_V1.0.md | V1.0.0 | ✅ APPROVED |
 
+### Combat_Intelligence — A股实战智能层 (V3.0 Phase 2)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| LimitUp_Intelligence/01_Architecture/AQFT_LimitUp_Intelligence_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| LimitUp_Intelligence/02_Board_Type_Model/LimitUp_Board_Type_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| LimitUp_Intelligence/03_OrderFlow_Model/LimitUp_OrderFlow_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| LimitUp_Intelligence/04_Decision_Interface/LimitUp_Decision_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| LimitUp_Intelligence/05_Test_Cases/LimitUp_Validation_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+
 ### Reflection_Intelligence — 反思智能层 (V3.0 Phase 1)
 
 | 文件 | 版本 | 状态 |
@@ -467,7 +477,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 128 |
+| FINAL | 133 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
