@@ -180,6 +180,7 @@ World_Model/
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_Software_Engineering_Standard_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_Document_Completeness_Standard_V1.0.md | V1.0.0 | ✅ FINAL |
 
 ---
 
@@ -361,7 +362,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 58 |
+| FINAL | 59 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 6 |
 | PLANNED | 10+ |
