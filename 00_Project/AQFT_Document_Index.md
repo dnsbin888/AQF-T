@@ -98,14 +98,31 @@ Updated: 2026-07-26
 
 ### World_Model — 世界模型 (V2.9.0)
 
-| 文件 | 版本 | 状态 |
+```
+World_Model/
+├── 01_Architecture/
+│   └── AQFT_World_Model_Intelligence_Spec_V2.9.0.md
+├── 02_State_Model/
+│   └── AQFT_Market_State_Space_Design_V1.0.md
+├── 03_Belief_Model/
+│   └── AQFT_Belief_State_Engine_Design_V1.0.md
+├── 04_Regime_Model/
+│   └── AQFT_Regime_Model_Design_V1.0.md
+├── 05_Simulation/
+│   └── AQFT_Scenario_Simulation_Design_V1.0.md
+├── 06_Interface/
+│   └── AQFT_World_Model_Interface_Spec_V1.0.md
+└── 99_Archive/
+```
+
+| 路径 | 版本 | 状态 |
 |------|------|------|
-| AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ⏳ AWAITING DESIGN |
-| AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 01_Architecture/AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ⏳ AWAITING DESIGN |
+| 02_State_Model/AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 03_Belief_Model/AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 06_Interface/AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
 
 ---
 
