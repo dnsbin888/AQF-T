@@ -44,6 +44,7 @@ Updated: 2026-07-26
 | SYSTEM_MAP.md | V1.0.0 | ✅ FINAL |
 | MODULE_REGISTRY.md | V1.0.0 | ✅ FINAL |
 | AI_CONTEXT.md | V1.0.0 | ✅ FINAL |
+| AI_ONBOARDING.md | V1.0.0 | ✅ FINAL |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
@@ -362,7 +363,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 59 |
+| FINAL | 60 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 6 |
 | PLANNED | 10+ |
