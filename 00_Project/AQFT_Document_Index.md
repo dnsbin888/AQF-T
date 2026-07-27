@@ -101,6 +101,7 @@ Updated: 2026-07-26
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
 | AQFT_CC_Execution_Constraint_V1.0.md | V1.0.0 | ✅ FINAL（CC最高约束） |
 | AQFT_QMT_Integration_Principle_V1.0.md | V1.0.0 | ✅ FINAL（QMT集成宪法） |
+| AQFT_Strategy_Runtime_Boundary_C004_V1.0.md | V1.0.0 | ✅ FINAL（Strategy边界宪法） |
 
 ---
 
@@ -418,7 +419,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 94 |
+| FINAL | 95 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
