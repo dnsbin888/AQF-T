@@ -223,6 +223,7 @@ World_Model/
 | 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
 | 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
 | 06_Interface/AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
+| 07_Market_Clock/AQFT_Market_Clock_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ---
 
@@ -461,7 +462,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 122 |
+| FINAL | 123 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
