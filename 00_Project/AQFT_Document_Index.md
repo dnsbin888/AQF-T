@@ -223,7 +223,11 @@ World_Model/
 | 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
 | 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
 | 06_Interface/AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
-| 07_Market_Clock/AQFT_Market_Clock_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 07_Market_Clock/01_Architecture/AQFT_Market_Clock_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 07_Market_Clock/02_Session_Phase_Model/Session_Phase_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 07_Market_Clock/03_Time_Context_Engine/Market_Time_Context_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 07_Market_Clock/04_Decision_Integration/Market_Clock_Decision_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 07_Market_Clock/05_Test_Cases/Market_Clock_Validation_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ---
 
@@ -462,7 +466,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 123 |
+| FINAL | 127 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
