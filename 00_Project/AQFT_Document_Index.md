@@ -37,6 +37,8 @@ Updated: 2026-07-26
 | AQFT_V2.9.2_Memory_System_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.3_Reasoning_Engine_Freeze_Review.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.3_Reasoning_Engine_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9_Intelligence_Era_Global_Freeze_Review.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9_Intelligence_Era_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -105,6 +107,12 @@ Updated: 2026-07-26
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### Autonomous_Runtime — 自主运行 (V2.9.4)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Autonomous_Intelligence_Runtime_Architecture_V2.9.4.md | V2.9.4 | ✅ FROZEN |
 
 ### Reasoning_Engine — 推理引擎 (V2.9.3)
 
@@ -399,7 +407,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 85 |
+| FINAL | 88 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
