@@ -121,8 +121,8 @@ World_Model/
 | 路径 | 版本 | 状态 |
 |------|------|------|
 | 01_Architecture/AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ⏳ AWAITING DESIGN |
-| 02_State_Model/AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| 02_State_Model/AQFT_State_Vector_Definition_V1.0.md | V1.0.0 | ✅ FINAL DESIGN（⏳ Pending Parent: Market State Space Freeze） |
+| 02_State_Model/AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ✅ FINAL DESIGN（Parent: Intelligence Spec V2.9.0 → Child: State Vector V1.0） |
+| 02_State_Model/AQFT_State_Vector_Definition_V1.0.md | V1.0.0 | ✅ FINAL DESIGN（Parent Complete: Market State Space ✅） |
 | 03_Belief_Model/AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
 | 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
 | 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
