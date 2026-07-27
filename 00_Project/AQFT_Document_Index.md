@@ -150,11 +150,21 @@ Updated: 2026-07-26
 
 | 文件 | 版本 | 状态 |
 |------|------|------|
-| 01_Experience_Architecture/AQFT_Experience_Intelligence_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 02_Episode_Model/Trading_Episode_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 03_Pattern_Extractor/Experience_Pattern_Extractor_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 04_Knowledge_Router/Experience_Knowledge_Router_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
-| 05_Memory_Integration/Memory_Experience_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 01_Experience_Architecture/AQFT_Experience_Intelligence_Architecture_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 02_Episode_Model/Trading_Episode_Model_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 03_Pattern_Extractor/Experience_Pattern_Extractor_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 04_Knowledge_Router/Experience_Knowledge_Router_V1.0.md | V1.0.0 | ✅ APPROVED |
+| 05_Memory_Integration/Memory_Experience_Interface_V1.0.md | V1.0.0 | ✅ APPROVED |
+
+### Reflection_Intelligence — 反思智能层 (V3.0 Phase 1)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| 01_Reflection_Architecture/AQFT_Trading_Reflection_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 02_Decision_Outcome_Model/Decision_Outcome_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 03_Error_Attribution_Engine/Trading_Error_Attribution_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 04_Counterfactual_Review/Counterfactual_Trading_Review_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 05_Knowledge_Update_Interface/Reflection_Knowledge_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Reasoning_Engine — 推理引擎 (V2.9.3)
 
@@ -449,7 +459,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 115 |
+| FINAL | 120 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
