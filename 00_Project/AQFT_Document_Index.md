@@ -45,6 +45,7 @@ Updated: 2026-07-26
 | MODULE_REGISTRY.md | V1.0.0 | ✅ FINAL |
 | AI_CONTEXT.md | V1.0.0 | ✅ FINAL |
 | AI_ONBOARDING.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.8.6_Deep_Summary.md | V1.0.0 | ✅ FINAL |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
@@ -363,7 +364,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 60 |
+| FINAL | 61 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 6 |
 | PLANNED | 10+ |
