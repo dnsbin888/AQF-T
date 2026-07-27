@@ -30,6 +30,7 @@ Updated: 2026-07-26
 | AQFT_Architecture_Map.md | V1.0.0 | ✅ FINAL (auto-generated) |
 | AQFT_V2.9_Intelligence_Roadmap.md | V1.0.0 | ✅ FINAL |
 | AQFT_Design_Principles_V2.8.6.md | V2.8.6 | ✅ FINAL |
+| AQFT_V2.9.0_World_Model_Freeze_Review.md | V1.0.0 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -120,13 +121,13 @@ World_Model/
 
 | 路径 | 版本 | 状态 |
 |------|------|------|
-| 01_Architecture/AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ⏳ AWAITING DESIGN |
+| 01_Architecture/AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ✅ FROZEN — V2.9.0 |
 | 02_State_Model/AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ✅ FINAL DESIGN（Parent: Intelligence Spec V2.9.0 → Child: State Vector V1.0） |
 | 02_State_Model/AQFT_State_Vector_Definition_V1.0.md | V1.0.0 | ✅ FINAL DESIGN（Parent Complete: Market State Space ✅） |
-| 03_Belief_Model/AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
-| 06_Interface/AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| 03_Belief_Model/AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
+| 04_Regime_Model/AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
+| 05_Simulation/AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
+| 06_Interface/AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ✅ FROZEN — V2.9.0 |
 
 ---
 
@@ -365,9 +366,9 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 61 |
+| FINAL | 67 |
 | DRAFT | 2 |
-| AWAITING DESIGN | 6 |
+| AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
 
