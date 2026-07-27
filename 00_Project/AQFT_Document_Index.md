@@ -118,6 +118,12 @@ Updated: 2026-07-26
 |------|------|------|
 | AQFT_Autonomous_Intelligence_Runtime_Architecture_V2.9.4.md | V2.9.4 | ✅ FROZEN |
 
+### Execution_Intelligence — 交易执行智能层 (V3.0)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| 01_Architecture/AQFT_Execution_Intelligence_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+
 ### Reasoning_Engine — 推理引擎 (V2.9.3)
 
 | 文件 | 版本 | 状态 |
@@ -411,7 +417,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 92 |
+| FINAL | 93 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
