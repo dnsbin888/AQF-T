@@ -129,6 +129,7 @@ Updated: 2026-07-26
 | 02_Strategy_Runtime/AQFT_Strategy_Runtime_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | 03_Portfolio/AQFT_Portfolio_Manager_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | 04_Position/AQFT_Position_Engine_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 05_Order/AQFT_Order_Planner_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Reasoning_Engine — 推理引擎 (V2.9.3)
 
@@ -423,7 +424,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 99 |
+| FINAL | 100 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
