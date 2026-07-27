@@ -55,6 +55,9 @@ Updated: 2026-07-26
 | AI_CONTEXT.md | V1.0.0 | ✅ FINAL |
 | AI_ONBOARDING.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.8.6_Deep_Summary.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9_Comprehensive_Analysis_V1.0.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9_Final_Deep_Analysis_Report.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9_Dual_Perspective_Audit.md | V1.0.0 | ✅ FINAL |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
@@ -97,6 +100,7 @@ Updated: 2026-07-26
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
 | AQFT_CC_Execution_Constraint_V1.0.md | V1.0.0 | ✅ FINAL（CC最高约束） |
+| AQFT_QMT_Integration_Principle_V1.0.md | V1.0.0 | ✅ FINAL（QMT集成宪法） |
 
 ---
 
@@ -407,7 +411,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 88 |
+| FINAL | 92 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
