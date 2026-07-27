@@ -25,6 +25,11 @@ Updated: 2026-07-26
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_Document_Index.md | V2.8.6 | ✅ FINAL |
+| AQFT_Development_Spec_V1.0.md | V1.0.0 | ✅ FINAL |
+| AQFT_Project_Status.md | V1.0.0 | ✅ FINAL (auto-generated) |
+| AQFT_Architecture_Map.md | V1.0.0 | ✅ FINAL (auto-generated) |
+| AQFT_V2.9_Intelligence_Roadmap.md | V1.0.0 | ✅ FINAL |
+| AQFT_Design_Principles_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -325,11 +330,11 @@ Updated: 2026-07-26
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 52 |
+| FINAL | 57 |
 | DRAFT | 2 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
 
 ---
 
-*索引更新时间：2026-07-26*
+*索引更新时间：2026-07-27*
