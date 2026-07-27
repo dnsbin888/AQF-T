@@ -31,6 +31,8 @@ Updated: 2026-07-26
 | AQFT_V2.9_Intelligence_Roadmap.md | V1.0.0 | ✅ FINAL |
 | AQFT_Design_Principles_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_V2.9.0_World_Model_Freeze_Review.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.1_Decision_Intelligence_Freeze_Review.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.1_Decision_Intelligence_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -99,6 +101,15 @@ Updated: 2026-07-26
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### Decision_Intelligence — 决策智能 (V2.9.1)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Decision_Intelligence_Architecture_V2.9.1.md | V2.9.1 | ✅ FROZEN |
+| AQFT_Decision_Fusion_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Action_Selection_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Decision_Memory_Feedback_Interface_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
 
 ### World_Model — 世界模型 (V2.9.0)
 
@@ -366,7 +377,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 67 |
+| FINAL | 73 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |

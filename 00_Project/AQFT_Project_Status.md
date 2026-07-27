@@ -44,6 +44,14 @@ Architecture Design: FROZEN (6/6 modules, 8 documents)
 
 **Next: V2.9.1 Decision Intelligence 🚀**
 
+**V2.9.1 Decision Intelligence — COMPLETED ✅:**
+- DI-001 Architecture ✅ FROZEN
+- DI-002 Fusion Engine ✅ FROZEN
+- DI-003 Action Selection ✅ FROZEN
+- DI-004 Decision Memory ✅ FROZEN
+
+**Next: V2.9.2 Memory System 🧠**
+
 ---
 
 ## P5 Status: Architecture Blueprint
