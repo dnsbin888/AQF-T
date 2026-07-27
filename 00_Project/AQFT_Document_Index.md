@@ -183,7 +183,8 @@ Updated: 2026-07-26
 | AQFT_Memory_System_Architecture_V2.9.2.md | V2.9.2 | ✅ FROZEN |
 | AQFT_Memory_Retrieval_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
 | AQFT_Memory_Consolidation_Pattern_Learning_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
-| AQFT_Memory_Cold_Start_Strategy_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| AQFT_Memory_Cold_Start_Strategy_V1.0.md | V1.0.0 | ✅ APPROVED |
+| AQFT_Failure_Pattern_Library_Design_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Decision_Intelligence — 决策智能 (V2.9.1)
 
@@ -460,7 +461,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 121 |
+| FINAL | 122 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
