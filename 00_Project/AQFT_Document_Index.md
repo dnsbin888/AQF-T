@@ -35,6 +35,8 @@ Updated: 2026-07-26
 | AQFT_V2.9.1_Decision_Intelligence_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.2_Memory_System_Freeze_Review.md | V1.0.0 | ✅ FINAL |
 | AQFT_V2.9.2_Memory_System_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.3_Reasoning_Engine_Freeze_Review.md | V1.0.0 | ✅ FINAL |
+| AQFT_V2.9.3_Reasoning_Engine_Freeze_Approval.md | V1.0.0 | ✅ FINAL |
 | AQFT_Project_Roadmap_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Version_Control_V2.8.6.md | V2.8.6 | ✅ FINAL |
 | AQFT_Development_Plan_V2.8.6.md | V2.8.6 | ✅ FINAL |
@@ -103,6 +105,16 @@ Updated: 2026-07-26
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### Reasoning_Engine — 推理引擎 (V2.9.3)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_Reasoning_Engine_Architecture_V2.9.3.md | V2.9.3 | ✅ FROZEN |
+| AQFT_Causal_Reasoning_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Counterfactual_Reasoning_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Scenario_Reasoning_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
+| AQFT_Explainable_Reasoning_Engine_Design_V1.0.md | V1.0.0 | ✅ FROZEN |
 
 ### Memory_System — 记忆系统 (V2.9.2)
 
@@ -387,7 +399,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 78 |
+| FINAL | 85 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
