@@ -30,11 +30,11 @@ V3.0    Financial Intelligence Operating System (target)
 
 ## Current Phase
 
-**Intelligence Deepening Phase**
+**V2.9.0 — World Model Intelligence Development**
 
-Architecture Freeze Completed → Intelligence Design Deepening Active
+Architecture Freeze → Intelligence Deepening Active
 
-Next Target: AQF-T V2.9.0 — World Model Intelligence Upgrade
+Active: World Model Intelligence Design
 
 ---
 
@@ -45,7 +45,7 @@ P5 modules are **Architecture Blueprint Completed** — NOT Engineering Complete
 | 编号 | 模块 | 版本 | 设计状态 | 工程状态 |
 |------|------|------|----------|----------|
 | P5-01 | Agent Intelligence | V3.0.0 Blueprint | ✅ Blueprint | ⏳ Deepening Pending |
-| P5-02 | World Model | V3.0.0 Blueprint | ✅ Blueprint | ⏳ Deepening Pending |
+| P5-02 | World Model | V3.0.0 Blueprint | ✅ Blueprint | 🔄 V2.9.0 Active |
 | P5-03 | Decision Intelligence | V3.0.0 Blueprint | ✅ Blueprint | ⏳ Deepening Pending |
 | P5-04 | Cross-Market Intelligence | V3.0.0 Blueprint | ✅ Blueprint | ⏳ Deepening Pending |
 | P5-05 | Human-AI Governance | V3.0.0 Blueprint | ✅ Blueprint | ⏳ Deepening Pending |
@@ -54,23 +54,22 @@ V3.0.0 documents are **Intelligence Blueprint / Expansion Draft** — not final 
 
 ---
 
-## Module Status (Full)
+## V2.9.0 World Model — New Documents
 
-| Phase | 名称 | 设计状态 | 工程状态 |
-|-------|------|----------|----------|
-| P0 | Foundation | ✅ Freeze | ✅ Complete |
-| P1 | Architecture Definition | ✅ Freeze | ✅ Complete |
-| P2 | Core System Design | ✅ Freeze | ✅ Complete |
-| P3 | Engineering Implementation | ✅ Freeze | ✅ Complete |
-| P4 | Runtime & Evolution | ✅ Freeze | ✅ Complete |
-| P5 | Autonomous Intelligence | ✅ Blueprint | ⏳ Awaiting V2.9 Refinement |
-| P6 | Runtime Engineering | ✅ Blueprint | ⏳ Awaiting V3.0 |
+| 文件 | 状态 |
+|------|------|
+| AQFT_World_Model_Intelligence_Spec_V2.9.0.md | ⏳ AWAITING DESIGN |
+| AQFT_Market_State_Space_Design_V1.0.md | ⏳ AWAITING DESIGN |
+| AQFT_Belief_State_Engine_Design_V1.0.md | ⏳ AWAITING DESIGN |
+| AQFT_Regime_Model_Design_V1.0.md | ⏳ AWAITING DESIGN |
+| AQFT_Scenario_Simulation_Design_V1.0.md | ⏳ AWAITING DESIGN |
+| AQFT_World_Model_Interface_Spec_V1.0.md | ⏳ AWAITING DESIGN |
 
 ---
 
 ## Document Count
 
-**55** (Indexed FINAL documents)
+**57** (Indexed FINAL) + **6** (AWAITING DESIGN)
 
 ---
 
@@ -78,9 +77,8 @@ V3.0.0 documents are **Intelligence Blueprint / Expansion Draft** — not final 
 
 | 项目 | 值 |
 |------|------|
-| Last Commit | `0215514` |
-| Message | design: Feature Engineering Spec — 100 A-share factors with formulas |
-| Uncommitted | 6 files (pending rebaseline commit) |
+| Baseline Tag | `v2.8.6-architecture-freeze` |
+| Uncommitted | 8 files (pending V2.9.0 commit) |
 
 ---
 

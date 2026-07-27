@@ -90,9 +90,22 @@ Updated: 2026-07-26
 
 ## 03_AI_Brain — AI 智能层
 
+### AI Brain
+
 | 文件 | 版本 | 状态 |
 |------|------|------|
 | AQFT_AI_Brain_Design_V2.8.6.md | V2.8.6 | ✅ FINAL |
+
+### World_Model — 世界模型 (V2.9.0)
+
+| 文件 | 版本 | 状态 |
+|------|------|------|
+| AQFT_World_Model_Intelligence_Spec_V2.9.0.md | V2.9.0 | ⏳ AWAITING DESIGN |
+| AQFT_Market_State_Space_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| AQFT_Belief_State_Engine_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| AQFT_Regime_Model_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| AQFT_Scenario_Simulation_Design_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
+| AQFT_World_Model_Interface_Spec_V1.0.md | V1.0.0 | ⏳ AWAITING DESIGN |
 
 ---
 
@@ -332,6 +345,7 @@ Updated: 2026-07-26
 |------|------|
 | FINAL | 57 |
 | DRAFT | 2 |
+| AWAITING DESIGN | 6 |
 | PLANNED | 10+ |
 | ARCHIVED | 0 |
 
