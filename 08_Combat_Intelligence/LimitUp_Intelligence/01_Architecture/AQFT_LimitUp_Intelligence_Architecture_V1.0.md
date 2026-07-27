@@ -1,6 +1,6 @@
 # AQF-T Limit-Up Microstructure Intelligence Architecture
 
-Version: V1.0.0 | Status: ENGINEERING DRAFT — Phase 2 | Module: 08_Combat_Intelligence
+Version: V1.0.0 | Status: ARCHITECT REVIEW PASSED — Phase 2 Combat Active | Module: 08_Combat_Intelligence
 Created: 2026-07-28
 
 ---
