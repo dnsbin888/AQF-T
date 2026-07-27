@@ -102,6 +102,7 @@ Updated: 2026-07-26
 | AQFT_CC_Execution_Constraint_V1.0.md | V1.0.0 | ✅ FINAL（CC最高约束） |
 | AQFT_QMT_Integration_Principle_V1.0.md | V1.0.0 | ✅ FINAL（QMT集成宪法） |
 | AQFT_Strategy_Runtime_Boundary_C004_V1.0.md | V1.0.0 | ✅ FINAL（Strategy边界宪法） |
+| AQFT_Portfolio_Authority_Boundary_C005_V1.0.md | V1.0.0 | ✅ FINAL（Portfolio边界宪法） |
 
 ---
 
@@ -420,7 +421,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 96 |
+| FINAL | 97 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
