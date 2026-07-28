@@ -182,6 +182,11 @@ Updated: 2026-07-26
 | Quant_Footprint/03_Inference_Engine/Quant_Footprint_Inference_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | Quant_Footprint/04_Decision_Interface/Quant_Footprint_Decision_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | Quant_Footprint/05_Test_Cases/Quant_Footprint_Validation_V1.0.md | V1.0.0 | ✅ APPROVED V1.1 |
+| Hypothesis_Arbitration/01_Architecture/AQFT_Hypothesis_Arbitration_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Hypothesis_Arbitration/02_Arbitration_Engine/Hypothesis_Arbitration_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Hypothesis_Arbitration/03_Conflict_Resolution/Conflict_Resolution_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Hypothesis_Arbitration/04_Decision_Context/Decision_Context_Interface_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| Hypothesis_Arbitration/05_Test_Cases/Hypothesis_Arbitration_Validation_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 
 ### Reflection_Intelligence — 反思智能层 (V3.0 Phase 1)
 
@@ -493,7 +498,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 149 |
+| FINAL | 154 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
