@@ -60,6 +60,7 @@ Updated: 2026-07-26
 | AQFT_V2.9_Dual_Perspective_Audit.md | V1.0.0 | ✅ FINAL |
 | AQFT_V3.0_Industry_Benchmark_Deep_Analysis.md | V1.0.0 | ✅ FINAL |
 | AQFT_V3.0_Improvement_Proposal_V1.0.md | V1.0.0 | ✅ FINAL |
+| AQFT_V3.1_Scientific_Engineering_Proposal_V1.0.md | V1.0.0 | ✅ FINAL（V3.1战略蓝图） |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
