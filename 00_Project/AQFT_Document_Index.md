@@ -64,6 +64,7 @@ Updated: 2026-07-26
 | AQFT_V3.1_Strategic_Blueprint_V1.0.md | V1.0.0 | ✅ FINAL（V3.1优化治理） |
 | AQFT_Architecture_Retirement_Governance_V1.0.md | V1.0.0 | ✅ FINAL（模块退役治理） |
 | AQFT_V3.1_001_Architecture_Audit_Task_Card_V1.0.md | V1.0.0 | ✅ FINAL（V3.1-001审计任务卡） |
+| AQFT_V3.1_Architecture_Audit_Matrix_V1.0.md | V1.0.0 | ✅ FINAL（V3.1审计矩阵） |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
