@@ -101,6 +101,7 @@ Updated: 2026-07-26
 |------|------|------|
 | AQFT_Meta_Constitution_V1.0.md | V1.1.0 | ✅ FINAL（最高宪法 — 知识治理框架） |
 | AQFT_Meta_Constitution_Extension_AI_Collaboration_V1.0.md | V1.0.0 | ✅ FINAL（Meta扩展 — AI协同治理） |
+| AQFT_Collaboration_Model_V1.0.md | V1.0.0 | ✅ FINAL（双AI协作研发治理） |
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
 | AQFT_CC_Execution_Constraint_V1.0.md | V1.0.0 | ✅ FINAL（CC最高约束） |
@@ -491,7 +492,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 147 |
+| FINAL | 148 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
