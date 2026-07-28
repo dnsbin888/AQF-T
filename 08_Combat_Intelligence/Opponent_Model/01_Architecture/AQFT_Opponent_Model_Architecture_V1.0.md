@@ -1,6 +1,6 @@
 # AQF-T Opponent Model Architecture
 
-Version: V1.0.0 | Status: ENGINEERING DRAFT — Phase 2 | Module: 08_Combat_Intelligence
+Version: V1.0.0 | Status: ARCHITECT REVIEW PASSED — Phase 2 V1.1 | Module: 08_Combat_Intelligence
 Created: 2026-07-28
 
 ---
@@ -47,3 +47,19 @@ Opponent Model may interpret participant behavior. Shall never generate trading 
 ├── 04_Decision_Interface/
 └── 05_Test_Cases/
 ```
+
+---
+
+## V1.1 Architect Refinements (APPROVED)
+
+**R1 — Intent Confidence**: All intents carry confidence (0-1). Never True/False. Evidence: MC-001, MC-010.
+
+**R2 — Evidence Chain**: Every participant classification backed by observable signals (Large Order Ratio, VWAP, Holding Time, 龙虎榜, 盘口). Fully explainable.
+
+**R3 — Unknown Participant**: Added as 6th type. Confidence<0.50 → "Unknown". System stays cautious, avoids forced classification.
+
+**C-012 — Participant Hypothesis**: Opponent Model outputs ParticipantHypothesis (行为假设), NOT participant identity (真实身份). AQF-T observes and infers. It does not claim to know.
+
+**New Object — ParticipantHypothesis**: participant_type, intent, intent_confidence, evidence_chain, alternative_hypothesis, timestamp.
+
+*Phase 2. APPROVED V1.1.*
