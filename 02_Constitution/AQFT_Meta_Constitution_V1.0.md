@@ -1,7 +1,13 @@
-# AQF-T Meta Constitution — Design Evidence First
+# AQF-T Meta Constitution — Knowledge Governance Framework
 
-Version: V1.0.0 | Status: ✅ FROZEN — Highest-Level Constitution
+Version: V1.1.0 | Status: ✅ FROZEN — Highest-Level Constitution
 Date: 2026-07-28 | Priority: Above all C-001~C-012
+
+---
+
+## 定位
+
+本文件不仅是架构约束，更是 **AQF-T Knowledge Governance Framework（知识治理框架）** — 项目中所有 AI、人类架构师和未来自动化工具共同遵守的知识治理规范。它是 AQF-T 最长期、最稳定、最难复制的基础设施。
 
 ---
 
@@ -19,19 +25,25 @@ AQF-T 的任何设计、模块、模型、算法、接口、规则，都必须�
 
 ## MC-002: Evidence Level（证据等级）
 
+Evidence Level 描述的是**证据成熟度**，不是**设计价值**。
+
 | Level | Name | Criteria | Examples |
 |:-----:|------|----------|----------|
-| **A+** | Industry Proven | 已成为行业事实。论文+工程+长期实践验证。 | Belief State, Bayesian Updating, Counterfactual Reasoning, World Model, Risk Budget, Kelly, Portfolio Theory |
-| **A** | Academic Proven | 大量论文支持，多个团队验证。 | Transformer, RL, MCTS, Bayesian Network, Knowledge Graph, HMM, Particle Filter, GNN |
-| **B** | Industry Best Practice | 无严格论文，但行业大量采用。 | Event-driven architecture, CQRS, DDD, Risk Pipeline |
+| **A+** | Industry Proven | 已成为行业事实。论文+工程+长期实践验证。 | Bayesian Updating, Counterfactual Reasoning, Risk Budget, Kelly, Portfolio Theory |
+| **A** | Academic Proven | 大量论文支持，多个团队验证。 | Transformer, RL, MCTS, Bayesian Network, HMM, GNN |
+| **B** | Industry Best Practice | 无严格论文，但行业大量采用。 | Event-driven architecture, DDD, Risk Pipeline |
 | **C** | Empirical | 经验模型。有市场验证但非理论。 | 游资经验, 龙头战法, 涨停板经验, 盘口规律 |
-| **D** | AQF-T Original | 原创。无公开成熟方案。**必须说明：为什么设计、解决什么问题、未来如何验证。** | Belief Engine, Pattern→Knowledge, S(t)→B(t)→R(t), Memory Constitution, Decision Quality Matrix |
+| **D** | AQF-T Original | 原创。尚未形成行业共识。**允许创新，要求持续验证。** 不代表价值最低——可能未来升级为 A+。 | Belief Engine, Pattern→Knowledge, S(t)→B(t)→R(t), Decision Quality Matrix |
 
 ---
 
-## MC-003: Five Questions for Every Design
+## MC-003: Five Questions for Every Design（设计五问）
 
-任何新增设计必须回答：
+任何新增设计必须回答。建议所有 Design Doc 固定模板：
+
+```
+Problem → Design → Evidence → Validation → Boundary
+```
 
 1. **为什么？** — 解决什么问题？
 2. **来源？** — 来自哪里？
@@ -41,7 +53,7 @@ AQF-T 的任何设计、模块、模型、算法、接口、规则，都必须�
 
 ---
 
-## MC-004: Knowledge Source Priority
+## MC-004: Knowledge Source Priority（知识来源优先级）
 
 | Priority | Source | Usage |
 |:--------:|--------|-------|
@@ -50,17 +62,20 @@ AQF-T 的任何设计、模块、模型、算法、接口、规则，都必须�
 | P2 | 世界领先机构工程实践（DeepMind、OpenAI、Jane Street、Bridgewater等） | 经架构适配后采用 |
 | P3 | A股长期统计规律与可验证市场经验 | 仅限A股模块，持续验证 |
 | P4 | AQF-T原创设计 | 必须注明原创、验证计划和适用边界 |
+| **P5** | **AQF-T自身长期验证（真实交易结果）** | **对AQF-T自身决策最有约束力的证据** |
 | ❌ | **禁止：无来源、无法解释、仅凭AI猜测** | **不允许进入正式架构** |
 
----
-
-## MC-005: No Hallucinated Design
-
-任何模型、算法、公式、接口，必须能够说明来源。否则不能进入正式设计。
+**P5 说明：** 当真实交易验证与文献、行业经验冲突时，以可重复验证的真实交易结果为准。例如：论文说突破成功率72%，AQF-T真实1000次=58% → 相信58%。因为自己的市场、自己的交易、自己的数据。
 
 ---
 
-## MC-006: Architect's Responsibility
+## MC-005: No Hallucinated Design（禁止幻觉设计）
+
+任何模型、算法、公式、接口，必须能够说明来源。否则不能进入正式设计。**任何 AI（Claude/ChatGPT/Gemini/DeepSeek）都必须说明依据。否则 Reject。**
+
+---
+
+## MC-006: Architect's Responsibility（架构师职责）
 
 Architect 不再只是"设计系统"，而是"维护 AQF-T 的知识体系"。每个模块需经过三层审核：
 
@@ -70,26 +85,58 @@ Architect 不再只是"设计系统"，而是"维护 AQF-T 的知识体系"。�
 
 ---
 
-## MC-007: Evidence Library
+## MC-007: Evidence Library（证据库）
 
 ```
 01_Research/
 ├── Papers/        # 学术论文
-├── Industry/      # 行业报告
+├── Industry/      # 行业报告/白皮书
 ├── Books/         # 书籍
+├── Standards/     # 工程标准 (FIX, ONNX, Arrow, DDD, OpenTelemetry等)
+├── Datasets/      # 数据集引用
+├── Benchmarks/    # 基准测试
 ├── Empirical/     # 经验总结
 ├── Original/      # AQF-T原创
-└── Validation/    # 验证结果
+└── Validation/    # 验证结果（真实交易统计）
 ```
 
 每个模块引用 Research ID (R-XXX)。
 
 ---
 
+## MC-008: Evidence Is Versioned（证据可演化）
+
+证据不是永久正确的。2024年正确的论文，2029年可能已经过时。
+
+| Status | Meaning |
+|--------|--------|
+| Active | 当前有效 |
+| Deprecated | 已被更优证据替代 |
+| Superseded | 被新版本覆盖 |
+| Rejected | 经AQF-T自身验证后被否定 |
+
+Evidence Library 应允许升级、降级、替换。
+
+---
+
+## MC-009: Multi-source Confirmation（多源确认）
+
+重要设计至少需要两个来源。例如 Opponent Model 应有：论文(Jane Street) + A股经验。A+ 级证据应有 Academic + Industry 共同支持。
+
+---
+
+## MC-010: Validation Overrides Authority（验证高于权威）
+
+**当真实交易验证与文献、行业经验冲突时，以可重复验证的真实交易结果为准。**
+
+这是 AQF-T 真正自主智能的基础——不盲从论文，不盲从权威，以自身数据为最终裁判。
+
+---
+
 ## Constitution Hierarchy
 
 ```
-AQF-T Meta Constitution (MC-001 ~ MC-007)  ← 最高原则
+AQF-T Meta Constitution (MC-001 ~ MC-010)  ← 最高知识治理框架
 │
 ├── C-001: Intelligence Ownership
 ├── C-002: Immutable Core
@@ -107,4 +154,4 @@ AQF-T Meta Constitution (MC-001 ~ MC-007)  ← 最高原则
 
 ---
 
-*AQF-T Meta Constitution V1.0 — FROZEN. Highest-Level. Above all C-001~C-012.*
+*AQF-T Meta Constitution V1.1 — Knowledge Governance Framework. FROZEN.*
