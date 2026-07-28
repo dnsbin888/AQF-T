@@ -115,6 +115,7 @@ Updated: 2026-07-26
 | AQFT_LimitUp_Intelligence_Boundary_C011_V1.0.md | V1.0.0 | ✅ FINAL（LimitUp边界宪法） |
 | AQFT_Participant_Interpretation_Boundary_C012_V1.0.md | V1.0.0 | ✅ FINAL（Participant边界宪法） |
 | AQFT_Microstructure_Interpretation_Boundary_C013_V1.0.md | V1.0.0 | ✅ FINAL（Microstructure边界宪法） |
+| AQFT_Hypothesis_Arbitration_Boundary_C014_V1.0.md | V1.0.0 | ✅ FINAL（Arbitration边界宪法） |
 
 ---
 
@@ -498,7 +499,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 154 |
+| FINAL | 155 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
