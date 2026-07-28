@@ -135,6 +135,7 @@ Updated: 2026-07-26
 | AQFT_Mission_Knowledge_Accumulation_V1.0.md | V1.0.0 | ✅ FINAL（项目使命） |
 | AQFT_Vision_V1.0.md | V1.0.0 | ✅ FINAL（项目愿景） |
 | AQFT_Architecture_Era_Closure_Review_V1.0.md | V1.0.0 | ✅ FINAL（时代闭幕评审） |
+| AQFT_EP_Operational_Model_V1.0.md | V1.0.0 | ✅ FINAL（EP运营模型） |
 | AQFT_Collaboration_Model_V1.0.md | V1.0.0 | ✅ FINAL（双AI协作研发治理） |
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
@@ -535,7 +536,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 191 |
+| FINAL | 192 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
