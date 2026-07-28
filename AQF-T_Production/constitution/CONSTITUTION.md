@@ -1,0 +1,35 @@
+# 01 Constitution — 交易制度
+
+## 不可违反
+
+```
+1. 单票仓位 ≤ 10%
+2. 日亏损 ≥ 3% → 停止当日交易
+3. 总回撤 ≥ 15% → Safe Mode (仅允许平仓)
+4. 退潮期 → 总仓位强制 ≤ 20%，禁止Dragon Strategy
+5. Risk 不可绕过，不可关闭
+6. AI 不可直接下单
+7. 所有交易必须记录：时间/标的/方向/数量/价格/信号来源/风控结果/盈亏
+```
+
+## 交易主链 (硬编码)
+
+```
+Strategy → Risk → Execution
+   ↑         ↑
+   └── Learning (只提供评分/建议/经验)
+```
+
+## 14 边界宪法 (引用 V2.8.6: 02_Constitution)
+
+```
+C004: Strategy   — 生成信号，不执行交易
+C005: Portfolio  — 组合管理，单票≤10%
+C006: Position   — 仓位管理，T+1不可卖当日买入
+C007: Order      — 只执行 Risk APPROVE/ADJUST 的订单
+C008: QMT        — 唯一实盘通道
+C010: Market     — 识别当前Regime+情绪周期
+C011: LimitUp    — 涨停封单系数<3禁止打板
+C012: Participant— 识别主力/游资/量化/散户行为
+C015: Confidence — AI输出必须附带置信度
+```
