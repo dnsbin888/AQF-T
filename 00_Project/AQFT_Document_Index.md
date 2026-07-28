@@ -61,6 +61,8 @@ Updated: 2026-07-26
 | AQFT_V3.0_Industry_Benchmark_Deep_Analysis.md | V1.0.0 | ✅ FINAL |
 | AQFT_V3.0_Improvement_Proposal_V1.0.md | V1.0.0 | ✅ FINAL |
 | AQFT_V3.1_Scientific_Engineering_Proposal_V1.0.md | V1.0.0 | ✅ FINAL（V3.1战略蓝图） |
+| AQFT_V3.1_Strategic_Blueprint_V1.0.md | V1.0.0 | ✅ FINAL（V3.1优化治理） |
+| AQFT_Architecture_Retirement_Governance_V1.0.md | V1.0.0 | ✅ FINAL（模块退役治理） |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
@@ -500,7 +502,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 156 |
+| FINAL | 158 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
