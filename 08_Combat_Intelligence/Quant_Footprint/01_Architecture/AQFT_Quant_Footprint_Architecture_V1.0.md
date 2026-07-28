@@ -1,6 +1,6 @@
 # AQF-T Quant Footprint Intelligence Architecture
 
-Version: V1.0.0 | Status: ENGINEERING DRAFT — Phase 2 | Module: 08_Combat_Intelligence
+Version: V1.0.0 | Status: ARCHITECT REVIEW PASSED — Phase 2 V1.1 | Module: 08_Combat_Intelligence
 Created: 2026-07-28
 
 ---
@@ -61,3 +61,17 @@ Quant Footprint may infer algorithmic patterns. Shall never claim specific insti
 ├── 04_Decision_Interface/
 └── 05_Test_Cases/
 ```
+
+---
+
+## V1.1 Architect Refinements (APPROVED — Score 94-96)
+
+**R1 — Evidence Fusion**: Footprint confidence = multi-feature fusion, not single pattern. Passive Liquidity = OrderFlow + QueueStability + CancelRatio + SpreadStability → fused confidence. Aligned with Belief Engine.
+
+**R2 — Temporal Consistency**: Footprint persistence tiers: Short(<5s, Observation) / Medium(5s-5min, Hypothesis) / Long(>5min, Belief Strength++). Duration matters more than detection.
+
+**R3 — Contradiction Detection**: Footprint vs Opponent conflict → ConflictScore(0-1). High conflict → auto confidence reduction. Example: Momentum Ignition(HIGH) + Institution Accumulating → conflict, conf−0.05.
+
+**C-013 — Market Microstructure Interpretation Boundary**: Microstructure modules may interpret behavior, shall never generate trading decisions. Decision always belongs to Decision Engine.
+
+*Phase 2. APPROVED V1.1. 94-96/100.*
