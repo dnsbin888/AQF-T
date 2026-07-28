@@ -66,6 +66,12 @@ Updated: 2026-07-26
 | AQFT_V3.1_001_Architecture_Audit_Task_Card_V1.0.md | V1.0.0 | ✅ FINAL（V3.1-001审计任务卡） |
 | AQFT_V3.1_Architecture_Audit_Matrix_V1.0.md | V1.0.0 | ✅ FINAL（V3.1审计矩阵） |
 | Technology_Benchmark/AQFT_Technology_Benchmark_Framework_V1.0.md | V1.0.0 | ✅ FINAL（TAF-001技术准入框架） |
+| 09_Validation_Framework/01_Architecture/AQFT_Validation_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 09_Validation_Framework/02_Experiment_Registry/Experiment_Record_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 09_Validation_Framework/03_Replay_Engine/Market_Replay_Engine_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 09_Validation_Framework/04_Benchmark/Benchmark_Framework_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 09_Validation_Framework/05_Statistical_Test/Statistical_Validation_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
+| 09_Validation_Framework/06_Calibration/Confidence_Calibration_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | VERSION_CONTROL.md | V1.0.0 | ✅ FINAL |
 
 ---
@@ -505,7 +511,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 161 |
+| FINAL | 167 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
