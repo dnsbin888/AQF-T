@@ -129,6 +129,7 @@ Updated: 2026-07-26
 | AQFT_Contract_Before_Code_MC020_V1.0.md | V1.0.0 | ✅ FINAL（MC-020契约优先） |
 | AQFT_Metrics_Drive_Evolution_MC021_V1.0.md | V1.0.0 | ✅ FINAL（MC-021指标驱动） |
 | AQFT_Truth_Over_Ownership_MC022_V1.0.md | V1.0.0 | ✅ FINAL（MC-022事实高于所有权） |
+| AQFT_Minimal_Cognitive_Core_MC023_V1.0.md | V1.0.0 | ✅ FINAL（MC-023最小认知核心） |
 | AQFT_Collaboration_Model_V1.0.md | V1.0.0 | ✅ FINAL（双AI协作研发治理） |
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
@@ -529,7 +530,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 185 |
+| FINAL | 186 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
