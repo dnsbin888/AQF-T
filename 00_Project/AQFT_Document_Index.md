@@ -72,6 +72,7 @@ Updated: 2026-07-26
 | AQFT_V4.0_002_Technology_Stack_Architecture_V1.0.md | V1.0.0 | ✅ APPROVED 98/100 |
 | AQFT_V4.0_003_Canonical_Contract_V1.0.md | V1.0.0 | ✅ APPROVED 99/100 |
 | AQFT_Architecture_Era_Final_Reflection_V1.0.md | V1.0.0 | ✅ FINAL（时代收官反思） |
+| AQFT_Engineering_Era_Vision_V1.0.md | V1.0.0 | ✅ FINAL（工程时代愿景） |
 | Technology_Benchmark/AQFT_Technology_Benchmark_Framework_V1.0.md | V1.0.0 | ✅ FINAL（TAF-001技术准入框架） |
 | 09_Validation_Framework/01_Architecture/AQFT_Validation_Architecture_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
 | 09_Validation_Framework/02_Experiment_Registry/Experiment_Record_Model_V1.0.md | V1.0.0 | ⏳ ENGINEERING DRAFT |
@@ -526,7 +527,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 182 |
+| FINAL | 183 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
