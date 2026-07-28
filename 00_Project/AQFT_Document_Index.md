@@ -132,6 +132,7 @@ Updated: 2026-07-26
 | AQFT_Microstructure_Interpretation_Boundary_C013_V1.0.md | V1.0.0 | ✅ FINAL（Microstructure边界宪法） |
 | AQFT_Hypothesis_Arbitration_Boundary_C014_V1.0.md | V1.0.0 | ✅ FINAL（Arbitration边界宪法） |
 | AQFT_Confidence_Integrity_Boundary_C015_V1.0.md | V1.0.0 | ✅ FINAL（Confidence边界宪法） |
+| AQFT_Knowledge_Lifecycle_Boundary_C016_V1.0.md | V1.0.0 | ✅ FINAL（Knowledge Lifecycle边界宪法） |
 
 ---
 
@@ -515,7 +516,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 171 |
+| FINAL | 172 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
