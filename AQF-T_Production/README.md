@@ -122,6 +122,25 @@ AQF-T_Production/
 
 ---
 
+## V2.8.6 引用清单
+
+```
+Production 模块        V2.8.6 设计来源
+
+01_Constitution    ←  02_Constitution (14边界宪法 C004-C016)
+02_Data            ←  07_Data (6类A股数据源 + Schema)
+                       10_Engineering (10表DDL + 100因子公式)
+03_Strategy        ←  04_Strategy (Dragon + 5策略 + 适配矩阵)
+                       03_AI_Brain §4 (情绪引擎 + 题材热度)
+04_Risk            ←  05_Risk (44公式 + KillSwitch + 仓位计算)
+05_Execution       ←  06_Execution (订单状态机 + A股规则 + QMT)
+                       99_Archive代码 (qmt_adapter, a_share_rules)
+06_Learning        ←  03_AI_Brain §3 (Prediction Engine)
+                       10_Engineering (100因子)
+07_Review          ←  22_Evolution (精简版)
+                       09_Test (回测+压力场景)
+```
+
 ## 设计原则
 
 ```
