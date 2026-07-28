@@ -124,6 +124,7 @@ Updated: 2026-07-26
 | AQFT_Meta_Constitution_Extension_AI_Collaboration_V1.0.md | V1.0.0 | ✅ FINAL（Meta扩展 — AI协同治理） |
 | AQFT_Reality_Over_Architecture_MC016_V1.0.md | V1.0.0 | ✅ FINAL（MC-016现实验证优先） |
 | AQFT_Engineering_Principles_MC018_MC019_V1.0.md | V1.0.0 | ✅ FINAL（MC-018/019工程原则） |
+| AQFT_Contract_Before_Code_MC020_V1.0.md | V1.0.0 | ✅ FINAL（MC-020契约优先） |
 | AQFT_Collaboration_Model_V1.0.md | V1.0.0 | ✅ FINAL（双AI协作研发治理） |
 | AQFT_System_Constitution_V2.8.6.md | V2.8.6 | 📝 DRAFT（历史版本） |
 | AQFT_System_Constitution_V2.8.6_FINAL.md | V2.8.6-FINAL | ✅ FINAL（最高约束文件） |
@@ -524,7 +525,7 @@ World_Model/
 
 | 类别 | 数量 |
 |------|------|
-| FINAL | 180 |
+| FINAL | 181 |
 | DRAFT | 2 |
 | AWAITING DESIGN | 0 |
 | PLANNED | 10+ |
