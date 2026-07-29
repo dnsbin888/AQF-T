@@ -1,0 +1,7 @@
+✅ data_model OK
+✅ validator OK (3/3 passed)
+✅ recovery_manager OK
+✅ health_monitor OK (score=100.0)
+✅ quality_report OK (365 chars)
+
+=== M1 Core Framework: ALL CHECKED ===
