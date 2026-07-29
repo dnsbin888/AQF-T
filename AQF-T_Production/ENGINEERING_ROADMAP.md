@@ -52,9 +52,26 @@ Deliverables:
   Evidence/RecoveryLog_*.json
   Evidence/LatencySummary_*.csv
 
-编码优先: data_quality/ (M2-M7都依赖此基础)
-  validator.py / anomaly_detector.py / recovery_manager.py
-  / health_monitor.py / quality_report.py / tests/
+M1 实施顺序 (按依赖, 非按文件数):
+
+  Day1: 统一数据模型 (Tick/OrderBook/Bar/DataQualityResult)
+        所有源→统一内部格式→进入Validator
+  Day2: validator.py (规则注册制: Price/Timestamp/Volume/OrderBook/Symbol)
+  Day3: anomaly_detector.py (检测异常, 不修复: Gap/Duplicate/Drift/Freeze/Jump)
+  Day4: recovery_manager.py (RECOVERED/DEGRADED/FAILED 三结果)
+  Day5: health_monitor.py (DataHealthSnapshot 统一指标)
+  Day6: quality_report.py (每日自动: Health/Validation/Anomaly/Recovery/Latency)
+
+编码实践:
+  配置驱动 (max_latency_ms/max_price_jump_pct/max_missing_ticks)
+  测试先行 (正常Tick/重复/倒退/Bid>Ask/成交量倒退/L2中断恢复)
+
+本周验收:
+  ✅ 5个核心组件框架完成
+  ✅ 主要校验规则+单元测试覆盖
+  ✅ 第一版Data Health Report生成
+  ✅ 至少1种异常Recovery流程验证
+  ✅ M1工程证据齐全 (日志+报告+测试结果)
 
 Rollback: 任何数据异常未报警 → 停止进入M2
 ```
