@@ -160,6 +160,7 @@ Execution Latency   P99 < 500ms
 ### Validation KPI (模型/策略可信?)
 ```
 Replay一致率        ≥ 99%
+Replay可复现        同数据同结果 (Reproducibility)
 Decision Trace完整率 100%
 Walk-Forward稳定    连续3月IC波动<30%
 DSR                 > 0
