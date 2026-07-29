@@ -24,6 +24,18 @@
     Execution Metrics: 即使判断正确, 是否真正执行到了?
 ```
 
+## 质量原则
+
+```
+任何里程碑(M1-M7)不得以人工解释代替工程证据。
+
+不能说 "我觉得没问题"。
+必须提供:
+  Replay Report / Decision Trace / Execution Metrics / Validation Report
+
+所有结论由可重复、可审计的工程证据支撑。
+```
+
 ## 不可违反
 
 ```

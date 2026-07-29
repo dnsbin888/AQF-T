@@ -31,14 +31,19 @@ M7 Live Trading        系统可真实赚钱
 Entry: QMT接通 + L2接通 + AKShare正常 + 数据库正常
 
 Exit:
-  数据完整率 > 99.9%
-  重复数据 = 0
-  缺失自动恢复
-  时间同步正常
-  异常全部报警
-  Data Health Score ≥ 95
+  数据完整率 > 99.9% (量化)
+  重复数据 = 0 (量化)
+  缺失自动恢复并记录 (量化)
+  时间同步偏差 < 100ms (量化)
+  异常100%报警 (量化)
+  Data Health Score ≥ 95 (量化)
 
-Rollback: 任何数据异常 → 停止进入M2
+Deliverables:
+  Data Health Report (每日自动)
+  Data Quality Dashboard
+  异常日志 + 恢复日志
+
+Rollback: 任何数据异常未报警 → 停止进入M2
 ```
 
 ### M2 L2 Replay
@@ -47,10 +52,16 @@ Rollback: 任何数据异常 → 停止进入M2
 Entry: M1通过
 
 Exit:
-  Replay结果 = 实时Decision (误差 < 1%)
-  Path A 回封板可完整回放
+  Replay结果 = 实时Decision (误差 < 1%) (量化)
+  Path A 回封板完整回放 (量化)
+  回放覆盖≥100个历史炸板案例 (量化)
 
-Rollback: Replay与实时不一致 → 回M1
+Deliverables:
+  Replay Report (每次回放)
+  Replay一致率报告
+  Case Library (回封板案例库)
+
+Rollback: Replay与实时不一致 >1% → 回M1
 ```
 
 ### M3 Decision Trace
@@ -59,12 +70,13 @@ Rollback: Replay与实时不一致 → 回M1
 Entry: M2通过
 
 Exit:
-  每笔交易可回答:
-    为什么买? (Path/Score/Reason)
-    为什么没买? (Risk REJECT/Regime/Timing)
-    为什么Risk拒绝?
-    为什么Execution失败?
-    为什么盈利/亏损?
+  100%交易可回答: 为什么买/没买? Risk为什么拒绝? Execution为什么失败? (量化)
+  Decision Trace完整率 = 100% (量化)
+  Decision Audit Report自动生成 (量化)
+
+Deliverables:
+  Decision Trace Database
+  Decision Audit Report (每日)
 
 Rollback: 任何交易无法回答 → 回M2
 ```
@@ -75,9 +87,13 @@ Rollback: 任何交易无法回答 → 回M2
 Entry: M3通过
 
 Exit:
-  每日自动生成Execution Report:
-    Fill Rate / Latency / Slippage / Reject / Cancel / Timeout
-  执行问题可定位
+  每日自动Execution Report (量化)
+  Fill Rate/Latency/Slippage/Reject/Cancel/Timeout 全部可查 (量化)
+  Execution异常100%可追溯 (量化)
+
+Deliverables:
+  Execution Daily Report
+  Latency Report / Fill Report
 
 Rollback: 任何执行异常未记录 → 回M3
 ```
@@ -87,10 +103,14 @@ Rollback: 任何执行异常未记录 → 回M3
 ```
 Entry: M4通过
 Exit:
+  连续3个月Walk-Forward稳定 (IC波动<30%) (量化)
+  DSR > 0 (量化)
+  PBO < 10% (量化)
   不追求最高准确率, 追求模型稳定性
-  LGBM: IC日间波动 < 30%
-  回封板: 信号稳定性 > 月度衰减 < 10%
-  通过CPCV+DSR+PBO
+
+Deliverables:
+  Strategy Validation Report
+  Walk-Forward Report / CPCV Report
 
 Rollback: 模型不稳定 → 回M4
 ```
@@ -100,8 +120,13 @@ Rollback: 模型不稳定 → 回M4
 ```
 Entry: M5通过
 Exit:
-  连续20+交易日自动运行
-  无人工干预 / 无异常退出 / 无数据中断 / 无Risk失效
+  连续20+交易日自动运行 (量化)
+  0次人工干预 / 0次异常退出 (量化)
+  0次数据中断 / 0次Risk失效 (量化)
+
+Deliverables:
+  Paper Trading Daily Log
+  System Reliability Report
 
 Rollback: 任何中断 → 回M5
 ```
@@ -110,25 +135,39 @@ Rollback: 任何中断 → 回M5
 
 ```
 Entry: M6通过
-Exit Phase 1 (首月): 连续运行/自动下单/自动止损/自动恢复
+Exit Phase 1 (首月):
+  连续运行 / 自动下单 / 自动止损 / 自动恢复 (全部量化)
+  System Reliability KPI 全部达标
 Exit Phase 2: 收益达标
+
+Deliverables:
+  Live Trading Daily Report
+  System Reliability Dashboard
 
 Rollback: 任何铁律违规 → 立即停止, 人工审查
 ```
 
-## 贯穿KPI: System Reliability
+## 贯穿KPI
 
+### System KPI (系统坏了?)
 ```
 Availability        ≥ 99.9%
-Decision Success    ≥ 99%
-Risk Success        100%
-Replay一致率        ≥ 99%
-Data Quality        ≥ 99.9%
-Execution Success   ≥ 98%
 Crash               0
 Memory Leak         0
+Execution Latency   P99 < 500ms
+```
+
+### Validation KPI (模型/策略可信?)
+```
+Replay一致率        ≥ 99%
+Decision Trace完整率 100%
+Walk-Forward稳定    连续3月IC波动<30%
+DSR                 > 0
+PBO                 < 10%
+Data Quality Score  ≥ 95
 ```
 
 ---
 
 **从这一刻起: 先证明系统可靠, 再证明策略赚钱。**
+**没有工程证据, 不算通过Exit。**
