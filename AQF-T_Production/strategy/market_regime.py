@@ -1,0 +1,141 @@
+"""
+Market Regime Engine — 市场状态引擎
+所有策略的"总开关" — 每天第一个运行, 输出统一市场状态
+"""
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Literal
+
+
+@dataclass
+class MarketRegime:
+    """全市场状态 — 所有策略读取"""
+
+    # 情绪维度
+    sentiment_phase: Literal["冰点期", "回暖期", "高潮期", "退潮期"]
+    sentiment_score: float              # 情绪值
+
+    # 结构维度
+    limit_up_count: int                 # 涨停家数
+    limit_down_count: int               # 跌停家数
+    board_ladder: dict                  # {2板:N, 3板:N, 4板:N, 5+板:N}
+    promotion_rate: float               # 首板→二板晋级率
+   炸板率: float
+
+    # 资金维度
+    north_bound_direction: Literal["流入", "流出", "中性"]
+    north_bound_amount: float           # 北向净流入(亿)
+    margin_trend: Literal["上升", "下降", "平稳"]
+
+    # 综合决策
+    operation_mode: Literal["aggressive", "normal", "cautious", "defensive", "stop"]
+    path_a_allowed: bool                # 回封板是否允许
+    path_b_allowed: bool                # 半路是否允许
+    max_position_pct: float             # 全局仓位上限
+    recommended_path: str               # 推荐路径
+
+    timestamp: str = ""
+
+
+class MarketRegimeEngine:
+    """
+    市场状态引擎 — 系统每天第一个运行的模块
+
+    输入: 全市场统计数据 (涨停/跌停/梯队/北向/炸板率)
+    输出: MarketRegime → 所有策略读取
+
+    决策逻辑:
+      退潮 → stop (两条路都禁止)
+      冰点 → cautious (仅B2题材扩散, 轻仓)
+      回暖 → normal (A+B, 中等仓位)
+      高潮 → aggressive (A+B, 满仓)
+    """
+
+    def evaluate(self, market_stats: dict) -> MarketRegime:
+        # ── 情绪值 ──
+        up = market_stats.get("limit_up_count", 0)
+        down = market_stats.get("limit_down_count", 0)
+        height = market_stats.get("max_board_height", 0)
+       炸板率 = market_stats.get("炸板率", 0)
+        north = market_stats.get("north_bound_net", 0)
+
+        score = up * 2 - down * 3 + height * 5
+        if north > 10:    score += 10
+        elif north < -10:  score -= 10
+
+        # ── 四阶段 ──
+        if down > 30 and height <= 2:
+            phase = "冰点期"
+        elif height >= 7 and炸板率 < 0.30:
+            phase = "高潮期"
+        elif炸板率 > 0.40 or down > 50:
+            phase = "退潮期"
+        elif score > 80:
+            phase = "高潮期"
+        elif score > 20:
+            phase = "回暖期"
+        else:
+            phase = "冰点期"
+
+        # ── 梯队 ──
+        ladder = market_stats.get("board_ladder", {})
+        promotion = market_stats.get("promotion_rate", 0)
+
+        # ── 北向 ──
+        if north > 10:       nb_dir = "流入"
+        elif north < -10:    nb_dir = "流出"
+        else:                nb_dir = "中性"
+
+        # ── 融资 ──
+        margin_chg = market_stats.get("margin_balance_change", 0)
+        if margin_chg > 0.02:      margin_t = "上升"
+        elif margin_chg < -0.02:   margin_t = "下降"
+        else:                      margin_t = "平稳"
+
+        # ── 综合决策 ──
+        mode, path_a, path_b, max_pos, recommended = self._decide(
+            phase, score, 炸板率, promotion
+        )
+
+        return MarketRegime(
+            sentiment_phase=phase,
+            sentiment_score=round(score, 0),
+            limit_up_count=up,
+            limit_down_count=down,
+            board_ladder=ladder,
+            promotion_rate=round(promotion, 2),
+            炸板率=round(炸板率, 2),
+            north_bound_direction=nb_dir,
+            north_bound_amount=round(north, 1),
+            margin_trend=margin_t,
+            operation_mode=mode,
+            path_a_allowed=path_a,
+            path_b_allowed=path_b,
+            max_position_pct=max_pos,
+            recommended_path=recommended,
+            timestamp=datetime.now().isoformat(),
+        )
+
+    def _decide(self, phase: str, score: float, 炸板率: float,
+                promotion: float) -> tuple:
+        """综合决策 — 所有策略的总开关"""
+
+        if phase == "退潮期":
+            return ("stop", False, False, 0.0, "空仓")
+
+        if phase == "冰点期":
+            if promotion > 0.20:  # 晋级率还可以
+                return ("cautious", False, True, 0.20, "B2题材扩散")
+            return ("defensive", False, False, 0.10, "观望")
+
+        if phase == "高潮期":
+            if炸板率 < 0.20:  # 炸板率低, 封板质量好
+                return ("aggressive", True, True, 0.70, "A+B全开")
+            return ("normal", True, True, 0.50, "A+B")
+
+        if phase == "回暖期":
+            if promotion > 0.30:
+                return ("normal", True, True, 0.50, "A+B")
+            return ("normal", True, False, 0.30, "A优先")
+
+        return ("normal", True, True, 0.50, "A+B")
