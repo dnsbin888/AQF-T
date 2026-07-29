@@ -1,83 +1,102 @@
 """
-Decision Core — 融合/优先级/冲突解决/仓位分配
-职责: 选谁? 多少? (Risk只管合法/超仓/熔断)
+Decision Core — 唯一决策中枢
+统一Candidate接口: 所有策略输出Candidate, 不是BUY指令
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from strategy.market_regime import MarketRegime
-from strategy.arbitration import HypothesisArbitrator, ArbitrationResult
 
 
 @dataclass
-class UnifiedSignal:
-    """统一交易信号 — Decision输出"""
+class TradingCandidate:
+    """统一候选 — 所有策略(Path A/B/未来新策略)统一输出此格式"""
     symbol: str
-    action: str          # BUY / SELL / HOLD
-    path: str            # A(回封板) / B1(Trend) / B2(Theme) / B3(Intraday)
+    strategy: str            # reseal / trend / theme / intraday / ...
+    score: float             # 综合评分 0-100
+    confidence: float        # 0-1
+    expected_return: float   # 预期收益
+    risk: float              # 风险评分 0-100
+    position_hint: float     # 建议仓位
+    evidence: dict = field(default_factory=dict)  # 决策依据
+    path: str = ""           # A / B1 / B2 / B3
+
+
+@dataclass
+class TradingSignal:
+    """最终交易信号 — Decision输出"""
+    symbol: str
+    action: str              # BUY / SELL / HOLD
+    strategy: str
     position_pct: float
     confidence: float
-    reason: str
+    reasoning: str
 
 
 class DecisionCore:
     """
-    决策核心 — Strategy和Risk之间的独立层
+    唯一决策中枢
 
-    职责:
-      ① 融合 Path A 和 Path B 的信号
-      ② 冲突解决 (用Hypothesis Arbitration)
-      ③ 仓位分配 (A优先于B)
-      ④ 输出统一TradingSignal
+    接收: TradingCandidate列表 (来自Path A/B/未来新策略)
+    处理: 排序→冲突消解→仓位优化
+    输出: TradingSignal列表 (统一格式, 进入Risk)
     """
 
     def __init__(self):
-        self.arbitrator = HypothesisArbitrator()
+        self.candidates: list[TradingCandidate] = []
 
-    def decide(self, path_a_signals: list[dict],
-               path_b_signals: list[dict],
-               regime: MarketRegime,
-               current_positions: dict) -> list[UnifiedSignal]:
+    def collect(self, candidates: list[TradingCandidate]):
+        """收集所有策略的候选"""
+        self.candidates.extend(candidates)
+
+    def decide(self, regime: MarketRegime,
+               current_positions: dict) -> list[TradingSignal]:
         """
-        核心决策:
-          1. Regime过滤 (退潮→全部拒绝)
-          2. 路径融合 (A优先于B)
-          3. 仓位分配 (总仓位上限控制)
+        核心决策流程:
+          1. Regime过滤
+          2. 评分排序
+          3. 冲突消解 (同标的多个信号→取最高分)
+          4. 仓位分配 (A优先, 总上限控制)
+          5. 输出统一TradingSignal
         """
 
-        # ── Regime总开关 ──
-        if not regime.path_a_allowed:
-            path_a_signals = []
-        if not regime.path_b_allowed:
-            path_b_signals = []
+        # ── Regime过滤 ──
+        if regime.operation_mode == "stop":
+            return []
 
-        all_signals = []
+        active = [c for c in self.candidates
+                  if (c.path == "A" and regime.path_a_allowed) or
+                     (c.path.startswith("B") and regime.path_b_allowed)]
 
-        # ── Path A 优先处理 (确定性更高) ──
-        remaining_position = regime.max_position_pct
-        for sig in path_a_signals:
-            if remaining_position <= 0:
+        # ── 评分排序 ──
+        active.sort(key=lambda c: c.score, reverse=True)
+
+        # ── 冲突消解 (同标的取最高分) ──
+        seen = {}
+        for c in active:
+            if c.symbol not in seen or c.score > seen[c.symbol].score:
+                seen[c.symbol] = c
+        unique = list(seen.values())
+        unique.sort(key=lambda c: c.score, reverse=True)
+
+        # ── 仓位分配 ──
+        signals = []
+        remaining = regime.max_position_pct
+
+        for c in unique:
+            if remaining <= 0.05:
                 break
-            pos = min(sig.get("position_pct", 0.10), remaining_position)
-            all_signals.append(UnifiedSignal(
-                symbol=sig["symbol"], action=sig.get("action", "BUY"),
-                path="A", position_pct=round(pos, 2),
-                confidence=sig.get("confidence", 0.7),
-                reason=sig.get("reason", ""),
-            ))
-            remaining_position -= pos
-
-        # ── Path B 剩余仓位 ──
-        for sig in path_b_signals:
-            if remaining_position <= 0.05:  # <5%不做
-                break
-            pos = min(sig.get("position_pct", 0.05), remaining_position)
-            all_signals.append(UnifiedSignal(
-                symbol=sig["symbol"], action=sig.get("action", "BUY"),
-                path=sig.get("path", "B"),
+            pos = min(c.position_hint, remaining)
+            signals.append(TradingSignal(
+                symbol=c.symbol,
+                action="BUY" if c.score > 50 else "HOLD",
+                strategy=c.strategy,
                 position_pct=round(pos, 2),
-                confidence=sig.get("confidence", 0.5),
-                reason=sig.get("reason", ""),
+                confidence=c.confidence,
+                reasoning=f"{c.strategy}: score={c.score:.0f}, risk={c.risk:.0f}",
             ))
-            remaining_position -= pos
+            remaining -= pos
 
-        return all_signals
+        # ── 清空, 准备下一轮 ──
+        self.candidates = []
+
+        return signals
