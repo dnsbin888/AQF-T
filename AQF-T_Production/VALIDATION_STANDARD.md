@@ -51,6 +51,15 @@ Data Health Score = (Freshness×0.25 + Integrity×0.25 + Completeness×0.20 + La
   ✅ 无未来函数 (因子计算不依赖未来数据)
   ✅ Train/Val/Test时间顺序正确 (Train最早, Test最晚)
 
+Walk-Forward Analysis (防过拟合黄金标准):
+  方法: 滚动窗口训练-验证
+    Window 1: Train 2020-2022 → Test 2023 Q1
+    Window 2: Train 2020-2023Q1 → Test 2023 Q2
+    Window 3: Train 2020-2023Q2 → Test 2023 Q3
+    ...滚动至2026 Q2
+  验证: 所有Window的IC/Sharpe均值 > 单次Train/Test
+         各Window间IC波动 < 30% (模型稳定)
+
 幸存者偏差:
   ✅ 回测包含已退市股票 (非仅存活股)
   ✅ IC计算包含"买入失败"样本 (非仅已成交)
