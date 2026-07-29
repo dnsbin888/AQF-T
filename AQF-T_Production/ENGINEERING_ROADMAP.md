@@ -7,6 +7,56 @@
 
 ---
 
+## P0 — 实盘前必须完成
+
+```
+L2 Replay (GPT研究验证 → 从P1提升):
+  回封板策略核心依赖L2微观结构
+  没有L2 Replay = 无法回测Path A
+  行业标准: hftbacktest / QuantReplay 已成熟
+  定位: 验证基础设施, 非策略模块
+
+Execution Metrics (GPT研究验证):
+  滑点/成交率/撤单率/超时率
+  Signal→Decision→Order→Fill 全链路延迟
+  每日自动生成Execution Report
+
+Decision Trace (GPT建议新增):
+  Candidate→Path→Score→Decision→Risk→Execution→Result
+  每笔交易完整轨迹 → Knowledge Hub可直接回答:
+    为什么买? 为什么没买? 哪个环节失效?
+
+数据质量自动化:
+  Data Health Score (Freshness/Integrity/Completeness/Latency/Consistency)
+  自动计算+告警, ≥95分才进Stage 2
+```
+
+## P1 — V1.1 升级
+
+```
+CPCV + DSR + PBO:
+  行业标准: CPCV > Walk-Forward (2024 Arian et al. 实证)
+  Walk-Forward已成熟, CPCV进一步防数据挖掘偏差
+
+Execution Quality 四分解:
+  滑点分解: spread/impact/timing/opportunity
+
+Portfolio Risk (游资简化版):
+  行业/题材集中度 + 持仓相关性 + Beta暴露
+
+在线模型评估:
+  模型漂移检测 / 数据漂移检测 / 自动重训练触发
+```
+
+## P2 — Research Lab
+
+```
+Monte Carlo / Multi-Asset / RL / World Model
+全部不进Production主链, 验证通过→插件接入
+```
+
+---
+
 ## Stage 1: 数据可信 (最高优先级)
 
 ```

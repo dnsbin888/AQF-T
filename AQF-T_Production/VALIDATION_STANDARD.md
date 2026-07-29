@@ -97,12 +97,30 @@ Walk-Forward Analysis (防过拟合黄金标准):
   ✅ Review记录100%覆盖每笔交易
 
 数据持久化 (已踩过的坑):
-  ✅ 系统重启后持仓不丢失、不重置 (SQLite持久化验证)
-  ✅ 交易记录重启后可查询 (历史数据完整性)
-  ✅ 历史持仓与当前持仓不混淆 (按日期分区, 快照机制)
-  ✅ 日切时T+1锁定/解锁正确 (不出现"昨日买的今天还锁着")
-  ✅ 重复下单检测: 同一信号ID→拒绝第二次 (幂等性)
-  ✅ 数据库异常恢复: 写入失败→重试3次→告警 (不静默丢数据)
+  ✅ 系统重启后持仓不丢失、不重置
+  ✅ 交易记录重启后可查询
+  ✅ 历史持仓与当前持仓不混淆
+  ✅ 重复下单检测: 同一信号ID→拒绝第二次
+
+Decision Trace (决策审计链) — P0新增:
+  每笔交易自动记录完整决策轨迹:
+    Candidate → Path → Score → Decision → Risk → Execution → Result
+  
+  可回答:
+    为什么买? (Path X, Score Y, Reason Z)
+    为什么没买? (Risk REJECT, Regime退潮, Timing=WAIT)
+    哪个环节失效? (信号→决策→风控→执行)
+    哪个模型贡献最大? (归因到具体因子/规则)
+
+Execution Metrics (实时) — P0新增:
+  ✅ Signal→Decision 延迟
+  ✅ Decision→Order 延迟
+  ✅ Order→Fill 延迟
+  ✅ Fill Rate (成交率)
+  ✅ Average Slippage (平均滑点)
+  ✅ Cancel Rate (撤单率)
+  ✅ Timeout Rate (超时率)
+  每日自动生成Execution Report
 
 风控:
   ✅ Risk审批100%执行 (无绕过)
