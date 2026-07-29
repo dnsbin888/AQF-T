@@ -1,0 +1,20 @@
+{
+  "pattern": "PositionAnchor",
+  "version": "1.0",
+  "status": "PRODUCTION",
+  "dataset": "L2_v1",
+  "backtest": {
+    "samples": 200,
+    "win_rate": 0.715,
+    "profit_factor": 4.44,
+    "max_drawdown": 0.2059,
+    "avg_return": 0.0293
+  },
+  "statistics": {
+    "sharpe": 9.13,
+    "dsr": 15.1188,
+    "pbo": 0.0,
+    "cpcv_stable": true
+  },
+  "timestamp": "2026-07-30T03:01:27.451256"
+}

@@ -1,0 +1,20 @@
+{
+  "pattern": "LeaderLifeCycle",
+  "version": "1.0",
+  "status": "VALIDATED",
+  "dataset": "L2_v1",
+  "backtest": {
+    "samples": 200,
+    "win_rate": 0.755,
+    "profit_factor": 4.72,
+    "max_drawdown": 0.2395,
+    "avg_return": 0.031
+  },
+  "statistics": {
+    "sharpe": 10.11,
+    "dsr": 15.6029,
+    "pbo": 0.0,
+    "cpcv_stable": false
+  },
+  "timestamp": "2026-07-30T03:01:27.477346"
+}
