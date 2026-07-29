@@ -65,6 +65,14 @@ Data Health Score = (Freshness×0.25 + Integrity×0.25 + Completeness×0.20 + La
 收益率最后验证:
   ✅ Path B LGBM: IC > 0.05, ICIR > 0.3
   ✅ Path A: 回封板信号逻辑正确 (非验证收益率)
+
+模型融合方案对比 (数据决定, 不提前选):
+  方案A: LGBM单独 (基准)
+  方案B: LGBM + XGBoost 加权融合 (当前设计, 各0.5)
+  方案C: LGBM + XGBoost Stacking (CJoE 2024最优, Sharpe 1.23)
+    基学习器: XGBoost + LightGBM
+    次级学习器: AdaBoost or Logistic Regression
+  验证: 哪个IC/Sharpe最高用哪个
 ```
 
 ## Stage 3: 模拟盘 (Paper Trading)
