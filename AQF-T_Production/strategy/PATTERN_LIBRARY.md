@@ -55,4 +55,54 @@ P2 弱转强规则化:
 
 ---
 
+## Pattern Card (每个Pattern统一元数据)
+
+```
+Pattern:      PositionAnchor
+Version:      1.0
+Status:       Research | Validated | Production | Deprecated
+Inputs:       板块封板时序, 跟风数量, L2封单
+Outputs:      anchor_score, separation_score
+Regime Fit:   回暖/高潮
+Samples:      待回测统计
+Replay Rate:  待验证
+Backtest:     待验证
+Paper:        待验证
+Live:         待验证
+```
+
+## 模型准入制度
+
+```
+任何模型(游资/学术/AI/私募)进入Production唯一路径:
+
+  Research Lab → Replay → Backtest → Paper → Live → Production Plugin
+
+准入检查:
+  ✅ 解决真实问题? (明确解决哪一环节)
+  ✅ 独立于已有Pattern? (避免高度重复, 相关性<0.8)
+  ✅ 可Replay? (必须可重现)
+  ✅ 有统计证据? (Backtest+Paper)
+  ✅ 提升整体系统? (非单指标优化)
+
+不建议进入Production:
+  ❌ RL (无稳定模拟环境之前)
+  ❌ Transformer预测涨停 (短线游资场景无充分证据)
+  ❌ LLM决策 (与"AI不直接下单"铁律冲突)
+  
+  ✅ LLM辅助 (公告解析/新闻摘要/龙虎榜文本/舆情分类) — 可作为Learning插件
+```
+
+## 当前成熟度
+
+```
+已Ready (7):  情绪周期/龙头8维/梯队/生命周期/回封/卡位/淘汰
+待验证 (3):   RelativeStrength/SectorFlow/RelayStrength
+Research (1): Weak→Strong
+
+下一步: 不是加Pattern, 是为每个Pattern建立统计证据
+```
+
+---
+
 **全部规则, 零AI, 可单独回测验证, 不修改主链。**
