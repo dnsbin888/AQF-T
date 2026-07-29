@@ -1,152 +1,94 @@
-# AQF-T Production — 最终完美方案
-
+# AQF-T Production — V1.0 最终架构
 
 **Version:** V1.0 Final | **Date:** 2026-07-29
-**前置:** V2.8.6设计母库(不动) + 国金QMT + L2数据(已开通)
-**定位:** A股游资/个人量化 全自动交易系统
+**评分:** 9.3→10 (修正后)
+
 
 ---
 
-## 零、设计来源
-
-```
-本方案综合三种视角:
-
-  视角1 (游资):     回封板实战经验, 市场感知, 龙头战法
-  视角2 (AI架构):   V2.8.6冻结基线, 四维模型, 宪法治理
-  视角3 (工程):     Production精简, 路径分叉, 统一框架
-```
-
----
-
-## 一、最终架构
+## 最终架构
 
 ```
                     Constitution (交易制度)
-                         │
-                  Market Regime (总开关)
-                   每天第一个运行
-                  输出: 能不能做? 做多少?
-                         │
-                       Data
-                  QMT L2 + akshare
-                         │
-              ┌──────────┴──────────┐
-              │                     │
-          Path A                  Path B
-          回封板                   半路/接力
-              │                     │
-         Perception              ML引擎
-              │                     │
-      板块地位→炸板分类        B1 Trend (LGBM)
-      →回封确认→进场           B2 Theme (规则)
-                               B3 Intraday (XGBoost确认)
-              │                     │
-              └──────────┬──────────┘
-                         │
-                    Risk (统一审批)
-                  APPROVE/ADJUST/REJECT
-                         │
-                    Execution (QMT)
-                         │
-                      Review
-                   归因→经验→学习
+                          │
+                   Market Regime (总开关)
+                    今天能不能赚钱?
+                          │
+                        Data (QMT L2 + akshare)
+                          │
+                    Perception (8层感知)
+                          │
+                 ┌────────┴────────┐
+                 │                 │
+             Path A            Path B
+           回封板(规则)       ML预测(统计)
+          Perception驱动    LGBM+XGBoost
+                 │                 │
+                 └────────┬────────┘
+                          │
+                     Decision Core
+              (融合/优先级/冲突解决/仓位分配)
+                          │
+                        Risk (合法?超仓?熔断?)
+                          │
+                     Execution (QMT)
+                          │
+                   Knowledge Hub
+        Review/Experience/Training/Model Registry
+
+     ┌──────────────────────────┐
+     │    Learning (旁路服务)     │
+     │                          │
+     │  Offline: 训练/回测/数据集  │
+     │  Online:  预测/确认/记忆    │
+     │  LLM:     DeepSeek/Qwen   │
+     └──────────────────────────┘
 ```
 
-## 二、两条赚钱路径
+## 关键修正 (V1.0 Final)
 
 ```
-Path A — 回封板 (确定性最高, 胜率70-85%)
+1. Decision Core 独立
+   旧: Strategy → Risk (Risk既审合规又选标的)
+   新: Strategy → Decision(选谁/多少) → Risk(合法/超仓/熔断)
+   职责分离: Decision负责融合, Risk负责防线
 
-  漏斗: 涨停池→炸板池→洗盘型判定→回封确认(3标准≥2)→进场
+2. Regime 不属于 Learning
+   旧: Learning四维包含Regime
+   新: Market Regime独立, 属于Decision Layer上游
+   Regime是规则+统计+经验, 不是AI学习的产物
 
-  "不是预测涨停, 是判断资金是否完成重新合力"
+3. Review → Knowledge Hub
+   旧: Review(复盘)
+   新: Knowledge Hub (归因+经验+训练+模型评估+绩效+Model Registry)
+   未来所有模型依赖这里
 
-  核心变量: 板块地位 / 炸板原因(洗盘vs诱多) / 承接力度
-           / 封单恢复速度 / 情绪周期
-
-  不需要LGBM/XGBoost — 微观结构判断比统计模型更准
-  用: Perception规则引擎 (V2.8.6 08_Combat_Intelligence)
-
-
-Path B — 半路/接力 (统计模型)
-
-  B1 Trend:   突破平台+放量+趋势加速 → LGBM三目标预测
-  B2 Theme:   龙头涨停, 资金找补涨 → 情绪因子+板块强度
-  B3 Intraday: 盘中强势→冲板 → XGBoost L2确认封板概率
-
-  LGBM三目标标签: 机会评分 = 爆发概率 - 风险概率 + 资金认可度
-  XGBoost定位: 确认器 (Confirmation Model), 非决策者
+4. Learning 拆 Offline/Online
+   旧: Learning一个模块
+   新: Offline(训练/回测/数据集) + Online(预测/确认/记忆) + LLM
+   防止膨胀成新的"AI Brain"
 ```
 
-## 三、两条路的关系
+## 主链 (不可绕过)
 
 ```
-共享:
-  市场感知 ✅  (Market Regime退潮→两条路都停)
-  Risk审批 ✅  (统一限额/熔断/KillSwitch)
-  QMT执行 ✅  (同一账户)
-  Review复盘 ✅ (分路径统计绩效)
-
-各自:
-  信号来源不同 (Perception规则 vs ML统计)
-  参数不同 (回封参数 vs Alpha参数)
-
-冲突处理:
-  仓位达上限时 Path A > Path B (A确定性更高)
-  退潮期两条路都禁止买入
+Market Regime → Perception → Path A/B → Decision → Risk → Execution → QMT
+                                                       ↑
+                                              Learning (旁路, 只提供评分/建议)
 ```
 
-## 四、四维模型 (Learning层)
+## 与V2.8.6的关系
 
 ```
-LightGBM    → B1 Trend   → 趋势预测 (日K+100因子, 三目标标签)
-XGBoost     → B3 + 确认  → L2择时 + 盘口质量确认 (确认器, 非决策者)
-Regime引擎  → 总开关     → 情绪周期+梯队+北向 → 所有策略读取
-LLM API     → 事件分析   → DeepSeek/Qwen 非结构化文本
+V2.8.6 = 设计知识库, 保留不动
+Production = 实盘运行系统
 
-不是Ensemble投票, 是Pipeline串联, 各做各的事
-```
-
-## 五、全自动交易循环
-
-```
-盘中 (9:30-15:00, 每5分钟):
-
-  ① Market Regime: 今天能不能做?
-     退潮→全停 | 冰点→仅B2 | 回暖→A+B | 高潮→A+B满仓
-
-  ② 数据更新: QMT L2 + akshare实时
-
-  ③ 涨停池→炸板池:
-     Path A: 炸板分类→回封确认→进场(如满足)
-     Path B: 异动监控→LGBM→确认→进场(如满足)
-
-  ④ Risk审批: 每条信号→APPROVE/ADJUST/REJECT
-     退潮→REJECT全部买入
-
-  ⑤ QMT执行: APPROVE→下单 | REJECT→记录
-
-  ⑥ 成交→Review记录→Experience积累
-```
-
-## 六、验证路线
-
-```
-Phase 0: 系统冻结 ✅
-Phase 1: 离线回测 (B1 LGBM回测, 3年历史)
-Phase 2: 模拟盘 (B1先→A后→同时, 1-2月)
-Phase 3: 实盘 (≤10万, 人工监督, 两条路对比)
-```
-
-## 七、三条铁律
-
-```
-1. AI不直接下单 (Learning只提供评分/建议)
-2. Risk最高否决权 (Strategy→Risk→Execution硬链不可绕过)
-3. 退潮期两条路都禁止买入 (Market Regime总开关)
+V2.8.6中冻结的研究资产:
+  World Model / Belief State / Counterfactual / Multi-Agent
+  → 不进入交易主链
+  → 未来通过回测+模拟盘证明有效 → 作为可插拔研究模块引入
 ```
 
 ---
 
-**架构冻结。进入工程验证。**
+**Architecture Final. Engineering Verification Begins.**

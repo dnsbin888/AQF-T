@@ -10,23 +10,25 @@
 ## 架构
 
 ```
-01_Constitution    交易制度 (不可违反)
-02_Data            数据 (QMT L2 + akshare)
-03_Strategy        策略 (规则 + L2订单流 + Dragon)
-04_Risk            风控 (最高否决权)
-05_Execution       执行 (国金miniQMT)
-06_Learning        AI插件 (纯建议, 不参与交易链)
-07_Review          复盘 (因子归因 + L2复盘 + 经验)
+Constitution     交易制度
+Market Regime    总开关 (今天能不能做?)
+Data             QMT L2 + akshare
+Perception       8层感知
+Path A           回封板 (规则)
+Path B           半路/接力 (ML统计)
+Decision Core    融合/优先级/仓位分配
+Risk             合法?超仓?熔断?
+Execution        国金QMT
+Knowledge Hub    归因/经验/训练/注册
+Learning(旁路)   预测/确认/记忆/LLM
 ```
 
 ## 决策主链 (不可绕过)
 
 ```
-Data → Strategy → Risk → Execution → 国金QMT → A股
-         ↑         ↑
-         └── Learning (评分/建议, 只读不写)
-
-Risk: APPROVE → 执行 | ADJUST → 降仓执行 | REJECT → 放弃
+Market Regime → Perception → Path A/B → Decision Core → Risk → Execution → QMT
+                                               ↑
+                                        Learning (旁路, 只提供评分)
 ```
 
 ## 三条铁律
@@ -41,45 +43,36 @@ Risk: APPROVE → 执行 | ADJUST → 降仓执行 | REJECT → 放弃
 
 ## 模块速览
 
-### 01 Constitution
-交易制度。引用V2.8.6: 14边界宪法(C004-C016)。限额: 单票≤10%, 日亏≤3%, 总回撤≤15%。
+### Market Regime (总开关)
+每天第一个运行。回答: 今天能不能做? 退潮→全停 / 冰点→仅B2 / 回暖→A+B / 高潮→A+B满仓
 
-### 02 Data
-- **L2**: 国金QMT — 逐笔成交/十档盘口/委托队列/大单统计
-- **L1**: QMT基础 — 分钟/日K线  
-- **Free**: akshare — 涨停列表/龙虎榜/财务
-- **存储**: SQLite 14张表 (10基础+4 L2)
-- **因子**: 100个 (技术30+Alpha30+情绪20+资金20)
+### Data
+国金QMT L2(逐笔/十档/队列/大单) + akshare(涨停/龙虎榜)。SQLite 14张表。100因子。
 
-### 03 Strategy
-- **规则**: Dragon龙头战法 / Trend趋势 / Sentiment情绪周期 / VolumePrice量价 / Defensive防御
-- **L2**: OrderFlow订单流 / LimitUpL2涨停增强 / OrderBook盘口失衡
-- **信号**: TradingSignal统一14字段输出
+### Perception (8层感知)
+市场级: 情绪周期/涨停梯队/题材热度/赚钱效应
+个股级: 炸板分类/回封确认/对手识别/足迹检测
 
-### 04 Risk
-- **公式**: 五因子评分(44公式, 引用V2.8.6 05_Risk)
-- **限额**: 单票≤10% / 日亏≤3% / 总回撤≤15%
-- **L2过滤**: 虚假信号识别 / 涨停风控(封单系数/撤单率/炸板)
-- **Kill Switch**: 6触发→撤单+停策略+清仓
+### Path A — 回封板 (规则, 70-85%胜率)
+板块地位→炸板分类(洗盘/诱多)→回封确认(缩量/快速/联动, ≥2进场)
 
-### 05 Execution
-- **实盘**: 国金miniQMT (xtquant)
-- **模拟**: 本地Paper Trading
-- **规则**: T+1/涨跌停5档/真实费率/100股手数
-- **模式**: QMT完整版(研发回测) + miniQMT(7×24挂机, 500MB)
+### Path B — 半路/接力 (ML统计)
+B1 Trend(LGBM三目标) / B2 Theme(规则) / B3 Intraday(XGBoost确认器)
 
-### 06 Learning (AI插件)
-- **本地**: LightGBM/CatBoost 趋势预测
-- **云端**: Qwen(因子挖掘 IC2.95%) + DeepSeek(选股)
-- **L2**: 模式识别(拆细/对倒/托单/压单)
-- **禁止**: 直接下单 / 绕过Risk / 修改风控参数
+### Decision Core
+融合A/B信号, 冲突解决(Hypothesis Arbitration), 仓位分配(A优先于B)
 
-### 07 Review
-- **绩效**: 胜率/盈亏比/夏普/最大回撤
-- **归因**: 因子贡献拆解 / 幸存者偏差修正
-- **L2复盘**: 逐笔回放 / 主力行为回溯 / 封板质量
-- **经验**: 成功/失败案例库
-- **节奏**: 日/周/月
+### Risk (最高否决权)
+44公式+7项检查+Kill Switch。APPROVE/ADJUST/REJECT
+
+### Execution
+国金miniQMT直连。Paper Broker模拟交易。T+1/涨跌停/真实费率
+
+### Knowledge Hub
+归因+经验+训练历史+模型注册+绩效评估+日/周/月报告
+
+### Learning (旁路)
+Offline: 训练/回测/数据集。Online: 预测/确认/记忆。LLM: DeepSeek/Qwen
 
 ---
 
@@ -114,11 +107,12 @@ AQF-T_Production/
 | 阶段 | 内容 | 验证标准 |
 |------|------|---------|
 | 1 | Data: QMT L2→SQLite | xtdata.getl2transaction() 有数据 |
-| 2 | Strategy: Dragon+情绪+L2订单流 | 输出情绪周期+龙头+L2信号 |
-| 3 | Risk+Execution: 风控+miniQMT模拟 | Paper Trading 跑通 |
-| 4 | Review: 归因+经验 | 日终自动复盘报告 |
-| 5 | Learning: LightGBM+Qwen+DeepSeek | AI评分, 不参与交易链 |
-| 6 | 实盘: miniQMT | ≤10万, 单一策略, 人工监控 |
+| 2 | Market Regime + Perception | 情绪周期判断准确 > 80% |
+| 3 | Path A (回封板) | 炸板分类+回封确认 模拟验证 |
+| 4 | Path B (半路/接力) | LGBM回测 IC>0.05 |
+| 5 | Decision + Risk + Execution | Paper Trading 跑通 |
+| 6 | Knowledge Hub + Learning | 日终自动复盘报告 |
+| 7 | 实盘: miniQMT | ≤10万, 人工监控 |
 
 ---
 
