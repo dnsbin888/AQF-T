@@ -28,20 +28,33 @@ M7 Live Trading        系统可真实赚钱
 ### M1 Data Quality
 
 ```
-Entry: QMT接通 + L2接通 + AKShare正常 + 数据库正常
+M1不是"数据接通", 是"数据可信被证明"。
 
-Exit:
-  数据完整率 > 99.9% (量化)
-  重复数据 = 0 (量化)
-  缺失自动恢复并记录 (量化)
-  时间同步偏差 < 100ms (量化)
-  异常100%报警 (量化)
+实施顺序 (5个子里程碑, 不是5个模块):
+  M1.1 Connectivity  →  QMT/L2/AKShare/DB全部接通并监控
+  M1.2 Validation    →  每条Tick/Bar经过校验 (价格/量/时间/盘口)
+  M1.3 Recovery      →  中断→检测→补齐→恢复 全自动
+  M1.4 Monitoring    →  Data Health Score每日自动计算
+  M1.5 Evidence      →  四类证据齐全
+
+Entry: QMT+L2+AKShare+DB全部接通
+
+Exit (四类证据齐全):
+  Data Health Report (每日自动)
+  Validation Report (价格/量/时间/盘口校验通过)
+  Recovery Test Report (中断恢复测试通过)
+  Latency Statistics (延迟统计)
   Data Health Score ≥ 95 (量化)
 
 Deliverables:
-  Data Health Report (每日自动)
-  Data Quality Dashboard
-  异常日志 + 恢复日志
+  Evidence/DataHealthReport_*.pdf
+  Evidence/MissingTickReport_*.csv
+  Evidence/RecoveryLog_*.json
+  Evidence/LatencySummary_*.csv
+
+编码优先: data_quality/ (M2-M7都依赖此基础)
+  validator.py / anomaly_detector.py / recovery_manager.py
+  / health_monitor.py / quality_report.py / tests/
 
 Rollback: 任何数据异常未报警 → 停止进入M2
 ```
