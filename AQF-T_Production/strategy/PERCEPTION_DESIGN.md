@@ -5,10 +5,49 @@
 
 ```
 市场级 (1次, 先回答: 今天能不能做?)
-  情绪周期 + 涨停梯队 + 题材热度 + 赚钱效应
+  情绪周期 → 梯队完整性 → 题材热度 → 赚钱效应
+  (串行, 前一失败→后续跳过)
 
 个股级 (只对炸板池3-8只跑, 再回答: 做哪一个?)
-  炸板分类 + 回封确认 + 对手识别 + 足迹检测
+  龙头身份 → 板型判断 → 订单流 → 对手识别 → 足迹 → 卡位 → 回封确认
+  (部分并行, 板型+订单流并行 / 对手+足迹并行)
+
+Perception Orchestrator:
+  run_all(market_context) → MarketPerception
+  run_per_symbol(symbol, l2_data) → StockPerception
+  失败处理: L2数据缺失→该股跳过 / 单层异常→降级继续 / 多层异常→停止
+```
+
+## 交易日状态机
+
+```
+PRE_MARKET (9:00-9:25):  竞价感知 + 盘前数据加载
+TRADING    (9:30-15:00): 全感知运行
+POST_MARKET (15:00-16:00): 复盘 + 龙虎榜 + 经验提取
+OFF_MARKET (其他):        仅系统监控 + 模型训练
+
+每层声明支持状态:
+  Replay:        POST_MARKET + OFF_MARKET
+  Execution:     TRADING
+  Learning:      POST_MARKET + OFF_MARKET
+  SystemMonitor: ALL
+```
+
+## 异常降级策略
+
+```
+不是RUN/STOP二元。四级降级:
+
+FULL:     全部15层运行
+DEGRADED: L2丢失→禁用Path A, Path B仅B1/B2 (无L2确认)
+SAFE_MODE: 仅风控+监控运行, 禁止新开仓
+STOP:     Kill Switch触发, 全部停止
+
+触发条件:
+  L2断流>30s → DEGRADED
+  akshare失败 → DEGRADED (使用缓存)
+  连续3层Perception异常 → SAFE_MODE
+  Kill Switch触发 → STOP
 ```
 
 ---
