@@ -56,9 +56,13 @@ M1 实施顺序 (按依赖, 非按文件数):
 
   Day1: 统一数据模型 (Tick/OrderBook/Bar/DataQualityResult)
         所有源→统一内部格式→进入Validator
-  Day2: validator.py (规则注册制: Price/Timestamp/Volume/OrderBook/Symbol)
+  Day2: validator.py (规则注册制: Price/Timestamp/Volume/OrderBook/Symbol/CrossSource)
+  + CrossSourceConsistencyRule (QMT vs akshare, severity: critical→FAIL)
   Day3: anomaly_detector.py (检测异常, 不修复: Gap/Duplicate/Drift/Freeze/Jump)
-  Day4: recovery_manager.py (RECOVERED/DEGRADED/FAILED 三结果)
+  Day4: recovery_manager.py (PASS/RETRY/SWITCH_BACKUP/FAIL)
+  FAIL = 默认fail-fast (停止传播, 禁止下游)
+  severity: critical→FAIL / warning→RETRY / info→PASS
+  (不新增FAIL_FAST模式, 不新增模块)
   Day5: health_monitor.py (DataHealthSnapshot 统一指标)
   Day6: quality_report.py (每日自动: Health/Validation/Anomaly/Recovery/Latency)
 
