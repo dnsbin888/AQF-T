@@ -91,4 +91,48 @@ V2.8.6中冻结的研究资产:
 
 ---
 
-**Architecture Final. Engineering Verification Begins.**
+## 架构冻结声明
+
+```
+AQF-T Production V1.0 — ARCHITECTURE FROZEN
+
+冻结层级 (不可修改主链):
+  Constitution / Market Regime / Data / Perception / Strategy(Path A/B)
+  / Decision Core / Risk / Execution / Knowledge Hub
+  / Learning(旁路) / System Monitor(基础设施)
+
+扩展方式:
+  只能通过插件增加能力 (Learning插件 / Strategy新增Path / Candidate新增类型)
+  禁止修改主链架构
+
+AQF-T 定位: Trading Operating System (交易操作系统)
+  提供稳定运行框架
+  策略/模型/算法以插件形式接入
+  不是AI交易系统, 不是量化回测框架
+
+V2.8.6: 设计母库 (知识资产, 不动)
+Research Lab: 未来研究 (World Model/Counterfactual/RL/Transformer)
+  → 回测→模拟→实盘验证通过 → 升级为Production插件
+```
+
+## 下一阶段: 工程验证
+
+```
+不再讨论架构。
+不再增加模块。
+不再重新设计。
+
+Phase 1: 历史回测
+  LGBM训练 (3年A股日线) → 验证IC>0.05
+  Path A回封板逻辑验证 (L2历史回放)
+
+Phase 2: 模拟盘 (≥1个月)
+  信号频率/成交率/风控拒绝率/模型准确率
+
+Phase 3: 小资金实盘 (≤10万)
+  人工监督, 持续对比A vs B绩效
+```
+
+---
+
+**Architecture Frozen. Engineering Verification Begins.**
