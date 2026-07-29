@@ -1,0 +1,20 @@
+{
+  "pattern": "EmotionCycle",
+  "version": "1.0",
+  "status": "VALIDATED",
+  "dataset": "L2_v1",
+  "backtest": {
+    "samples": 300,
+    "win_rate": 0.6633,
+    "profit_factor": 3.68,
+    "max_drawdown": 0.1792,
+    "avg_return": 0.0191
+  },
+  "statistics": {
+    "sharpe": 7.94,
+    "dsr": 17.5976,
+    "pbo": 0.0,
+    "cpcv_stable": false
+  },
+  "timestamp": "2026-07-30T03:02:16.777524"
+}

@@ -1,0 +1,20 @@
+{
+  "pattern": "LadderScore",
+  "version": "1.0",
+  "status": "PRODUCTION",
+  "dataset": "L2_v1",
+  "backtest": {
+    "samples": 300,
+    "win_rate": 0.7467,
+    "profit_factor": 4.68,
+    "max_drawdown": 0.1033,
+    "avg_return": 0.0231
+  },
+  "statistics": {
+    "sharpe": 9.7,
+    "dsr": 18.8762,
+    "pbo": 0.0,
+    "cpcv_stable": true
+  },
+  "timestamp": "2026-07-30T03:02:16.737060"
+}
