@@ -60,6 +60,7 @@ P2 弱转强规则化:
 ```
 Pattern:      PositionAnchor
 Version:      1.0
+Owner:        AQF-T Production
 Status:       Research | Validated | Production | Deprecated
 Inputs:       板块封板时序, 跟风数量, L2封单
 Outputs:      anchor_score, separation_score
@@ -69,6 +70,7 @@ Replay Rate:  待验证
 Backtest:     待验证
 Paper:        待验证
 Live:         待验证
+Retirement:   如废弃, 记录原因 (Paper Failure/Replay Drift/Performance Decay/High Correlation)
 ```
 
 ## 模型准入制度

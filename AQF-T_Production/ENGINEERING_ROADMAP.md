@@ -141,10 +141,13 @@ Exit:
   DSR > 0 (量化)
   PBO < 10% (量化)
   不追求最高准确率, 追求模型稳定性
+  Pattern Correlation Matrix: 任意两Pattern相关性<0.8 (防重复加分)
+  Signal Overlap < 80% (重叠过高→融合或淘汰)
 
 Deliverables:
   Strategy Validation Report
   Walk-Forward Report / CPCV Report
+  Pattern Correlation Matrix
 
 Rollback: 模型不稳定 → 回M4
 ```
