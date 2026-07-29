@@ -9,6 +9,18 @@
 4. 未经回测→模拟盘→小资金实盘三级验证的能力, 不得进入Production主链
 ```
 
+## 核心原则 (V1.0 Final)
+
+```
+Production 不再追求增加Pattern，而是追求增加Evidence。
+
+每个Pattern必须经过统一生命周期:
+  Research → Replay → Backtest → Paper → Live → Evidence Complete → Production → Review → Deprecated → Retired
+
+Pattern Attribution提供证据，不直接决定淘汰。
+最终淘汰仍走: Evidence → Engineering Review → Research Review → Status更新
+```
+
 ## 工程原则
 
 ```
