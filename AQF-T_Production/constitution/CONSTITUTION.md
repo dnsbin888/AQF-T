@@ -1,5 +1,14 @@
 # 01 Constitution — 交易制度
 
+## 四条铁律
+
+```
+1. AI不直接下单
+2. Risk最高否决权 (Strategy→Decision→Risk→Execution硬链不可绕过)
+3. 退潮期两条路都禁止买入 (Market Regime总开关)
+4. 未经回测→模拟盘→小资金实盘三级验证的能力, 不得进入Production主链
+```
+
 ## 不可违反
 
 ```
