@@ -1,0 +1,7 @@
+# AQF-T Production — Python 3.11+
+# 安装: pip install -r requirements.txt
+
+pandas>=2.0
+numpy>=1.24
+pyyaml>=6.0
+psutil>=5.9
