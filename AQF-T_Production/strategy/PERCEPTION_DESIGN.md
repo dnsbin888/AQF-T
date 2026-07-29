@@ -149,7 +149,64 @@ LadderScore < 0.4 → 梯队脆弱, 退潮风险
     封板期间主动卖出>主动买入 → 出货嫌疑
 ```
 
-## 六、炸板分类 (个股级核心) ← 2026实战验证
+## 六、卡位博弈 (Position Anchor) — P0新增
+
+```
+游资不是孤立看回封。真正盘中看的是:
+  A炸板 → B先回封 → C跟随 → 谁抢到了板块身位?
+
+PositionAnchor (身位锚定):
+  FirstBreakout:    同板块第一个突破前高
+  FirstLimitUp:     同板块第一个封板
+  HighestBoard:     同板块最高连板
+  EarliestSeal:     同板块最早封板时间
+
+SeparationSignal (分离确认):
+  IndexWeakStockStrong:   大盘跌+该股抗跌 → 龙头确认
+  SectorWeakLeaderStrong: 板块弱+龙头强 → 身位独立
+  IndependentTrend:       脱离板块独立走强 → 真龙
+
+规则输出 (非AI):
+  anchor_score = (is_first_breakout×0.30 + is_first_limitup×0.25 
+               + is_highest_board×0.25 + is_earliest_seal×0.20)
+  separation_score = (index_weak×0.40 + sector_weak×0.35 + independent×0.25)
+
+  anchor_score > 0.7 → Position Leader (身位领先)
+  separation_score > 0.6 → Independent Leader (脱离板块)
+```
+
+## 七、龙头淘汰机制 (Leader Invalid) — P0新增
+
+```
+龙头不是永久的。必须识别什么时候失效。
+
+LeaderInvalidRule (满足任一→降级):
+  连续掉队:        连续2日未封板 (非主动调整)
+  放量滞涨:        连板但成交量>前日3倍, 换手>40% (出货信号)
+  跟风死亡:        板块内涨停<3家, 无跟风 (独木难支)
+  跌破结构:        跌破10日线 (趋势破坏)
+  跌破情绪锚:       炸板后3日未修复 (情绪退潮)
+
+  触发→ LeaderIdentity降级为 FOLLOWER or INVALID
+  → Path A 不再考虑此标的
+```
+
+## 八、Candidate排序增强 — P0新增
+
+```
+Decision Core 之前, Candidate增加排序字段:
+
+LeaderScore:    LeaderIdentity + PositionAnchor
+PositionScore:  板块地位 + LadderScore
+CapitalScore:   资金流向 (北向+主力+游资合力)
+EmotionScore:   情绪周期适配度
+RiskScore:      风控评分
+
+Decision排序: LeaderScore×0.30 + PositionScore×0.25 
+            + CapitalScore×0.20 + EmotionScore×0.15 + RiskScore×0.10
+```
+
+## 九、炸板分类 (个股级核心) ← 2026实战验证
 
 ### 两类炸板
 
