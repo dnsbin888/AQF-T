@@ -9,6 +9,21 @@
 4. 未经回测→模拟盘→小资金实盘三级验证的能力, 不得进入Production主链
 ```
 
+## 工程原则
+
+```
+任何新策略/模型/插件, 必须先通过P0验证基础设施, 再进入回测/模拟/实盘:
+
+  New Strategy → Data Quality → L2 Replay → Decision Trace → Execution Metrics
+     → 四项全部通过 → Backtest → Paper → Live
+
+  验证链回答四个问题:
+    Data Quality:     数据是真的吗?
+    L2 Replay:        历史上真的能做出来吗?
+    Decision Trace:   系统当时为什么这么决定?
+    Execution Metrics: 即使判断正确, 是否真正执行到了?
+```
+
 ## 不可违反
 
 ```
