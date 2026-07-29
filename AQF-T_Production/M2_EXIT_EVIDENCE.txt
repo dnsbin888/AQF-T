@@ -1,0 +1,64 @@
+============================================================
+  M2 Test Evidence
+============================================================
+M2.1 Loader:    200 ticks, ordering verified
+M2.2 Perception: 200 snapshots, Determinism 100%
+M2.3 Decision:   3 candidates, Consistency 100%
+M2.4 Trace:      Report + JSON + Pattern audit
+ALL 4 PHASES PASSED
+
+============================================================
+  M2 Runtime Evidence (Cross-Process Determinism)
+============================================================
+Process A Hash: a89e1081e5009345d5497659b805f440
+Process B Hash: a89e1081e5009345d5497659b805f440
+Cross-Process Match: PASS
+Determinism: 100%
+
+============================================================
+  M2 Data Evidence (Replay Dataset Metadata)
+============================================================
+  dataset_id: L2_20260730_v1
+  date: 2026-07-30
+  symbols: ['SH.600519']
+  source: QMT L2 (Simulated)
+  market_phase: 开盘30分钟
+  regime: 回暖期
+  total_ticks: 200
+  tick_interval_seconds: 3
+  data_format: CSV/dict
+  quality_notes: 模拟数据, 用于Engineering Test
+
+============================================================
+  M2 Audit Evidence (Replay Trace)
+============================================================
+
+================================================================
+  AQF-T M2 Replay Trace Report
+  Replay ID: M2-EXIT-001
+  Dataset:   L2_20260730_v1
+  Engine:    2.4.0
+  Generated: 2026-07-30T02:33:28.316663
+================================================================
+
+一、Replay概况
+  Total Ticks:    200
+  Errors:         0
+  Snapshots:      200
+  Decisions:      1
+
+二、Consistency & Determinism
+  Tick Hashes:    0 (唯一序列)
+  Verify:         Replay两次应完全一致
+
+三、Pattern Triggers
+    PositionAnchor: 200 triggers
+    LeaderLifeCycle: 200 triggers
+
+四、决策样本 (最近3条)
+  [2026-07-30T09:39:57] Selected: SH.600519, Position: 0.12, Confidence: 0.74
+
+五、审计声明
+  本Replay由AQF-T M2引擎生成。
+  同一Dataset+Config+GitCommit必须产生相同结果。
+================================================================
