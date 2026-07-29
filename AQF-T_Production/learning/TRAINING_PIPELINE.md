@@ -1,14 +1,35 @@
 # Training Pipeline — 模型训练流程
 
 
-## LGBM 趋势预测 (路径B用)
+## LGBM 趋势预测 (B1 Trend用)
+
+### 三目标标签
+
+```
+不是预测单一收益率。是游资视角的三维评估:
+
+Label 1: 短线爆发 (未来5日最高收益)
+  回答: "有没有机会?"
+  计算: max(close_t1..close_t5) / close_t0 - 1
+
+Label 2: 最大回撤 (未来5日最大亏损)
+  回答: "风险多大?"
+  计算: min(close_t1..close_t5) / close_t0 - 1
+
+Label 3: 资金认可 (是否进入涨停/连板状态)
+  回答: "游资关注?"
+  值: 1(涨停/连板) / 0.5(大涨>5%) / 0(其他)
+
+最终: 机会评分 = 爆发概率×0.5 - 风险概率×0.3 + 资金认可度×0.2
+```
 
 ### 数据准备
 
 ```
 数据源: akshare 日K线 (3年+历史)
 股票池: 沪深A股 (排除ST/新股<375天/停牌)
-标签: 未来N日超额收益率 CSRank标准化
+标签: 三目标 (爆发/回撤/资金认可)
+```
 
 特征 (100个):
   技术30: MA/MACD/RSI/KDJ/BOLL/ATR/OBV/...
@@ -65,7 +86,21 @@ AUC > 0.65
 
 ---
 
-## XGBoost L2择时 (路径A/B辅助用)
+## XGBoost L2 — 确认器 (非决策者)
+
+```
+定位: Confirmation Model, 不是 Trading Model
+
+路径A: Perception发现回封 → XGBoost确认盘口质量
+路径B3: Alpha发现强势 → XGBoost确认封板概率
+
+融合公式: Final = Perception×0.7 + XGBoost×0.3
+
+不输出: BUY/SELL
+只输出: 盘口质量分 0-1
+```
+
+### 训练
 
 ### 数据准备
 
