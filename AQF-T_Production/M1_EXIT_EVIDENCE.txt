@@ -1,0 +1,73 @@
+
+============================================================
+  AQF-T M1 EXIT EVIDENCE PACKAGE
+  Generated: 2026-07-30T02:20:48.358138
+============================================================
+
+
+M1 Test Evidence
+================
+✅ data_model: 4/4 tests passed
+✅ validator: 6/6 tests passed
+✅ anomaly: 5/5 tests passed
+✅ recovery: 4/4 tests passed
+✅ health: 4/4 tests passed
+✅ report: 2/2 tests passed
+
+
+
+M1 Runtime Evidence
+===================
+Duration: 2.0h simulated (7200 ticks)
+Crashes: 0
+Memory Leaks: 0
+Anomalies: 208
+Recoveries: 208
+Health Score: 67.1/100
+
+
+
+M1 Data Evidence
+================
+Completeness: 100.00%
+Validation Pass Rate: 90.33%
+Freshness: 0.00%
+Health Score: 67.1
+
+
+
+================================================================
+  AQF-T M1 Data Quality Report
+  日期: 2026-07-30 02:20
+================================================================
+
+一、综合评分: N/A/100 ❌
+
+二、分类指标:
+  完整率: N/A
+  新鲜度: N/A
+  校验通过率: N/A
+
+三、校验错误 (1450):
+[2026-07-30T02:20:48.358138] SH.601012: ohlc_invariant failed — OHLC不变量违反
+[2026-07-30T02:20:48.358138] SH.688981: ohlc_invariant failed — OHLC不变量违反
+[2026-07-30T02:20:48.358138] SH.688981: ohlc_invariant failed — OHLC不变量违反
+[2026-07-30T02:20:48.358138] SZ.300750: ohlc_invariant failed — OHLC不变量违反
+[2026-07-30T02:20:48.358138] SH.600519: ohlc_invariant failed — OHLC不变量违反
+
+四、异常事件 (208):
+[2026-07-30T02:20:48.358138] SH.688981: JUMP — 价格跳空 101.0%
+[2026-07-30T02:20:48.358138] SZ.300750: GAP — 数据间隔 4936秒
+[2026-07-30T02:20:48.358138] SZ.000858: GAP — 数据间隔 4953秒
+[2026-07-30T02:20:48.358138] SZ.300750: JUMP — 价格跳空 101.0%
+[2026-07-30T02:20:48.358138] SZ.000858: JUMP — 价格跳空 101.0%
+
+五、恢复记录 (208):
+[2026-07-30T02:20:48.358138] SH.688981: warning → retry
+[2026-07-30T02:20:48.358138] SZ.300750: warning → retry
+[2026-07-30T02:20:48.358138] SZ.000858: warning → switch
+[2026-07-30T02:20:48.358138] SZ.300750: warning → retry
+[2026-07-30T02:20:48.358138] SZ.000858: warning → retry
+
+================================================================
+
