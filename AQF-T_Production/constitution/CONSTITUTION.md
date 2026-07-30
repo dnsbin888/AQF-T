@@ -1,5 +1,22 @@
 # 01 Constitution — 交易制度
 
+## 系统定位
+
+```
+QMT is an Execution Adapter. QMT是系统的手足, 不是大脑。
+
+AQF-T owns:
+  Perception / Decision / Risk / Evidence / Learning
+
+QMT owns:
+  Order routing / Trade execution / Account interface
+
+禁止:
+  - 策略逻辑驻留在QMT
+  - 决策依赖QMT UI
+  - QMT承担风控判断
+```
+
 ## 四条铁律
 
 ```

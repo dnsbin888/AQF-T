@@ -44,6 +44,11 @@ class PreTradeChecker:
               sector: str = "") -> RiskDecision:
         """返回 APPROVE / ADJUST / REJECT"""
 
+        #  V1.2 P0-4: KillSwitch — Risk内部第一道检查
+        from runtime.killswitch import killswitch
+        if killswitch.check() == "BLOCKED":
+            return RiskDecision("REJECT", 100, f"KillSwitch: {killswitch.state.reason}")
+
         # ① 情绪周期最高优先级
         if sentiment_phase == "退潮期" and action == "BUY":
             return RiskDecision("REJECT", risk_score + 30, "退潮期禁止买入")
