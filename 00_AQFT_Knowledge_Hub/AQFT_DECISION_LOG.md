@@ -417,6 +417,22 @@
 
 ---
 
+## DEC-20260730-025-VERIFIED
+
+- **date**: 2026-07-30
+- **decision**: Phase 2.1-C Evidence Acceptance — 6/6 criteria PASS
+- **context**: 30-day Simulator evidence regenerated after Health Profile fix. All 6 acceptance criteria verified
+- **evidence**:
+  - 1. Meta/Provenance: source=SIMULATOR, git_commit, evidence_version=2.1, not_live=true ✅
+  - 2. Pipeline: 30 daily_logs, data_integrity, replay_stability ✅
+  - 3. Regime: 28 trading + 2 stopped (退潮+冰点), phase distribution complete ✅
+  - 4. Risk: 52 rejects, risk_gate_active=true, reject_reasons classified ✅
+  - 5. Pattern: 4 patterns (PositionAnchor/LeaderLifeCycle/LadderScore/EmotionCycle), 106 triggers ✅
+  - 6. Execution: fill_rate, account summary, exposure data ✅
+- **status**: Phase 2.1 Simulator Evidence — VERIFIED
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
