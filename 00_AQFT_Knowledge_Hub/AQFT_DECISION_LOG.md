@@ -319,6 +319,23 @@
 
 ---
 
+## DEC-20260730-021
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Sign-off — Engineering Phase CLOSED, Evidence Phase APPROVED
+- **context**: 34/34测试全部通过。M1 Data Quality 25/25 + Pipeline E2E 9/9。Windows GBK兼容性修复完成。QMT显示DOWN为预期行为(Simulator模式)。工程侧无剩余阻塞项
+- **chosen**: 正式进入 Evidence Phase
+- **reason**: AQF-T 已经不再需要证明"代码存在"。下一阶段只回答一个问题：真实市场数据进入后，冻结系统是否仍然稳定地产生可审计证据
+- **impact**:
+  - Phase 2.1 输出: PHASE2_DATA_EVIDENCE.json (数据完整性/延迟/Replay一致性/数据源标记)
+  - 4项检查: Decision Drift / Pattern Drift / Execution Drift / Data Source标记
+  - 环境标记: SIMULATION / Data:Simulator / Execution:PaperBroker / Evidence:Synthetic
+  - 持续冻结: 新Pattern/AI模型/参数调优/收益优化/改规则
+  - 允许: 数据验证/Evidence生成/Drift检测/Runtime稳定性增强
+  - 里程碑: Design ████ Engineering ████ Evidence █ START
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
