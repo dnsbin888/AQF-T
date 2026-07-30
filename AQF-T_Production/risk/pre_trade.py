@@ -75,15 +75,45 @@ class PreTradeChecker:
                                     f"资金不足, 调整为{max_qty}股",
                                     adjusted_qty=max_qty)
 
-        # ⑤ 仓位检查
+        # ⑤ 单票仓位检查
         total_value = self.cash + sum(
             p.get("shares", 0) * p.get("price", 0)
             for p in self.positions.values()
         )
-        position_pct = (price * qty) / total_value if total_value > 0 else 1
-        if position_pct > 0.10:
+        trade_value = price * qty
+        position_pct = trade_value / total_value if total_value > 0 else 1
+        if position_pct > self.max_single_position:
             return RiskDecision("REJECT", risk_score + 20,
-                                f"单票超10%: {position_pct:.1%}")
+                                f"单票超{self.max_single_position:.0%}: {position_pct:.1%}")
+
+        # ⑤b 总仓位检查 (GPT Q3 — Portfolio Exposure)
+        current_exposure = sum(
+            p.get("shares", 0) * p.get("price", 0)
+            for p in self.positions.values()
+        )
+        new_total_exposure_pct = (current_exposure + trade_value) / total_value
+        if action == "BUY" and new_total_exposure_pct > self.max_total_position:
+            return RiskDecision("REJECT", risk_score + 15,
+                                f"总仓位超{self.max_total_position:.0%}: {new_total_exposure_pct:.1%}")
+
+        # ⑤c 同板块集中度检查 (GPT Q3)
+        if sector and action == "BUY":
+            sector_exposure = sum(
+                p.get("shares", 0) * p.get("price", 0)
+                for p in self.positions.values()
+                if p.get("sector") == sector
+            )
+            new_sector_pct = (sector_exposure + trade_value) / total_value
+            if new_sector_pct > self.max_same_sector:
+                return RiskDecision("REJECT", risk_score + 10,
+                                    f"板块[{sector}]超{self.max_same_sector:.0%}: {new_sector_pct:.1%}")
+
+        # ⑤d 当日新增敞口检查 (GPT Q3)
+        if action == "BUY":
+            new_daily_pct = (self.daily_new_exposure + trade_value) / total_value
+            if new_daily_pct > self.max_daily_new_exposure:
+                return RiskDecision("REJECT", risk_score + 10,
+                                    f"当日新增超{self.max_daily_new_exposure:.0%}: {new_daily_pct:.1%}")
 
         # ⑥ 手数检查
         if qty % 100 != 0:
@@ -101,11 +131,65 @@ class PreTradeChecker:
 
         # 风控评分决策
         if risk_score < 30:
-            return RiskDecision("APPROVE", risk_score, "风险可控")
+            decision = RiskDecision("APPROVE", risk_score, "风险可控")
         elif risk_score < 55:
-            return RiskDecision("APPROVE", risk_score, "降低仓位20%")
+            decision = RiskDecision("APPROVE", risk_score, "降低仓位20%")
         elif risk_score < 75:
             adj_qty = int(qty * 0.5 / 100) * 100
-            return RiskDecision("ADJUST", risk_score, f"高风险, 降低仓位50%",
-                                adjusted_qty=adj_qty)
-        return RiskDecision("REJECT", risk_score, "极端风险")
+            decision = RiskDecision("ADJUST", risk_score, f"高风险, 降低仓位50%",
+                                    adjusted_qty=adj_qty)
+        else:
+            decision = RiskDecision("REJECT", risk_score, "极端风险")
+
+        # 记录当日新增敞口 (APPROVE/ADJUST时)
+        if decision.decision in ("APPROVE", "ADJUST") and action == "BUY":
+            final_qty = decision.adjusted_qty if decision.adjusted_qty > 0 else qty
+            self.daily_new_exposure += price * final_qty
+
+        return decision
+
+    # ── Portfolio Exposure 管理 ──
+
+    def record_fill(self, symbol: str, price: float, qty: int, action: str,
+                    sector: str = ""):
+        """记录成交后更新仓位 (供Pipeline调用)"""
+        if action == "BUY":
+            if symbol not in self.positions:
+                self.positions[symbol] = {"shares": 0, "available": 0, "locked": 0,
+                                          "price": 0, "sector": sector}
+            pos = self.positions[symbol]
+            total = pos["shares"] + qty
+            pos["price"] = (pos["price"] * pos["shares"] + price * qty) / total if total > 0 else price
+            pos["shares"] = total
+            pos["sector"] = sector
+
+    def daily_reset(self):
+        """日初重置: T+1解锁 + 清零当日敞口"""
+        for pos in self.positions.values():
+            pos["available"] = pos["shares"]
+            pos["locked"] = 0
+        self.daily_new_exposure = 0.0
+
+    def exposure_summary(self) -> dict:
+        """敞口总览"""
+        total_value = self.cash + sum(
+            p.get("shares", 0) * p.get("price", 0)
+            for p in self.positions.values()
+        )
+        current_exposure = sum(
+            p.get("shares", 0) * p.get("price", 0)
+            for p in self.positions.values()
+        )
+        sector_exposure = {}
+        for p in self.positions.values():
+            sec = p.get("sector", "未知")
+            sector_exposure[sec] = sector_exposure.get(sec, 0) + p.get("shares", 0) * p.get("price", 0)
+
+        return {
+            "total_value": round(total_value, 2),
+            "total_exposure_pct": round(current_exposure / total_value * 100, 1) if total_value > 0 else 0,
+            "daily_new_exposure_pct": round(self.daily_new_exposure / total_value * 100, 1) if total_value > 0 else 0,
+            "sector_exposure": {k: round(v / total_value * 100, 1) for k, v in sector_exposure.items()} if total_value > 0 else {},
+            "max_total_limit_pct": round(self.max_total_position * 100, 0),
+            "max_sector_limit_pct": round(self.max_same_sector * 100, 0),
+        }

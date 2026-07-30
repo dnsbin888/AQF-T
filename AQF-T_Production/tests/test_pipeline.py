@@ -151,20 +151,20 @@ def test_decision_conflict_resolution():
 
 def test_risk_veto_power():
     """验证 Risk 最高否决权: 退潮期买入->REJECT, T+1卖出超量->REJECT"""
-    from unittest.mock import patch
     from datetime import datetime
+    from core.clock import clock
 
     checker = PreTradeChecker()
     checker.cash = 1_000_000.0
     checker.positions = {
-        "000001": {"shares": 10000, "available": 5000, "locked": 5000}
+        "000001": {"shares": 10000, "available": 5000, "locked": 5000, "price": 10.0, "sector": "金融"}
     }
 
-    # Mock trading hours (10:00 AM)
+    # 使用 ClockProvider.override 模拟交易时段 (10:00 AM)
     trading_time = datetime(2026, 7, 30, 10, 0, 0)
-    with patch('risk.pre_trade.datetime') as mock_dt:
-        mock_dt.now.return_value = trading_time
+    clock.override(trading_time)
 
+    try:
         # 退潮期买入 -> REJECT
         r1 = checker.check("000001", "BUY", 1000, 10.0, 20, "退潮期")
         assert r1.decision == "REJECT", f"退潮期买入应被拒绝, 实际={r1.decision}"
@@ -181,6 +181,8 @@ def test_risk_veto_power():
         r4 = checker.check("000001", "BUY", 150, 10.0, 20, "高潮期")
         assert r4.decision == "ADJUST", f"非整手应调整, 实际={r4.decision}"
         assert r4.adjusted_qty == 100
+    finally:
+        clock.clear_override()
 
     print("  [PASS] test_risk_veto_power: PASSED")
 

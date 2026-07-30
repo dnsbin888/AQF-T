@@ -32,7 +32,8 @@ class MarketRegime:
     path_a_allowed: bool                # 回封板是否允许
     path_b_allowed: bool                # 半路是否允许
     max_position_pct: float             # 全局仓位上限
-    recommended_path: str               # 推荐路径
+    recommended_path: str = ""          # 推荐路径
+    regime_confidence: float = 1.0      # 环境置信度 (GPT Q1: 0-1, 影响仓位倍率)
 
     timestamp: str = ""
 
@@ -105,6 +106,9 @@ class MarketRegimeEngine:
             phase, score, zhatban, promotion
         )
 
+        # ── 环境置信度 (GPT Q1) ──
+        confidence = self._compute_confidence(phase, score, zhatban, promotion)
+
         return MarketRegime(
             sentiment_phase=phase,
             sentiment_score=round(score, 0),
@@ -120,9 +124,54 @@ class MarketRegimeEngine:
             path_a_allowed=path_a,
             path_b_allowed=path_b,
             max_position_pct=max_pos,
+            regime_confidence=confidence,
             recommended_path=recommended,
             timestamp=datetime.now().isoformat(),
         )
+
+    def _compute_confidence(self, phase: str, score: float,
+                            zhatban: float, promotion: float) -> float:
+        """
+        环境置信度 (GPT Q1)
+
+        衡量环境判断的确定性:
+          - 指标远离边界 → 高置信
+          - 指标接近边界 → 低置信
+
+        返回: 0-1, 用于仓位倍率调节
+          > 0.8: 正常仓位
+          0.6-0.8: 70% 仓位
+          < 0.6: 50% 仓位
+        """
+        confidence = 0.5  # 基准
+
+        # 远离退潮边界 (炸板率低、跌停少 → 更确定)
+        if zhatban < 0.20:
+            confidence += 0.15
+        elif zhatban < 0.30:
+            confidence += 0.10
+        elif zhatban > 0.50:
+            confidence -= 0.10
+
+        # 晋级率高 → 情绪判断更确定
+        if promotion > 0.40:
+            confidence += 0.15
+        elif promotion > 0.25:
+            confidence += 0.10
+        elif promotion < 0.10:
+            confidence -= 0.10
+
+        # 情绪值远离边界
+        if score > 100:
+            confidence += 0.10
+        elif score < -50:
+            confidence -= 0.10
+
+        # 退潮期确定性更高 (明确的危险信号)
+        if phase == "退潮期":
+            confidence += 0.10
+
+        return round(max(0.0, min(1.0, confidence)), 2)
 
     def _decide(self, phase: str, score: float, zhatban: float,
                 promotion: float) -> tuple:

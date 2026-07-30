@@ -35,6 +35,7 @@ from review.factor_attribution import ReviewEngine
 from knowledge_hub import KnowledgeHub, StrategyLifecycle, StrategyStatus
 from core.event_bus import bus, EVENTS
 from core.system_monitor import SystemMonitor
+from core.report_writer import ReportWriter
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -119,6 +120,7 @@ class ProductionPipeline:
 
         # ── 基础设施 ──
         self.monitor = SystemMonitor()
+        self.report_writer = ReportWriter()
 
         # ── 回测引擎 (按需) ──
         self.backtest_engine: Optional[BacktestEngine] = None
@@ -414,11 +416,27 @@ class ProductionPipeline:
             for sym, p in self.broker.positions.items()
         }
 
+        # 应用 Regime Confidence 仓位倍率 (GPT Q1)
+        confidence = state.regime.regime_confidence if state.regime else 1.0
+        if confidence >= 0.8:
+            position_multiplier = 1.0
+        elif confidence >= 0.6:
+            position_multiplier = 0.70
+        else:
+            position_multiplier = 0.50
+
+        # 调整 Regime max_position
+        original_max = state.regime.max_position_pct
+        state.regime.max_position_pct = original_max * position_multiplier
+
         # 喂入所有候选
         self.decision_core.collect(state.candidates)
 
         # 执行决策
         signals = self.decision_core.decide(state.regime, current_positions)
+
+        # 恢复原始值 (不影响日志)
+        state.regime.max_position_pct = original_max
 
         return signals
 
@@ -427,11 +445,20 @@ class ProductionPipeline:
     # ═══════════════════════════════════════════════════════════
 
     def _run_risk_and_execution(self, state: PipelineState) -> tuple[list, list]:
-        """风控审批 + 订单执行"""
+        """风控审批 + 订单执行 (含 GPT Q3 Portfolio Exposure)"""
+        from core.clock import clock
+
         risk_decisions = []
         fills = []
 
         for signal in state.signals:
+            # 获取标的相关候选的 sector 信息
+            matching_candidate = next(
+                (c for c in state.candidates if c.symbol == signal.symbol),
+                None
+            )
+            sector = matching_candidate.evidence.get("sector", "") if matching_candidate else ""
+
             # ── Risk Check (最高否决权, 不可绕过) ──
             risk_decision = self.risk_checker.check(
                 symbol=signal.symbol,
@@ -440,6 +467,7 @@ class ProductionPipeline:
                 price=self._estimate_price(signal.symbol),
                 risk_score=int((1 - signal.confidence) * 100),
                 sentiment_phase=state.regime.sentiment_phase,
+                sector=sector,  # GPT Q3: 板块集中度
             )
             risk_decisions.append(risk_decision)
 
@@ -456,14 +484,14 @@ class ProductionPipeline:
                     "reason": risk_decision.reason,
                 }, source="risk")
                 fills.append(FillResult(
-                    order_id=f"{signal.symbol}-{datetime.now().timestamp()}",
+                    order_id=f"{signal.symbol}-{clock.now().timestamp()}",
                     symbol=signal.symbol,
                     action=signal.action,
                     requested_price=0, fill_price=0, fill_quantity=0,
                     slippage_bps=0, fee=0,
                     status="REJECTED",
                     reason=risk_decision.reason,
-                    timestamp=datetime.now().isoformat(),
+                    timestamp=clock.now_iso(),
                 ))
                 continue
 
@@ -473,7 +501,7 @@ class ProductionPipeline:
 
             # ── Execution ──
             order = {
-                "order_id": f"{signal.symbol}-{datetime.now().timestamp()}",
+                "order_id": f"{signal.symbol}-{clock.now().timestamp()}",
                 "symbol": signal.symbol,
                 "action": signal.action,
                 "quantity": final_qty,
@@ -496,7 +524,7 @@ class ProductionPipeline:
                     fee=0,
                     status="FILLED",
                     reason="Live QMT (待接入)",
-                    timestamp=datetime.now().isoformat(),
+                    timestamp=clock.now_iso(),
                 )
             else:
                 # Paper Trading
@@ -506,6 +534,17 @@ class ProductionPipeline:
                 )
 
             fills.append(fill)
+
+            # GPT Q3: 记录成交到 Risk Checker (更新敞口)
+            if fill.status == "FILLED" and signal.action == "BUY":
+                self.risk_checker.record_fill(
+                    symbol=signal.symbol,
+                    price=fill.fill_price,
+                    qty=fill.fill_quantity,
+                    action=signal.action,
+                    sector=sector,
+                )
+
             bus.publish(EVENTS["ORDER_FILLED"], {
                 "symbol": signal.symbol, "status": fill.status,
                 "fill_price": fill.fill_price, "qty": fill.fill_quantity,
@@ -558,6 +597,14 @@ class ProductionPipeline:
             "account": self.broker.summary(),
         }
         bus.publish(EVENTS["DAILY_REPORT"], summary, source="pipeline")
+
+        # ── 持久化报告 (GPT P0-3) ──
+        try:
+            report_path = self.report_writer.write_daily_report(state, self)
+            if state.fills:
+                self.report_writer.write_execution_report(state.fills, state.date)
+        except Exception as e:
+            state.errors.append(f"Report persist error: {e}")
 
         # 日终报告
         if state.regime:

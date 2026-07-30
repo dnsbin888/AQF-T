@@ -24,4 +24,5 @@ logs/
 
 # System
 Thumbs.db
-.DS_Store
+.DS_Storereports/
+test_output.txt
