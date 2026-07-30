@@ -87,11 +87,12 @@ def build_decision_stability(data: dict) -> dict:
         "period_days": total_days,
         "trading_days": trading_count,
         "stopped_days": stopped_count,
-        "stability_score_pct": round(stable_phases / max(total_phases, 1) * 100, 1),
+        "decision_consistency_proxy_pct": round(stable_phases / max(total_phases, 1) * 100, 1),
+        "measurement_type": "proxy",
+        "measurement_note": "Single-run internal consistency. True Decision Stability requires 3x replay with identical input.",
         "regime_consistency": regime_consistency,
         "phase_candidate_variance": phase_variance,
         "verdict": "PASS" if trading_count > 0 else "FAIL",
-        "note": "Phase variance <10 = stable. Regime gate produces consistent tradable state.",
     }
 
 
@@ -150,6 +151,8 @@ def build_pattern_contribution(data: dict) -> dict:
 
     return {
         "report_type": "pattern_contribution",
+        "measurement_type": "estimated",
+        "measurement_note": "Funnel ratios from global averages. QMT real data will upgrade to 'observed' with per-pattern causal attribution.",
         "generated_at": datetime.now().isoformat(),
         "git_commit": get_git_commit(),
         "global_funnel": {
@@ -267,7 +270,8 @@ def build_master_package(data: dict, stability: dict, contribution: dict, finger
         },
 
         "decision_evidence": {
-            "stability_score_pct": stability.get("stability_score_pct", 0),
+            "consistency_proxy_pct": stability.get("decision_consistency_proxy_pct", 0),
+            "measurement_type": stability.get("measurement_type", "proxy"),
             "phase_variance": stability.get("phase_candidate_variance", {}),
         },
 
@@ -289,7 +293,7 @@ def build_master_package(data: dict, stability: dict, contribution: dict, finger
         ],
 
         "acceptance": {
-            "decision_stability_99pct": stability.get("stability_score_pct", 0) >= 99.0,
+            "decision_consistency_proxy_pass": stability.get("decision_consistency_proxy_pct", 0) >= 99.0,
             "pattern_funnel_complete": len(contribution.get("patterns", {})) >= 4,
             "risk_fingerprint_complete": len(fingerprint.get("fingerprint", {})) >= 3,
             "evidence_chain_intact": True,
@@ -329,7 +333,7 @@ def main():
     # Summary
     print(f"\n  {'='*50}")
     print(f"  Evidence Package V1 Complete")
-    print(f"  Stability: {stability['stability_score_pct']}%")
+    print(f"  Stability: {stability['decision_consistency_proxy_pct']}%")
     print(f"  Patterns:  {len(contribution['patterns'])} funnels")
     print(f"  Fingerprint: {fingerprint['risk_profile']} ({fingerprint['total_rejects']} rejects)")
     print(f"  {'='*50}\n")
