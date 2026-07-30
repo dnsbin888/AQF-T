@@ -168,16 +168,20 @@ def render() -> str:
     pattern_evidence = evidence_data.get("pattern_evidence", {}).get("patterns", {})
     evidence_version = evidence_data.get("meta", {}).get("evidence_version", "")
 
+    # ── 展示映射 ──
+    ACTION_LABELS = {"BUY": "买入", "SELL": "卖出", "HOLD": "持有"}
+    STATUS_LABELS = {"FILLED": "已成交", "REJECTED": "已拒绝", "QUEUED": "排队中", "PARTIAL": "部分成交"}
+
     # ── 成交明细 ──
     fill_rows = ""
     for f in fills[:10]:
         sym = f.get("symbol", "")
-        act = f.get("action", "")
+        act = ACTION_LABELS.get(f.get("action", ""), f.get("action", ""))
         qty = f.get("fill_quantity", 0)
         price = f.get("fill_price", 0)
-        status = f.get("status", "")
+        status = STATUS_LABELS.get(f.get("status", ""), f.get("status", ""))
         reason = f.get("reason", "")
-        color = "#4caf50" if status == "FILLED" else "#f44336"
+        color = "#4caf50" if f.get("status") == "FILLED" else "#f44336"
         fill_rows += f"""
         <tr>
           <td>{sym}</td><td>{act}</td><td>{qty}</td>
@@ -191,9 +195,10 @@ def render() -> str:
     for s in signals[:5]:
         strat_raw = s.get('strategy', '')
         strat_label = STRATEGY_LABELS.get(strat_raw, strat_raw)
+        act_label = ACTION_LABELS.get(s.get('action', ''), s.get('action', ''))
         signal_rows += f"""
         <tr>
-          <td>{s.get('symbol','')}</td><td>{s.get('action','')}</td>
+          <td>{s.get('symbol','')}</td><td>{act_label}</td>
           <td>{strat_label}</td><td>{s.get('position_pct',0):.0%}</td>
           <td>{s.get('confidence',0):.2f}</td>
           <td style="font-size:12px;color:#888">{s.get('reasoning','')}</td>
