@@ -402,6 +402,21 @@
 
 ---
 
+## DEC-20260730-026
+
+- **date**: 2026-07-30
+- **decision**: V1.2 CLOSED — AQF-T 从"策略工程系统"进入"交易系统工程阶段"
+- **context**: 17 commits, 10 decisions, 9/9 tests, three-layer architecture frozen (DEC-024). Runtime layer 7/7 verified, Constitution compliant, boundaries clean
+- **chosen**: 关闭 V1.2，V1.3 方向冻结但暂不启动
+- **reason**: 系统已经从"不会坏"阶段完成，下一阶段是"如何更好地执行"。但 V1.3 需要 QMT 环境才能有效验证 Execution Intelligence
+- **impact**:
+  - V1.3 优先级: Execution Agent Interface → Order State Machine → Cancel/Replace → Fill Quality Evidence → QMT Adapter Integration
+  - 完整闭环: Market→Perception→Decision→Risk→Execution Intelligence→QMT→Fill→Evidence→Learning
+  - 当前等待: QMT 环境就绪
+  - AQF-T 定位: 个人量化交易操作系统 (非"调用QMT下单的策略程序")
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
