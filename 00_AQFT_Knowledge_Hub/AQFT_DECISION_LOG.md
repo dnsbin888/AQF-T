@@ -448,6 +448,20 @@
 
 ---
 
+## DEC-20260730-027
+
+- **date**: 2026-07-30
+- **decision**: Phase 2.3 Evidence Package V1 — PASS WITH NOTES, all 3 notes resolved, package frozen
+- **context**: 4份报告生成 (Master/Stability/Contribution/Fingerprint). GPT评审通过, 3个命名级修正已应用
+- **notes resolved**:
+  - NOTE-1: stability_score_pct → decision_consistency_proxy_pct + measurement_type: "proxy"
+  - NOTE-2: Pattern contribution + measurement_type: "estimated" (QMT后升级为"observed")
+  - NOTE-3: Risk Fingerprint无需修改, 已适合作为基线
+- **status**: Evidence Package V1 FROZEN. Baseline established for QMT drift comparison
+- **next**: Phase 2.4 QMT Environment Validation (只替换Provider, 比较Baseline漂移)
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
