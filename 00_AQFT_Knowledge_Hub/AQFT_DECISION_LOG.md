@@ -352,6 +352,21 @@
 
 ---
 
+## DEC-20260730-023
+
+- **date**: 2026-07-30
+- **decision**: Phase 2.1-A CLOSED — Evidence Infrastructure Frozen, QMT Gate Ready
+- **context**: 30-day Simulator Evidence generated. Evidence provenance v2.1 verified (git_commit/config_hash/provider/not_live). Provider abstraction validated (Simulator/QMT swap). 34/34 tests passing
+- **chosen**: Freeze Evidence Infrastructure, enter Phase 2.1-B (QMT Data Provider Validation)
+- **reason**: 进入QMT后重点应该是数据质量验证，而不是修改证据格式。Evidence Schema v2.1 / Provider Interface / Pipeline Interface / Evidence Provenance Fields 全部冻结
+- **impact**:
+  - Phase 2.1-B Gate: Tick完整率>=99% / Timestamp异常=0 / 连续30交易日0 Crash / Evidence生成成功率100% / Replay Consistency (Same Hash) / Decision Stability >=99%
+  - 不修改: Pipeline / Decision / Risk / Evidence Builder / Knowledge Hub
+  - 只替换: Data Source Layer (SimulatorProvider -> QMTProvider)
+  - Evidence Provenance "not_live": true 字段永久保留 — 防止模拟结果误标实盘
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
