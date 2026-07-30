@@ -3,18 +3,28 @@
 ## 系统定位
 
 ```
-QMT is an Execution Adapter. QMT是系统的手足, 不是大脑。
+AQF-T = 战略决策层 (为什么交易)
+Execution Agent = 执行智能层 (怎么交易)
+QMT = 交易通道 (下单/行情/账户)
 
-AQF-T owns:
-  Perception / Decision / Risk / Evidence / Learning
+AQF-T战略权限 (不可下放):
+  - 市场判断 (Regime/情绪/题材)
+  - 选股决策 (Pattern/Candidate/Decision)
+  - 仓位管理 (Portfolio/Exposure)
+  - 风险裁决 (Risk APPROVE/ADJUST/REJECT)
+  - 证据记录 (Evidence/Trace/Attribution)
 
-QMT owns:
-  Order routing / Trade execution / Account interface
+Execution Agent局部智能 (行业标准):
+  - 订单拆分 (大单拆小)
+  - 盘口判断 (价差/深度保护)
+  - 撤改单 (超时/滑点)
+  - 成交优化 (VWAP/TWAP)
+  - 涨停排队策略 (封单衰减→撤单)
 
-禁止:
-  - 策略逻辑驻留在QMT
-  - 决策依赖QMT UI
-  - QMT承担风控判断
+禁止 (AQF-T保留):
+  - 自主发现机会并买入 (绕过Strategy)
+  - 修改仓位/风控参数 (绕过Risk)
+  - 替代AQF-T做交易决策
 ```
 
 ## 四条铁律
