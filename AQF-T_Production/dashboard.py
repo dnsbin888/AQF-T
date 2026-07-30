@@ -444,7 +444,7 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
     <div class="card">
       <h2 style="margin-bottom:8px">风控热力</h2>
       <div style="font-size:12px">
-        {self._risk_heatmap(reject_reasons)}
+        {_risk_heatmap(reject_reasons)}
       </div>
     </div>
   </div>
@@ -456,7 +456,7 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
     <div class="card">
       <h2 style="margin-bottom:8px">7日市场状态</h2>
       <div style="display:flex;gap:6px;font-size:12px">
-        {self._regime_calendar()}
+        {_regime_calendar()}
       </div>
     </div>
   </div>
@@ -465,7 +465,7 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
       <h2 style="margin-bottom:8px">Pattern 排序</h2>
       <table style="font-size:12px">
         <tr><th>Pattern</th><th style="text-align:right">触发</th><th>状态</th></tr>
-        {self._pattern_ranking(pattern_evidence)}
+        {_pattern_ranking(pattern_evidence)}
       </table>
     </div>
   </div>
