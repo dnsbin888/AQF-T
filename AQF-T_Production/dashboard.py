@@ -99,21 +99,32 @@ def _risk_heatmap(reject_reasons: dict) -> str:
 def _regime_calendar() -> str:
     from datetime import timedelta
     colors = {"高潮期": "#f85149", "回暖期": "#f0883e", "冰点期": "#58a6ff", "退潮期": "#6e7681"}
+    # Fallback: read evidence daily_logs
+    fallback = {}
+    if EVIDENCE_FILE.exists():
+        try:
+            ev = json.loads(EVIDENCE_FILE.read_text(encoding="utf-8"))
+            for log in ev.get("daily_logs", []):
+                fallback[log.get("date", "")] = log.get("regime", "")
+        except Exception:
+            pass
     cells = ""
     for i in range(6, -1, -1):
         d = datetime.now() - timedelta(days=i)
         date_str = d.strftime("%m/%d")
-        # Read daily report for that date
+        date_key = d.strftime("%Y-%m-%d")
         f = REPORTS_DAILY / f"{d.strftime('%Y%m%d')}_report.json"
-        phase = "?"
-        color = "#30363d"
+        phase_full = ""
         if f.exists():
             try:
                 rpt = json.loads(f.read_text(encoding="utf-8"))
-                phase = rpt.get("regime", {}).get("phase", "?")[0]
-                color = colors.get(rpt.get("regime", {}).get("phase", ""), "#30363d")
+                phase_full = rpt.get("regime", {}).get("phase", "")
             except Exception:
                 pass
+        if not phase_full:
+            phase_full = fallback.get(date_key, "")
+        phase = phase_full[0] if phase_full else "-"
+        color = colors.get(phase_full, "#30363d")
         cells += f"""<div style="text-align:center;padding:6px 8px;background:{color};border-radius:3px;color:#fff;min-width:38px">
           <div style="font-size:10px;opacity:0.8">{date_str}</div>
           <div style="font-weight:bold">{phase}</div>
@@ -124,8 +135,8 @@ def _pattern_ranking(patterns: dict) -> str:
     if not patterns:
         return '<tr><td colspan="3" style="color:#8b949e">暂无数据</td></tr>'
     ranked = sorted(patterns.items(), key=lambda x: x[1].get("trigger_count", 0), reverse=True)
-    labels = {"PositionAnchor": "回封锚定", "LeaderLifeCycle": "龙头周期", "LadderScore": "梯队评分",
-              "EmotionCycle": "情绪周期", "SectorFlow": "板块资金", "RelativeStrength": "相对强度"}
+    labels = {"PositionAnchor": "卡位博弈", "LeaderLifeCycle": "龙头8维", "LadderScore": "梯队完整性",
+              "EmotionCycle": "情绪周期", "SectorFlow": "板块轮动", "RelativeStrength": "相对强度"}
     rows = ""
     for name, p in ranked:
         label = labels.get(name, name)
@@ -208,9 +219,9 @@ def render() -> str:
         "trend": "Path B1 趋势",
         "theme": "Path B2 题材",
         "intraday": "Path B3 日内",
-        "ladder": "LadderScore",
-        "leader": "LeaderLifeCycle",
-        "emotion": "EmotionCycle",
+        "ladder": "梯队完整性",
+        "leader": "龙头8维",
+        "emotion": "情绪周期",
     }
 
     # ── Sector 空值处理 (P0-3) ──
