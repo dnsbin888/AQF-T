@@ -19,19 +19,19 @@
 
 ## Architecture Status
 
-- **phase**: V1.0 Integration Phase (Production Pipeline Runtime)
-- **status**: active
+- **phase**: V1.1 Runtime Hardening Phase 1 — COMPLETE
+- **status**: hardened
 - **p0-p4**: frozen
 - **p5**: frozen (V3.0.0 Architecture Design)
-- **production**: pipeline_integrated (M2-M7 wired)
+- **production**: runtime_hardened (ClockProvider / Portfolio Exposure / MarketDataProvider / Report)
 
 ---
 
 ## Current Focus
 
-- **module**: AQF-T_Production (Pipeline Runtime)
-- **version**: V1.0 Integration
-- **task**: Phase 2-7 Main Pipeline Integration
+- **module**: AQF-T_Production
+- **version**: V1.1
+- **task**: Phase 2 — Real Market Evidence (30-60交易日Replay)
 - **priority**: high
 
 ---
@@ -46,7 +46,8 @@
 | P3 | Running System | 8/8 | frozen |
 | P4 | Continuous Evolution | 6/6 | frozen |
 | P5 | Autonomous Intelligence | 5/5 | frozen |
-| V1.0 | Production Pipeline | 9/9 tests | integrated |
+| V1.0 | Pipeline Integration | 9/9 tests | complete |
+| V1.1 | Runtime Hardening Phase 1 | 6/6 items | complete |
 
 ---
 
@@ -54,8 +55,9 @@
 
 - **total_modules**: 30
 - **frozen**: 30
-- **active**: 1 (AQF-T_Production Pipeline)
+- **active**: 0 (待 Phase 2)
 - **pipeline**: Regime→Perception→PathA/B→Decision→Risk→Execution→KnowledgeHub
+- **hardening**: ClockProvider | Portfolio Exposure 40/25/20 | MarketDataProvider(QMT/Sim/Replay) | Regime Multiplier | Score Version | Event Evidence
 
 ---
 

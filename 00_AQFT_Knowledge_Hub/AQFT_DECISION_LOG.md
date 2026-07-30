@@ -264,6 +264,25 @@
 
 ---
 
+## DEC-20260730-018
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Review — Runtime Hardening Phase 1 PASS ✅, 进入 Phase 2 Real Market Evidence
+- **context**: 全部6项 DEC-016 决策已实现（QMT Adapter / ClockProvider / Report / Score归一化 / Portfolio Exposure / Regime Confidence）。9/9测试通过，未破坏 Frozen Architecture
+- **options**:
+  - A: 进入 ML 训练阶段
+  - B: Phase 2 — Real Market Evidence (30-60交易日真实数据Replay)
+  - C: 直接 Live Trading
+- **chosen**: B — Real Market Evidence
+- **reason**: 系统已从"可运行框架"进入"真实市场验证准备阶段"。当前不是缺乏能力，而是缺乏真实数据下的行为证据。先证明系统在真实数据下的 Replay Consistency / Decision Stability / Pattern Evidence / Risk Behavior，再考虑 ML
+- **impact**:
+  - Next Gate: 30-60交易日 QMT/xtdata 真实数据 Replay
+  - Pattern Evidence 4→7扩展（LeaderLifeCycle/LadderScore/EmotionCycle优先）
+  - 继续保持冻结: 不新增AI模型/Transformer/RL/LLM交易决策/新Pattern
+  - akshare = Research/Backup only, QMT xtdata = Production
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
