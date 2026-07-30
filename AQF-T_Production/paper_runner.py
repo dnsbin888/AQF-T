@@ -130,6 +130,7 @@ class MarketDataSimulator:
             symbol = stock["symbol"]
 
             # -- 通用 features --
+            sector_pct = random.uniform(-3, 5)
             features = {
                 "symbol": symbol,
                 "ma_5": random.uniform(10, 200),
@@ -137,6 +138,19 @@ class MarketDataSimulator:
                 "volume_ratio": random.uniform(0.5, 3.0),
                 "theme_heat": random.uniform(0, 1),
                 "sector_score": random.uniform(0, 1),
+                # P1 SectorFlow fields
+                "sector": stock["sector"],
+                "sector_limit_up_change": random.uniform(-0.3, 0.5),
+                "sector_fund_flow": random.uniform(-10, 20),
+                "sector_fund_flow_avg": random.uniform(1, 10),
+                "sector_pct": sector_pct,
+                "sector_volume_change": random.uniform(-0.5, 1.0),
+                "is_leader": random.random() > 0.8,
+                # P1 RelativeStrength fields
+                "stock_5d_return": random.uniform(-0.08, 0.15),
+                "market_5d_return": random.uniform(-0.03, 0.05),
+                "sector_5d_return": sector_pct / 100,
+                "leader_5d_return": random.uniform(-0.05, 0.18),
             }
 
             # -- L2 features --
@@ -177,6 +191,20 @@ class MarketDataSimulator:
                 "auction_amount": random.uniform(1000, 10000),
                 "float_market_cap": random.uniform(10, 80),
                 "gap_up_pct": random.uniform(-0.03, 0.07),
+
+                # P1 SectorFlow ctx
+                "sector": stock["sector"],
+                "sector_limit_up_change": random.uniform(-0.3, 0.5),
+                "sector_fund_flow": random.uniform(-10, 20),
+                "sector_fund_flow_avg": random.uniform(1, 10),
+                "sector_pct": sector_pct,
+                "sector_volume_change": random.uniform(-0.5, 1.0),
+                "is_leader": random.random() > 0.8,
+                # P1 RelativeStrength ctx
+                "stock_5d_return": features["stock_5d_return"],
+                "market_5d_return": features["market_5d_return"],
+                "sector_5d_return": features["sector_5d_return"],
+                "leader_5d_return": features["leader_5d_return"],
             }
 
             watchlist.append({
