@@ -1,36 +1,18 @@
 {
   "report_type": "execution",
   "date": "2026-07-30",
-  "generated_at": "2026-07-30T09:54:15.352275",
+  "generated_at": "2026-07-30T11:40:22.119477",
   "summary": {
-    "total_orders": 3,
-    "filled": 2,
-    "rejected": 1,
-    "fill_rate": 66.7,
-    "total_commission": 10.1,
-    "avg_slippage_bps": 18.9
+    "total_orders": 2,
+    "filled": 0,
+    "rejected": 2,
+    "fill_rate": 0.0,
+    "total_commission": 0,
+    "avg_slippage_bps": 0.0
   },
   "rejection_reasons": {
-    "总仓位超40%: 51.4%": 1
+    "总仓位超40%: 49.4%": 1,
+    "总仓位超40%: 49.1%": 1
   },
-  "fills": [
-    {
-      "symbol": "000002",
-      "action": "HOLD",
-      "fill_price": 15.36,
-      "fill_quantity": 200,
-      "fee": 5.03,
-      "slippage_bps": 18.7,
-      "timestamp": "2026-07-30T09:54:15.352275"
-    },
-    {
-      "symbol": "601012",
-      "action": "HOLD",
-      "fill_price": 35.1,
-      "fill_quantity": 200,
-      "fee": 5.07,
-      "slippage_bps": 19.0,
-      "timestamp": "2026-07-30T09:54:15.352275"
-    }
-  ]
+  "fills": []
 }
