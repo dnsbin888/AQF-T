@@ -101,7 +101,7 @@ class ReviewEngine:
     def summary(self) -> dict:
         """归因总结"""
         if not self.trades:
-            return {"total": 0}
+            return {"total_trades": 0, "win_rate": 0, "top_contributing_signals": []}
 
         wins = [t for t in self.trades if t.pnl_pct > 0]
         losses = [t for t in self.trades if t.pnl_pct <= 0]

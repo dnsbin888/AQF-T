@@ -1,40 +1,174 @@
 """
 AQF-T Production — 主程序入口
+==============================
+启动: python main.py [--mode paper|live] [--cmd run|status|test|backtest]
 
-启动: python main.py
-模式: paper (模拟) / live (实盘)
+命令:
+  run      运行主管线 (默认)
+  status   查看系统状态
+  test     运行测试套件
+  backtest 运行回测
+
+用法:
+  python main.py                          # Paper Trading 单日运行
+  python main.py --mode live              # 实盘模式 (需QMT连接)
+  python main.py --cmd status             # 系统状态
+  python main.py --cmd test               # 运行测试
+  python main.py --cmd batch --days 22    # 批量22天回放
 """
-import yaml
+
+import argparse
+import sys
 from pathlib import Path
 from datetime import datetime
 
+# 确保项目根目录在 path
+sys.path.insert(0, str(Path(__file__).parent))
 
-def load_config():
-    with open("config/system.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from pipeline import ProductionPipeline, create_pipeline
+from paper_runner import run_single_day, run_batch, MarketDataSimulator
+
+
+def cmd_run(args):
+    """运行主管线"""
+    pipeline = create_pipeline(args.mode)
+
+    print(f"""
+{'='*60}
+  AQF-T Production V{pipeline.config.get('system', {}).get('version', '1.0')}
+  Mode: {pipeline.mode}
+  QMT L2: {'ON' if pipeline.config.get('data', {}).get('l2_enabled') else 'OFF'}
+  Kill Switch: {'ACTIVE' if pipeline.config.get('risk', {}).get('kill_switch') else 'OFF'}
+  {datetime.now().isoformat()}
+{'='*60}
+""")
+
+    if args.cmd == "batch":
+        run_batch(pipeline, days=args.days)
+    else:
+        state = run_single_day(
+            pipeline,
+            phase=args.phase,
+            date=args.date,
+        )
+        print(pipeline.daily_summary(state))
+
+
+def cmd_status(args):
+    """查看系统状态"""
+    pipeline = ProductionPipeline()
+    status = pipeline.status()
+
+    print(f"""
+{'='*60}
+  AQF-T Production — System Status
+{'='*60}
+  Mode:        {status['mode']}
+  Last Regime: {status['last_regime'] or 'N/A'}
+  Positions:   {status['positions']}
+  Trades:      {status['trades_today']}
+
+  Account:
+    Cash:       ¥{status['account']['cash']:,.2f}
+    Positions:  {status['account']['positions']}
+    TotalValue: ¥{status['account']['total_value']:,.2f}
+    TotalTrades:{status['account']['total_trades']}
+
+  Health:
+    QMT:        {status['health']['qmt']}
+    L2 Age:     {status['health']['l2_age']}
+    DB:         {status['health']['db']}
+    CPU:        {status['health']['cpu']}
+    Memory:     {status['health']['memory']}
+    Overall:    {status['health']['overall']}
+{'='*60}
+""")
+
+
+def cmd_test(args):
+    """运行测试套件"""
+    print("\n  Running AQF-T Test Suite...\n")
+
+    # 运行 M1 测试
+    try:
+        from run_tests import results as m1_results
+        exec(open("run_tests.py", encoding="utf-8").read())
+    except Exception as e:
+        print(f"  M1 Tests: ERROR — {e}")
+
+    # 端到端 Pipeline 测试
+    print("\n  ── Pipeline E2E Test ──")
+    try:
+        from tests.test_pipeline import test_full_pipeline_single_day
+        test_full_pipeline_single_day()
+        print("  ✅ Pipeline E2E: PASSED")
+    except Exception as e:
+        print(f"  ❌ Pipeline E2E: {e}")
+
+    print("\n  Done.")
+
+
+def cmd_backtest(args):
+    """运行回测"""
+    from learning.backtest_engine import BacktestEngine, BacktestConfig
+
+    config = BacktestConfig(
+        start_date=args.start or "2023-01-01",
+        end_date=args.end or "2026-06-30",
+        initial_cash=args.cash or 1_000_000.0,
+    )
+
+    print(f"""
+{'='*60}
+  AQF-T Backtest
+  Period: {config.start_date} → {config.end_date}
+  Cash: ¥{config.initial_cash:,.0f}
+{'='*60}
+""")
+
+    # TODO: 加载真实数据 + 生成信号
+    # engine = BacktestEngine(config)
+    # result = engine.run(data, signals)
+    print("  Backtest engine ready. 需要提供 data + signals 输入。")
 
 
 def main():
-    config = load_config()
+    parser = argparse.ArgumentParser(
+        description="AQF-T Production — 智能交易系统"
+    )
+    parser.add_argument(
+        "--mode", "-m",
+        choices=["paper", "live"],
+        default="paper",
+        help="运行模式: paper(模拟) | live(实盘)"
+    )
+    parser.add_argument(
+        "--cmd",
+        choices=["run", "status", "test", "batch", "backtest"],
+        default="run",
+        help="命令: run|status|test|batch|backtest"
+    )
+    parser.add_argument("--days", "-d", type=int, default=22)
+    parser.add_argument("--phase", "-p", choices=["冰点期", "回暖期", "高潮期", "退潮期"])
+    parser.add_argument("--date")
+    parser.add_argument("--start")
+    parser.add_argument("--end")
+    parser.add_argument("--cash", type=float)
+    parser.add_argument("--seed", "-s", type=int, default=42)
 
-    print("=" * 60)
-    print(f"  AQF-T Production V{config['system']['version']}")
-    print(f"  Mode: {config['system']['mode']}")
-    print(f"  QMT L2: {'ON' if config['data']['l2_enabled'] else 'OFF'}")
-    print(f"  Kill Switch: {'ACTIVE' if config['risk']['kill_switch'] else 'OFF'}")
-    print(f"  {datetime.now().isoformat()}")
-    print("=" * 60)
+    args = parser.parse_args()
 
-    # To be implemented per phase:
-    # Phase 1: Data — QMT L2 → SQLite
-    # Phase 2: Strategy — Dragon + Sentiment
-    # Phase 3: Risk + Execution
-    # Phase 4: Review
-    # Phase 5: Learning
-    # Phase 6: Live Trading
-
-    print("\n  Ready. Implement phases per README.")
-    print("  Phase 1: python data/sources/qmt_l2_loader.py")
+    # 路由
+    if args.cmd == "status":
+        cmd_status(args)
+    elif args.cmd == "test":
+        cmd_test(args)
+    elif args.cmd == "backtest":
+        cmd_backtest(args)
+    elif args.cmd in ("run", "batch"):
+        cmd_run(args)
+    else:
+        cmd_run(args)
 
 
 if __name__ == "__main__":

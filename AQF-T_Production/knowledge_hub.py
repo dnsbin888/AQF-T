@@ -74,8 +74,9 @@ class KnowledgeHub:
     def get_strategy_performance(self) -> dict:
         s = self.review.summary()
         return {
-            "total_trades": s["total_trades"], "win_rate": s["win_rate"],
-            "top_signals": s["top_contributing_signals"],
+            "total_trades": s.get("total_trades", s.get("total", 0)),
+            "win_rate": s.get("win_rate", 0),
+            "top_signals": s.get("top_contributing_signals", []),
         }
 
     def daily_report(self, regime, positions, signals) -> str:

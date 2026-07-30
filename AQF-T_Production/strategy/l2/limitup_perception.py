@@ -7,7 +7,7 @@ from typing import Optional
 
 
 @dataclass
-class炸板Analysis:
+class ZhaBanAnalysis:
     symbol: str
     is_healthy: bool             # True=洗盘型, False=诱多型
     type: str                    # "洗盘型" | "诱多型"
@@ -40,7 +40,7 @@ class LimitUpPerception:
 
     # ── 炸板分类 ──
 
-    def classify_break(self, ctx: dict) -> 炸板Analysis:
+    def classify_break(self, ctx: dict) -> ZhaBanAnalysis:
         """
         炸板分类: 洗盘型 vs 诱多型
         洗盘型≥3 → 等回封 / 诱多型≥2 → 放弃
@@ -63,16 +63,16 @@ class LimitUpPerception:
         trap_count = sum(conditions_trap)
 
         if healthy_count >= 3:
-            return 炸板Analysis(
+            return ZhaBanAnalysis(
                 symbol=ctx.get("symbol", ""), is_healthy=True,
                 type="洗盘型", score=healthy_count, can_wait=True
             )
         elif trap_count >= 2:
-            return 炸板Analysis(
+            return ZhaBanAnalysis(
                 symbol=ctx.get("symbol", ""), is_healthy=False,
                 type="诱多型", score=trap_count, can_wait=False
             )
-        return 炸板Analysis(
+        return ZhaBanAnalysis(
             symbol=ctx.get("symbol", ""), is_healthy=False,
             type="不确定", score=0, can_wait=False
         )

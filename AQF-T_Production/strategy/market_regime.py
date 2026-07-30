@@ -20,7 +20,7 @@ class MarketRegime:
     limit_down_count: int               # 跌停家数
     board_ladder: dict                  # {2板:N, 3板:N, 4板:N, 5+板:N}
     promotion_rate: float               # 首板→二板晋级率
-   炸板率: float
+    zhatban_rate: float                 # 炸板率
 
     # 资金维度
     north_bound_direction: Literal["流入", "流出", "中性"]
@@ -56,19 +56,21 @@ class MarketRegimeEngine:
         up = market_stats.get("limit_up_count", 0)
         down = market_stats.get("limit_down_count", 0)
         height = market_stats.get("max_board_height", 0)
-       炸板率 = market_stats.get("炸板率", 0)
+        zhatban = market_stats.get("zhatban_rate", market_stats.get("炸板率", 0))
         north = market_stats.get("north_bound_net", 0)
 
         score = up * 2 - down * 3 + height * 5
-        if north > 10:    score += 10
-        elif north < -10:  score -= 10
+        if north > 10:
+            score += 10
+        elif north < -10:
+            score -= 10
 
         # ── 四阶段 ──
         if down > 30 and height <= 2:
             phase = "冰点期"
-        elif height >= 7 and炸板率 < 0.30:
+        elif height >= 7 and zhatban < 0.30:
             phase = "高潮期"
-        elif炸板率 > 0.40 or down > 50:
+        elif zhatban > 0.40 or down > 50:
             phase = "退潮期"
         elif score > 80:
             phase = "高潮期"
@@ -82,19 +84,25 @@ class MarketRegimeEngine:
         promotion = market_stats.get("promotion_rate", 0)
 
         # ── 北向 ──
-        if north > 10:       nb_dir = "流入"
-        elif north < -10:    nb_dir = "流出"
-        else:                nb_dir = "中性"
+        if north > 10:
+            nb_dir = "流入"
+        elif north < -10:
+            nb_dir = "流出"
+        else:
+            nb_dir = "中性"
 
         # ── 融资 ──
         margin_chg = market_stats.get("margin_balance_change", 0)
-        if margin_chg > 0.02:      margin_t = "上升"
-        elif margin_chg < -0.02:   margin_t = "下降"
-        else:                      margin_t = "平稳"
+        if margin_chg > 0.02:
+            margin_t = "上升"
+        elif margin_chg < -0.02:
+            margin_t = "下降"
+        else:
+            margin_t = "平稳"
 
         # ── 综合决策 ──
         mode, path_a, path_b, max_pos, recommended = self._decide(
-            phase, score, 炸板率, promotion
+            phase, score, zhatban, promotion
         )
 
         return MarketRegime(
@@ -104,7 +112,7 @@ class MarketRegimeEngine:
             limit_down_count=down,
             board_ladder=ladder,
             promotion_rate=round(promotion, 2),
-            炸板率=round(炸板率, 2),
+            zhatban_rate=round(zhatban, 2),
             north_bound_direction=nb_dir,
             north_bound_amount=round(north, 1),
             margin_trend=margin_t,
@@ -116,7 +124,7 @@ class MarketRegimeEngine:
             timestamp=datetime.now().isoformat(),
         )
 
-    def _decide(self, phase: str, score: float, 炸板率: float,
+    def _decide(self, phase: str, score: float, zhatban: float,
                 promotion: float) -> tuple:
         """综合决策 — 所有策略的总开关"""
 
@@ -129,7 +137,7 @@ class MarketRegimeEngine:
             return ("defensive", False, False, 0.10, "观望")
 
         if phase == "高潮期":
-            if炸板率 < 0.20:  # 炸板率低, 封板质量好
+            if zhatban < 0.20:  # 炸板率低, 封板质量好
                 return ("aggressive", True, True, 0.70, "A+B全开")
             return ("normal", True, True, 0.50, "A+B")
 
