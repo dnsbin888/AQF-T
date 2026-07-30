@@ -116,7 +116,8 @@ class EvidenceBuilder:
 
         daily_states = []
         pattern_triggers = {"PositionAnchor": 0, "LeaderLifeCycle": 0,
-                           "LadderScore": 0, "EmotionCycle": 0}
+                           "LadderScore": 0, "EmotionCycle": 0,
+                           "SectorFlow": 0, "RelativeStrength": 0}
         risk_reject_reasons = {}
         execution_metrics = {"total_signals": 0, "total_fills": 0,
                             "total_rejected": 0, "fill_rate": 0.0,
@@ -155,6 +156,11 @@ class EvidenceBuilder:
                     pattern_triggers["LadderScore"] += 1
                     if c.evidence.get("theme_heat", 0) > 0.5:
                         pattern_triggers["EmotionCycle"] += 1
+                # P1 Patterns
+                if c.evidence.get("sector_flow_score", 0) > 0.5:
+                    pattern_triggers["SectorFlow"] += 1
+                if c.evidence.get("rs_score", 0) > 0.6:
+                    pattern_triggers["RelativeStrength"] += 1
 
             # Collect risk reject reasons
             for f in state.fills:
