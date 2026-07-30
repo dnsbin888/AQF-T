@@ -1,116 +1,98 @@
 {
   "report_type": "daily",
   "date": "2026-07-30",
-  "generated_at": "2026-07-30T09:32:31.233388",
+  "generated_at": "2026-07-30T09:54:15.352275",
   "regime": {
     "phase": "高潮期",
     "operation_mode": "normal",
-    "sentiment_score": 105,
-    "regime_confidence": 0.7,
-    "zhatban_rate": 0.28,
-    "promotion_rate": 0.21,
+    "sentiment_score": 238,
+    "regime_confidence": 0.85,
+    "zhatban_rate": 0.22,
+    "promotion_rate": 0.52,
     "path_a_allowed": true,
     "path_b_allowed": true,
     "max_position_pct": 0.5
   },
   "pipeline": {
-    "total_candidates": 4,
-    "total_signals": 4,
-    "total_fills": 0,
-    "total_rejected": 4,
+    "total_candidates": 3,
+    "total_signals": 3,
+    "total_fills": 2,
+    "total_rejected": 1,
     "errors": []
   },
   "signals": [
     {
-      "symbol": "300750",
+      "symbol": "300059",
       "action": "BUY",
-      "strategy": "reseal",
-      "position_pct": 0.15,
-      "confidence": 0.875,
-      "reasoning": "reseal: score=90, risk=50"
-    },
-    {
-      "symbol": "000001",
-      "action": "BUY",
-      "strategy": "theme",
+      "strategy": "trend",
       "position_pct": 0.05,
       "confidence": 0.30000000000000004,
-      "reasoning": "theme: score=56, risk=40"
+      "reasoning": "trend: score=51, risk=40"
     },
     {
-      "symbol": "000858",
+      "symbol": "000002",
       "action": "HOLD",
       "strategy": "trend",
       "position_pct": 0.05,
       "confidence": 0.30000000000000004,
-      "reasoning": "trend: score=50, risk=55"
+      "reasoning": "trend: score=46, risk=40"
     },
     {
-      "symbol": "688981",
+      "symbol": "601012",
       "action": "HOLD",
       "strategy": "trend",
       "position_pct": 0.05,
       "confidence": 0.30000000000000004,
-      "reasoning": "trend: score=42, risk=40"
+      "reasoning": "trend: score=41, risk=40"
     }
   ],
   "fills": [
     {
-      "symbol": "300750",
+      "symbol": "300059",
       "action": "BUY",
       "status": "REJECTED",
       "fill_price": 0,
       "fill_quantity": 0,
       "fee": 0,
-      "reason": "单票超10%: 17.0%",
-      "timestamp": "2026-07-30T09:32:31.233388"
+      "reason": "总仓位超40%: 51.4%",
+      "timestamp": "2026-07-30T09:54:15.352275"
     },
     {
-      "symbol": "000001",
-      "action": "BUY",
-      "status": "REJECTED",
-      "fill_price": 0,
-      "fill_quantity": 0,
-      "fee": 0,
-      "reason": "总仓位超40%: 48.1%",
-      "timestamp": "2026-07-30T09:32:31.233388"
-    },
-    {
-      "symbol": "000858",
+      "symbol": "000002",
       "action": "HOLD",
-      "status": "REJECTED",
-      "fill_price": 170.97147541278625,
-      "fill_quantity": 0,
-      "fee": 0,
-      "reason": "可卖数量不足(T+1)",
-      "timestamp": "2026-07-30T09:32:31.233388"
+      "status": "FILLED",
+      "fill_price": 15.36,
+      "fill_quantity": 200,
+      "fee": 5.03,
+      "reason": "",
+      "timestamp": "2026-07-30T09:54:15.352275"
     },
     {
-      "symbol": "688981",
+      "symbol": "601012",
       "action": "HOLD",
-      "status": "REJECTED",
-      "fill_price": 50.80700450365966,
-      "fill_quantity": 0,
-      "fee": 0,
-      "reason": "可卖数量不足(T+1)",
-      "timestamp": "2026-07-30T09:32:31.233388"
+      "status": "FILLED",
+      "fill_price": 35.1,
+      "fill_quantity": 200,
+      "fee": 5.07,
+      "reason": "",
+      "timestamp": "2026-07-30T09:54:15.352275"
     }
   ],
   "exposure": {
-    "total_value": 1913941.0,
-    "total_exposure_pct": 47.8,
-    "daily_new_exposure_pct": 0.2,
+    "total_value": 2036087.0,
+    "total_exposure_pct": 50.9,
+    "daily_new_exposure_pct": 0.0,
     "sector_exposure": {
-      "": 47.8
+      "": 50.9
     },
     "max_total_limit_pct": 40.0,
     "max_sector_limit_pct": 25.0
   },
   "account": {
-    "cash": 85818.59,
-    "positions": 2,
-    "total_value": 999758.48,
-    "total_trades": 2
+    "cash": 16054.43,
+    "positions": 7,
+    "total_value": 1000639.66,
+    "total_trades": 24
   },
   "health": {
     "qmt": "DOWN",

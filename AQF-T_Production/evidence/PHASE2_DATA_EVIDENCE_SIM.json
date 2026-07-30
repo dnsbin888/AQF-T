@@ -3,9 +3,13 @@
     "source": "SIMULATOR",
     "environment": "TEST",
     "not_live": true,
-    "generated_at": "2026-07-30T09:49:10.748669",
+    "generated_at": "2026-07-30T09:54:15.277337",
     "period_days": 30,
-    "version": "Phase2.1-A"
+    "evidence_version": "2.1",
+    "git_commit": "f837fe4b",
+    "config_hash": "sim_default",
+    "provider": "SIMULATOR",
+    "phase": "Phase2.1-A"
   },
   "data_integrity": {
     "source": "SIMULATOR",

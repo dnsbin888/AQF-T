@@ -41,6 +41,10 @@ class EvidencePackage:
     not_live: bool = True
     generated_at: str = ""
     period_days: int = 0
+    evidence_version: str = "2.1"
+    git_commit: str = ""
+    config_hash: str = ""
+    provider: str = "SIMULATOR"
 
     # Data Integrity
     data_integrity: dict = field(default_factory=dict)
@@ -82,9 +86,22 @@ class EvidenceBuilder:
         pipeline = ProductionPipeline()
         sim = MarketDataSimulator(seed=seed)
 
+        import subprocess
+        git_commit = ""
+        try:
+            git_commit = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL
+            ).strip()[:8]
+        except Exception:
+            git_commit = "unknown"
+
         evidence = EvidencePackage(
             generated_at=datetime.now().isoformat(),
             period_days=30,
+            evidence_version="2.1",
+            git_commit=git_commit,
+            config_hash="sim_default",
+            provider="SIMULATOR",
         )
 
         # Phase cycle: 回暖 -> 高潮 -> 退潮 -> 冰点 -> 回暖
@@ -299,7 +316,11 @@ class EvidenceBuilder:
                 "not_live": evidence.not_live,
                 "generated_at": evidence.generated_at,
                 "period_days": evidence.period_days,
-                "version": "Phase2.1-A",
+                "evidence_version": evidence.evidence_version,
+                "git_commit": evidence.git_commit,
+                "config_hash": evidence.config_hash,
+                "provider": evidence.provider,
+                "phase": "Phase2.1-A",
             },
             "data_integrity": evidence.data_integrity,
             "replay_stability": evidence.replay_stability,
