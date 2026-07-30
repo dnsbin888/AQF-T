@@ -21,6 +21,8 @@ from strategy.market_regime import MarketRegimeEngine, MarketRegime
 from strategy.rules.sentiment import SentimentEngine
 from strategy.rules.dragon import DragonStrategy
 from strategy.l2.limitup_perception import LimitUpPerception
+from strategy.patterns.sector_flow import SectorFlow
+from strategy.patterns.relative_strength import RelativeStrength
 from strategy.arbitration import HypothesisArbitrator
 from decision_core import DecisionCore, TradingCandidate, TradingSignal
 from risk.pre_trade import PreTradeChecker, RiskDecision
@@ -99,6 +101,8 @@ class ProductionPipeline:
         self.sentiment_engine = SentimentEngine()
         self.dragon = DragonStrategy()
         self.perception = LimitUpPerception()
+        self.sector_flow = SectorFlow()
+        self.relative_strength = RelativeStrength()
         self.arbitrator = HypothesisArbitrator()
         self.decision_core = DecisionCore()
         self.risk_checker = PreTradeChecker()
@@ -315,6 +319,10 @@ class ProductionPipeline:
         )
         score = normalized_score * 100  # 转为0-100与Path B统一
 
+        # P1 Patterns: SectorFlow + RelativeStrength
+        sf_signal = self.sector_flow.evaluate(ctx)
+        rs_signal = self.relative_strength.evaluate(ctx)
+
         # 仓位: 主线15%, 次线8%
         position_hint = 0.15 if board_status.is_main_theme else 0.08
 
@@ -327,7 +335,7 @@ class ProductionPipeline:
             risk=30 if dragon_signal.is_dragon else 50,
             position_hint=position_hint,
             evidence={
-                "score_version": "pathA_v1",   # GPT V1.1: 权重版本追踪
+                "score_version": "pathA_v1",
                 "board_status": board_status.position_score,
                 "is_main_theme": board_status.is_main_theme,
                 "break_type": self.perception.classify_break(ctx).type,
@@ -335,6 +343,9 @@ class ProductionPipeline:
                 "is_dragon": dragon_signal.is_dragon,
                 "dragon_score": dragon_score,
                 "normalized_score": round(normalized_score, 3),
+                "sector_flow_score": sf_signal.sector_flow_score,
+                "sector": sf_signal.sector,
+                "rs_score": rs_signal.rs_score,
                 "reason": reason,
             },
             path="A",
@@ -397,6 +408,25 @@ class ProductionPipeline:
             theme_heat * 0.10 if theme_heat > 0.5 else 0.05
         )
 
+        # P1 Patterns: SectorFlow + RelativeStrength (from features)
+        sf_signal = self.sector_flow.evaluate({
+            "symbol": symbol,
+            "sector": features.get("sector", ""),
+            "sector_limit_up_change": features.get("sector_limit_up_change", 0),
+            "sector_fund_flow": features.get("sector_fund_flow", 0),
+            "sector_fund_flow_avg": features.get("sector_fund_flow_avg", 1),
+            "sector_pct": features.get("sector_pct", 0),
+            "sector_volume_change": features.get("sector_volume_change", 0),
+            "is_leader": features.get("is_leader", False),
+        })
+        rs_signal = self.relative_strength.evaluate({
+            "symbol": symbol,
+            "stock_5d_return": features.get("stock_5d_return", 0),
+            "market_5d_return": features.get("market_5d_return", 0.001),
+            "sector_5d_return": features.get("sector_5d_return", 0.001),
+            "leader_5d_return": features.get("leader_5d_return", 0.001),
+        })
+
         return TradingCandidate(
             symbol=symbol,
             strategy="trend" if theme_heat < 0.7 else "theme",
@@ -416,6 +446,8 @@ class ProductionPipeline:
                 "event_impact": event_signal.impact_score,
                 "event_action": event_action,
                 "event_evidence": event_evidence,
+                "sector_flow_score": sf_signal.sector_flow_score,
+                "rs_score": rs_signal.rs_score,
             },
             path="B1" if theme_heat < 0.7 else "B2",
         )
