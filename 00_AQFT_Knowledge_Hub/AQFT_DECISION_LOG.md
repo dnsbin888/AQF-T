@@ -433,6 +433,21 @@
 
 ---
 
+## DEC-20260730-026
+
+- **date**: 2026-07-30
+- **decision**: Phase 2.2 Long Evidence 60D PASS. 冻结代码, 进入 Phase 2.3 Evidence Package V1
+- **context**: 60天连续Replay完成 (59 trading + 1 stopped). 126候选→103信号→1成交→102拒绝. 0崩溃. 四种市场状态全覆盖. 期间未修改任何代码
+- **chosen**: 冻结代码, 生成 AQF-T Evidence Package V1, 等待QMT环境
+- **reason**: 系统已证明在长周期、多状态市场输入下会按照设计约束运行. 下一步不是增加模块, 而是补全 Evidence Package 的三个统计维度
+- **impact**:
+  - Phase 2.3: Decision Stability (同commit+config+input → ≥99%) + Pattern Contribution (trigger→decision→approved→filled链路) + Reject Profile (RQ Fingerprint分类)
+  - 102拒绝主要来自: 非交易时段 + 总仓位超40% → 规则生效, 非系统异常
+  - 账户 -0.025% → 不能评价策略盈利能力, 只证明无异常风险暴露
+  - 继续冻结: 不加模块/不改策略/不调参数
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
