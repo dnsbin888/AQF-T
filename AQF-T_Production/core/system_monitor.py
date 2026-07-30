@@ -44,32 +44,41 @@ class SystemMonitor:
         self.last_l2_time: Optional[datetime] = None
         self.last_l1_time: Optional[datetime] = None
 
-    def check(self) -> SystemHealth:
+    def check(self, mode: str = "paper") -> SystemHealth:
         health = SystemHealth()
+        is_live = (mode == "live")
 
-        # QMT连接
-        try:
-            from xtquant import xtdata
-            health.qmt_connected = True
-        except Exception:
-            health.qmt_connected = False
+        # QMT连接 (仅Live模式检查)
+        if is_live:
+            try:
+                from xtquant import xtdata
+                health.qmt_connected = True
+            except Exception:
+                health.qmt_connected = False
+        else:
+            health.qmt_connected = True  # Paper/Simulator: 跳过
 
         # L2数据新鲜度
         if self.last_l2_time:
             health.l2_data_age_seconds = (datetime.now() - self.last_l2_time).total_seconds()
+        elif not is_live:
+            health.l2_data_age_seconds = 0  # Paper模式: 无需L2
 
-        # 数据库
-        try:
-            conn = sqlite3.connect(self.db_path)
-            conn.execute("SELECT 1")
-            conn.close()
-            health.db_ok = True
-        except Exception:
-            health.db_ok = False
+        # 数据库 (仅Live模式检查)
+        if is_live:
+            try:
+                conn = sqlite3.connect(self.db_path)
+                conn.execute("SELECT 1")
+                conn.close()
+                health.db_ok = True
+            except Exception:
+                health.db_ok = False
+        else:
+            health.db_ok = True  # Paper/Simulator: 跳过
 
         # 模型加载状态
         health.models_loaded = {
-            "lgbm_trend": False,      # 待训练后设为True
+            "lgbm_trend": False,
             "xgb_timing": False,
         }
 
@@ -80,10 +89,14 @@ class SystemMonitor:
 
         # 综合判断
         issues = []
-        if not health.qmt_connected:        issues.append("QMT断开")
-        if health.l2_data_age_seconds > 30:  issues.append("L2数据断流>30s")
-        if not health.db_ok:                 issues.append("数据库异常")
-        if health.memory_pct > 85:           issues.append("内存不足")
+        if is_live and not health.qmt_connected:
+            issues.append("QMT断开")
+        if is_live and health.l2_data_age_seconds > 30:
+            issues.append("L2数据断流>30s")
+        if is_live and not health.db_ok:
+            issues.append("数据库异常")
+        if health.memory_pct > 85:
+            issues.append("内存不足")
 
         if not issues:
             health.overall = "HEALTHY"

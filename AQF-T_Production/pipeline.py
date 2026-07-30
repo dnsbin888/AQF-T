@@ -166,7 +166,7 @@ class ProductionPipeline:
                 return state
 
             # -- Phase 2: 系统健康检查 --
-            health = self.monitor.check()
+            health = self.monitor.check(mode=self.mode)
             if health.overall == "CRITICAL":
                 state.errors.append(f"系统CRITICAL: {health.to_dict()}")
                 state.tradable = False
@@ -676,7 +676,7 @@ class ProductionPipeline:
             "account": self.broker.summary(),
             "positions": len(self.broker.positions),
             "trades_today": len(self.broker.trades),
-            "health": self.monitor.check().to_dict(),
+            "health": self.monitor.check(mode=self.mode).to_dict(),
         }
 
     def daily_summary(self, state: PipelineState) -> str:
