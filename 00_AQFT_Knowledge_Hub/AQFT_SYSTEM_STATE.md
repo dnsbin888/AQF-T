@@ -19,18 +19,19 @@
 
 ## Architecture Status
 
-- **phase**: P5 Autonomous Intelligence
+- **phase**: V1.0 Integration Phase (Production Pipeline Runtime)
 - **status**: active
 - **p0-p4**: frozen
-- **p5**: in_progress
+- **p5**: frozen (V3.0.0 Architecture Design)
+- **production**: pipeline_integrated (M2-M7 wired)
 
 ---
 
 ## Current Focus
 
-- **module**: 24_World_Model_System
-- **version**: V3.0.0
-- **task**: World Model Architecture Design
+- **module**: AQF-T_Production (Pipeline Runtime)
+- **version**: V1.0 Integration
+- **task**: Phase 2-7 Main Pipeline Integration
 - **priority**: high
 
 ---
@@ -44,16 +45,17 @@
 | P2 | Engineering | 6/6 | frozen |
 | P3 | Running System | 8/8 | frozen |
 | P4 | Continuous Evolution | 6/6 | frozen |
-| P5 | Autonomous Intelligence | 2/5 | active |
+| P5 | Autonomous Intelligence | 5/5 | frozen |
+| V1.0 | Production Pipeline | 9/9 tests | integrated |
 
 ---
 
 ## Module Summary
 
 - **total_modules**: 30
-- **frozen**: 28
-- **active**: 2 (00_Knowledge_Hub, 24_World_Model)
-- **pending**: 3 (P5-03, P5-04, P5-05)
+- **frozen**: 30
+- **active**: 1 (AQF-T_Production Pipeline)
+- **pipeline**: Regime→Perception→PathA/B→Decision→Risk→Execution→KnowledgeHub
 
 ---
 
@@ -67,19 +69,18 @@
 
 ## Active Tasks
 
-1. World Model Architecture V3.0.0
-2. Knowledge Governance Layer Upgrade
-3. P5-03 AGI Decision Architecture
-4. MVP Kernel Planning
+1. V1.0 Production Pipeline Integration (COMPLETE 2026-07-30)
+2. Runtime hardening (trading hours, QMT connectivity)
+3. Paper→Live migration path
 
 ---
 
 ## Recent Decisions
 
-- 2026-07-26: DEC-001 建立 Knowledge Hub
-- 2026-07-26: DEC-002 Git 资产冻结 v2.8.6-design-complete
-- 2026-07-26: DEC-003 消除重复文档
+- 2026-07-30: V1.0 Integration Phase — Pipeline M2-M7 wired, 9/9 tests passing
+- 2026-07-26: DEC-015 正式启动 V3.1.0 P6 Runtime Engineering
 - 2026-07-26: DEC-004 创建 AQFT_ROOT.md 单一入口
+- 2026-07-26: DEC-001 建立 Knowledge Hub
 
 ---
 
