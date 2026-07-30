@@ -283,6 +283,25 @@
 
 ---
 
+## DEC-20260730-019
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Closure Review — V1.1 Runtime Hardening Phase 1 CLOSED ✅
+- **context**: 全部V1.0+V1.1开发阶段完成。Architecture/Governance/Pipeline/Risk/Data Interface全部PASS。系统从"开发阶段"正式进入"验证阶段"
+- **options**:
+  - A: 继续开发新功能
+  - B: 进入 Phase 2 — Real Market Evidence (真实数据验证)
+- **chosen**: B — Phase 2 Real Market Evidence
+- **reason**: 开发阶段结束。现在需要回答的问题不是"能不能赚"，而是"系统面对真实市场时，行为是否稳定、可解释、可验证"
+- **impact**:
+  - Next Gate: 30-60交易日 QMT/xtdata Replay
+  - 新增观察指标: Replay Drift (Tick缺失率/时间偏移/盘口差异) + Decision Stability (≥99%一致率)
+  - 每日生成 Daily Evidence Package (Regime/Candidates/Decisions/Risk/Execution/PnL/Pattern/Attribution)
+  - 继续保持冻结: 不新增Pattern/AI模型/调权重/改Risk/增加复杂Execution
+  - 核心原则: "让真实市场数据证明AQF-T，而不是继续让代码证明AQF-T"
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

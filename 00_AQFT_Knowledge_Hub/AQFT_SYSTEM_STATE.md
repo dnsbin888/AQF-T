@@ -19,8 +19,8 @@
 
 ## Architecture Status
 
-- **phase**: V1.1 Runtime Hardening Phase 1 — COMPLETE
-- **status**: hardened
+- **phase**: V1.1 CLOSED → Phase 2 Pending (Real Market Evidence)
+- **status**: development_complete — 验证阶段开始
 - **p0-p4**: frozen
 - **p5**: frozen (V3.0.0 Architecture Design)
 - **production**: runtime_hardened (ClockProvider / Portfolio Exposure / MarketDataProvider / Report)
