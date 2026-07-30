@@ -1,7 +1,7 @@
 """
-AQF-T Paper Trading Runner — 模拟交易日线运行器
+AQF-T Paper Trading Runner  模拟交易日线运行器
 ================================================
-每日运行: 加载市场数据 → 跑主管线 → 输出报告
+每日运行: 加载市场数据 -> 跑主管线 -> 输出报告
 
 模式:
   --mode single  单日运行 (默认)
@@ -25,12 +25,12 @@ from typing import Optional
 from pipeline import ProductionPipeline, PipelineState
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Mock Data Generators (Paper Trading)
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 class MarketDataSimulator:
-    """市场数据模拟器 — Paper Trading 用"""
+    """市场数据模拟器  Paper Trading 用"""
 
     # A股常见标的池
     WATCHLIST_POOL = [
@@ -117,7 +117,7 @@ class MarketDataSimulator:
     def generate_watchlist(self, regime_allows_a: bool = True,
                            regime_allows_b: bool = True) -> list[dict]:
         """
-        生成监控列表 — 包含模拟的 features / l2_features / ctx
+        生成监控列表  包含模拟的 features / l2_features / ctx
 
         Path A (回封板) 需要 ctx 有板/炸板/回封相关字段
         Path B (半路) 需要 features 有趋势/题材/L2字段
@@ -129,7 +129,7 @@ class MarketDataSimulator:
         for stock in pool:
             symbol = stock["symbol"]
 
-            # ── 通用 features ──
+            # -- 通用 features --
             features = {
                 "symbol": symbol,
                 "ma_5": random.uniform(10, 200),
@@ -139,7 +139,7 @@ class MarketDataSimulator:
                 "sector_score": random.uniform(0, 1),
             }
 
-            # ── L2 features ──
+            # -- L2 features --
             l2_features = {
                 "symbol": symbol,
                 "net_big_flow": random.uniform(-500, 2000),
@@ -147,7 +147,7 @@ class MarketDataSimulator:
                 "ddy": random.uniform(-2, 3),
             }
 
-            # ── Perception ctx (Path A 用) ──
+            # -- Perception ctx (Path A 用) --
             is_healthy_break = random.random() > 0.4  # 60% 洗盘型
             ctx = {
                 "symbol": symbol,
@@ -191,15 +191,15 @@ class MarketDataSimulator:
         return watchlist
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Runners
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 def run_single_day(pipeline: ProductionPipeline,
                    phase: str = None,
                    date: str = None) -> PipelineState:
     """
-    单日运行 — Paper Trading
+    单日运行  Paper Trading
 
     Args:
         pipeline: 已初始化的管道
@@ -256,10 +256,10 @@ def run_single_day(pipeline: ProductionPipeline,
 
 def run_batch(pipeline: ProductionPipeline, days: int = 22):
     """
-    批量回放 — 连续N天模拟
+    批量回放  连续N天模拟
 
     模拟完整的月度交易周期, 包含不同市场阶段:
-      回暖 → 高潮 → 退潮 → 冰点 → 回暖
+      回暖 -> 高潮 -> 退潮 -> 冰点 -> 回暖
     """
     # 一个月的典型情绪周期
     cycle = (
@@ -282,7 +282,7 @@ def run_batch(pipeline: ProductionPipeline, days: int = 22):
     start_date = datetime(2026, 7, 1)
 
     print(f"\n{'='*60}")
-    print(f"  AQF-T Batch Paper Trading — {days}天")
+    print(f"  AQF-T Batch Paper Trading  {days}天")
     print(f"  Start: {start_date.strftime('%Y-%m-%d')}")
     print(f"{'='*60}\n")
 
@@ -299,9 +299,9 @@ def run_batch(pipeline: ProductionPipeline, days: int = 22):
         print(summary)
         print()
 
-    # ── 批量统计 ──
+    # -- 批量统计 --
     print(f"\n{'='*60}")
-    print(f"  BATCH SUMMARY — {days}天")
+    print(f"  BATCH SUMMARY  {days}天")
     print(f"{'='*60}")
 
     trading_days = [r for r in results if r.tradable]
@@ -335,7 +335,7 @@ def run_batch(pipeline: ProductionPipeline, days: int = 22):
 
 def run_replay(pipeline: ProductionPipeline, replay_file: str):
     """
-    L2 Replay 验证 — 从历史数据文件回放
+    L2 Replay 验证  从历史数据文件回放
 
     replay_file: JSON文件, 每行一条历史数据记录
     """
@@ -371,16 +371,16 @@ def run_replay(pipeline: ProductionPipeline, replay_file: str):
         )
         assert state.total_signals == state2.total_signals, \
             f"Determinism FAILED: {state.total_signals} vs {state2.total_signals}"
-        print("  ✅ Determinism: PASSED")
+        print("  [OK] Determinism: PASSED")
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Main CLI
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 def main():
     parser = argparse.ArgumentParser(
-        description="AQF-T Paper Trading Runner — 模拟交易日线运行器"
+        description="AQF-T Paper Trading Runner  模拟交易日线运行器"
     )
     parser.add_argument(
         "--mode", "-m",

@@ -1,0 +1,33 @@
+
+================================================================
+  AQF-T M1 Test Results
+  Passed: 25/25 | Failed: 0
+================================================================
+[PASS] test_tick_creation
+[PASS] test_bar_creation
+[PASS] test_bar_immutable
+[PASS] test_orderbook_creation
+[PASS] test_normal_bar_passes
+[PASS] test_negative_price_fails
+[PASS] test_ohlc_violation_fails
+[PASS] test_negative_volume_fails
+[PASS] test_custom_rule_registration
+[PASS] test_critical_severity
+[PASS] test_normal_no_anomaly
+[PASS] test_duplicate_timestamp
+[PASS] test_price_jump
+[PASS] test_gap_detection
+[PASS] test_l2_freeze
+[PASS] test_info_passes
+[PASS] test_warning_retries
+[PASS] test_critical_fails
+[PASS] test_reset_retries
+[PASS] test_initial_score
+[PASS] test_failed_validations
+[PASS] test_missing_data
+[PASS] test_is_healthy
+[PASS] test_empty_report
+[PASS] test_report_errors
+================================================================
+  ALL PASSED
+================================================================

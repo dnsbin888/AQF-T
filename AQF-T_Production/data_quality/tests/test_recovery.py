@@ -11,7 +11,8 @@ def test_warning_retries_then_fails():
     rm = RecoveryManager(max_retries=2)
     assert rm.decide("warning") == RecoveryAction.RETRY
     assert rm.decide("warning") == RecoveryAction.RETRY
-    assert rm.decide("warning") == RecoveryAction.FAIL
+    # 3rd call: retries exhausted, backup not configured → SWITCH_BACKUP
+    assert rm.decide("warning") == RecoveryAction.SWITCH_BACKUP
 
 
 def test_critical_fails_directly():

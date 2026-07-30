@@ -1,11 +1,11 @@
 """
-AQF-T Production Pipeline — 主管线串联器
+AQF-T Production Pipeline  主管线串联器
 ===========================================
 完整交易主链 (不可绕过):
-  Market Regime → Perception → Path A/B → Decision Core → Risk → Execution
+  Market Regime -> Perception -> Path A/B -> Decision Core -> Risk -> Execution
 
 旁路服务:
-  Learning (预测/确认) → Knowledge Hub (归因/经验/训练)
+  Learning (预测/确认) -> Knowledge Hub (归因/经验/训练)
 
 模式: paper (模拟) / live (实盘)
 """
@@ -38,13 +38,13 @@ from core.system_monitor import SystemMonitor
 from core.report_writer import ReportWriter
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Pipeline State
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 @dataclass
 class PipelineState:
-    """主管线运行状态 — 单次交易日"""
+    """主管线运行状态  单次交易日"""
     date: str = ""
     mode: str = "paper"                     # paper | live
 
@@ -73,15 +73,15 @@ class PipelineState:
     errors: list = field(default_factory=list)
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Production Pipeline
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 class ProductionPipeline:
     """
     AQF-T 生产主管线
 
-    串联 Market Regime → Perception → Path A/B → Decision → Risk → Execution
+    串联 Market Regime -> Perception -> Path A/B -> Decision -> Risk -> Execution
     Learning 作为旁路服务提供预测/确认
     Knowledge Hub 记录所有交易和归因
 
@@ -94,7 +94,7 @@ class ProductionPipeline:
         self.config = self._load_config(config_path)
         self.mode = self.config.get("system", {}).get("mode", "paper")
 
-        # ── 一级模块: 交易主链 ──
+        # -- 一级模块: 交易主链 --
         self.regime_engine = MarketRegimeEngine()
         self.sentiment_engine = SentimentEngine()
         self.dragon = DragonStrategy()
@@ -103,45 +103,45 @@ class ProductionPipeline:
         self.decision_core = DecisionCore()
         self.risk_checker = PreTradeChecker()
 
-        # ── 行情Provider (GPT P0: 统一接口) ──
+        # -- 行情Provider (GPT P0: 统一接口) --
         from data.market_data_provider import create_provider
         provider_mode = self.config.get("data", {}).get("provider", "simulator")
         self.market_data = create_provider(provider_mode)
 
-        # ── 执行层 ──
+        # -- 执行层 --
         initial_cash = 1_000_000.0
         self.broker = PaperBroker(cash=initial_cash)
         self.risk_checker.cash = initial_cash
 
-        # ── 旁路: Learning ──
+        # -- 旁路: Learning --
         self.alpha = AlphaPredictor()
         self.timing = TimingPredictor()
         self.event_engine = EventEngine()
         self.learning_pipeline = DecisionPipeline()
 
-        # ── 旁路: Knowledge Hub ──
+        # -- 旁路: Knowledge Hub --
         self.knowledge = KnowledgeHub()
         self.model_registry = ModelRegistry()
 
-        # ── 基础设施 ──
+        # -- 基础设施 --
         self.monitor = SystemMonitor()
         self.report_writer = ReportWriter()
 
-        # ── 回测引擎 (按需) ──
+        # -- 回测引擎 (按需) --
         self.backtest_engine: Optional[BacktestEngine] = None
 
-        # ── 缓存 ──
+        # -- 缓存 --
         self._last_regime: Optional[MarketRegime] = None
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # 主循环: 每日运行
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def run_daily(self, market_stats: dict,
                   watchlist: list[dict] = None,
                   event_texts: dict[str, list[str]] = None) -> PipelineState:
         """
-        每日主管线运行 — 完整 M2-M7 链路
+        每日主管线运行  完整 M2-M7 链路
 
         Args:
             market_stats: 全市场统计数据
@@ -160,12 +160,12 @@ class ProductionPipeline:
         )
 
         try:
-            # ── Phase 1: Market Regime (M2 验证可信) ──
+            # -- Phase 1: Market Regime (M2 验证可信) --
             state.regime = self._run_regime(state, market_stats)
             if not state.tradable:
                 return state
 
-            # ── Phase 2: 系统健康检查 ──
+            # -- Phase 2: 系统健康检查 --
             health = self.monitor.check()
             if health.overall == "CRITICAL":
                 state.errors.append(f"系统CRITICAL: {health.to_dict()}")
@@ -177,28 +177,28 @@ class ProductionPipeline:
                 "health": health.overall,
             }, source="pipeline")
 
-            # ── Phase 3: Perception + Path A/B → Candidates (M3 决策可解释) ──
+            # -- Phase 3: Perception + Path A/B -> Candidates (M3 决策可解释) --
             if watchlist:
                 state.candidates = self._run_perception_and_strategy(
                     state, watchlist, event_texts or {}
                 )
             state.total_candidates = len(state.candidates)
 
-            # ── Phase 4: Decision Core (M4 执行可评估) ──
+            # -- Phase 4: Decision Core (M4 执行可评估) --
             if state.candidates:
                 state.signals = self._run_decision(state)
             state.total_signals = len(state.signals)
 
-            # ── Phase 5: Risk → Execution (M5 策略可证明) ──
+            # -- Phase 5: Risk -> Execution (M5 策略可证明) --
             if state.signals:
                 state.risk_decisions, state.fills = self._run_risk_and_execution(state)
             state.total_fills = len([f for f in state.fills if f.status == "FILLED"])
             state.total_rejected = len([f for f in state.fills if f.status != "FILLED"])
 
-            # ── Phase 6: Knowledge Hub 记录 (M6 系统可自动运行) ──
+            # -- Phase 6: Knowledge Hub 记录 (M6 系统可自动运行) --
             self._run_knowledge_recording(state)
 
-            # ── Phase 7: 发布事件 (M7 系统可真实运行) ──
+            # -- Phase 7: 发布事件 (M7 系统可真实运行) --
             self._publish_results(state)
 
         except Exception as e:
@@ -210,13 +210,13 @@ class ProductionPipeline:
 
         return state
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Phase 1: Market Regime
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _run_regime(self, state: PipelineState,
                     market_stats: dict) -> MarketRegime:
-        """市场状态评估 — 总开关"""
+        """市场状态评估  总开关"""
         state.market_stats = market_stats
 
         # 双引擎评估 (互相校验)
@@ -232,16 +232,16 @@ class ProductionPipeline:
 
         self._last_regime = regime
 
-        # 退潮/停止 → 不交易
+        # 退潮/停止 -> 不交易
         if regime.operation_mode == "stop":
             state.tradable = False
             state.errors.append(f"Regime=stop ({regime.sentiment_phase}), 今日不交易")
 
         return regime
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Phase 2: Perception + Path A/B
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _run_perception_and_strategy(self, state: PipelineState,
                                      watchlist: list[dict],
@@ -256,7 +256,7 @@ class ProductionPipeline:
             l2_features = stock.get("l2_features", {})
 
             try:
-                # ── Path A: 回封板 (规则驱动, Perception优先) ──
+                # -- Path A: 回封板 (规则驱动, Perception优先) --
                 if state.regime.path_a_allowed:
                     path_a_candidate = self._run_path_a(symbol, ctx, features)
                     if path_a_candidate:
@@ -266,7 +266,7 @@ class ProductionPipeline:
                             "confidence": path_a_candidate.confidence,
                         }, source="path_a")
 
-                # ── Path B: 半路/接力 (ML统计驱动) ──
+                # -- Path B: 半路/接力 (ML统计驱动) --
                 if state.regime.path_b_allowed:
                     path_b_candidate = self._run_path_b(
                         symbol, features, l2_features,
@@ -288,8 +288,8 @@ class ProductionPipeline:
     def _run_path_a(self, symbol: str, ctx: dict,
                     features: dict) -> Optional[TradingCandidate]:
         """
-        Path A — 回封板
-        漏斗: 板块地位 → 炸板分类 → 回封确认
+        Path A  回封板
+        漏斗: 板块地位 -> 炸板分类 -> 回封确认
         纯规则驱动, 不用ML
         """
         # Perception 综合判断
@@ -344,7 +344,7 @@ class ProductionPipeline:
                     l2_features: dict,
                     event_texts: list[str]) -> Optional[TradingCandidate]:
         """
-        Path B — 半路/接力
+        Path B  半路/接力
         B1 Trend(LGBM) / B2 Theme(规则) / B3 Intraday(XGBoost确认)
         ML统计驱动
         """
@@ -391,7 +391,7 @@ class ProductionPipeline:
         if score < 40:
             return None
 
-        # 仓位: 基于Regime上限 × Alpha置信度
+        # 仓位: 基于Regime上限  Alpha置信度
         position_hint = min(
             alpha_signal.confidence * 0.15,
             theme_heat * 0.10 if theme_heat > 0.5 else 0.05
@@ -420,18 +420,18 @@ class ProductionPipeline:
             path="B1" if theme_heat < 0.7 else "B2",
         )
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Phase 3: Decision Core
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _run_decision(self, state: PipelineState) -> list[TradingSignal]:
-        """决策中枢: 收集候选 → 排序 → 冲突消解 → 仓位分配"""
+        """决策中枢: 收集候选 -> 排序 -> 冲突消解 -> 仓位分配"""
         current_positions = {
             sym: {"shares": p["shares"], "available": p.get("available", p["shares"])}
             for sym, p in self.broker.positions.items()
         }
 
-        # 仓位 = base × confidence_multiplier × regime_multiplier (GPT V1.1)
+        # 仓位 = base  confidence_multiplier  regime_multiplier (GPT V1.1)
         confidence = state.regime.regime_confidence if state.regime else 1.0
         if confidence >= 0.8:
             confidence_mult = 1.0
@@ -458,9 +458,9 @@ class ProductionPipeline:
 
         return signals
 
-    # ═══════════════════════════════════════════════════════════
-    # Phase 4: Risk → Execution
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
+    # Phase 4: Risk -> Execution
+    # ===========================================================
 
     def _run_risk_and_execution(self, state: PipelineState) -> tuple[list, list]:
         """风控审批 + 订单执行 (含 GPT Q3 Portfolio Exposure)"""
@@ -477,11 +477,11 @@ class ProductionPipeline:
             )
             sector = matching_candidate.evidence.get("sector", "") if matching_candidate else ""
 
-            # ── Risk Check (最高否决权, 不可绕过) ──
+            # -- Risk Check (最高否决权, 不可绕过) --
             risk_decision = self.risk_checker.check(
                 symbol=signal.symbol,
                 action=signal.action,
-                qty=int(signal.position_pct * 10000),  # 仓位% → 股数估算
+                qty=int(signal.position_pct * 10000),  # 仓位% -> 股数估算
                 price=self._estimate_price(signal.symbol),
                 risk_score=int((1 - signal.confidence) * 100),
                 sentiment_phase=state.regime.sentiment_phase,
@@ -495,7 +495,7 @@ class ProductionPipeline:
                 "reason": risk_decision.reason,
             }, source="risk")
 
-            # ── REJECT → 跳过 ──
+            # -- REJECT -> 跳过 --
             if risk_decision.decision == "REJECT":
                 bus.publish(EVENTS["ORDER_REJECTED"], {
                     "symbol": signal.symbol,
@@ -513,11 +513,11 @@ class ProductionPipeline:
                 ))
                 continue
 
-            # ── 确定最终数量 ──
+            # -- 确定最终数量 --
             final_qty = risk_decision.adjusted_qty if risk_decision.adjusted_qty > 0 else int(signal.position_pct * 10000)
             final_qty = max(100, (final_qty // 100) * 100)  # 100股整数倍
 
-            # ── Execution ──
+            # -- Execution --
             order = {
                 "order_id": f"{signal.symbol}-{clock.now().timestamp()}",
                 "symbol": signal.symbol,
@@ -570,9 +570,9 @@ class ProductionPipeline:
 
         return risk_decisions, fills
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Phase 5: Knowledge Hub 记录
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _run_knowledge_recording(self, state: PipelineState):
         """记录所有交易到 Knowledge Hub"""
@@ -597,9 +597,9 @@ class ProductionPipeline:
                 }
                 self.knowledge.record_trade(trade_record)
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Phase 6: 发布结果
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _publish_results(self, state: PipelineState):
         """发布日终结果"""
@@ -616,7 +616,7 @@ class ProductionPipeline:
         }
         bus.publish(EVENTS["DAILY_REPORT"], summary, source="pipeline")
 
-        # ── 持久化报告 (GPT P0-3) ──
+        # -- 持久化报告 (GPT P0-3) --
         try:
             report_path = self.report_writer.write_daily_report(state, self)
             if state.fills:
@@ -632,11 +632,11 @@ class ProductionPipeline:
                 state.signals,
             )
         else:
-            report = f"AQF-T {state.date} — 未交易"
+            report = f"AQF-T {state.date}  未交易"
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # 回测模式
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def run_backtest(self, data: dict, signals: list[dict],
                      config: BacktestConfig = None) -> BacktestResult:
@@ -646,12 +646,12 @@ class ProductionPipeline:
         self.backtest_engine = BacktestEngine(config)
         return self.backtest_engine.run(data, signals)
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # Utilities
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def _estimate_price(self, symbol: str) -> float:
-        """获取当前价格 — 通过 MarketDataProvider 统一接口 (GPT P0)"""
+        """获取当前价格  通过 MarketDataProvider 统一接口 (GPT P0)"""
         snap = self.market_data.get_snapshot(symbol)
         if snap.price > 0:
             return snap.price
@@ -664,9 +664,9 @@ class ProductionPipeline:
             return yaml.safe_load(p.read_text(encoding="utf-8"))
         return {}
 
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
     # 状态查询
-    # ═══════════════════════════════════════════════════════════
+    # ===========================================================
 
     def status(self) -> dict:
         """获取管道运行状态"""
@@ -682,13 +682,13 @@ class ProductionPipeline:
     def daily_summary(self, state: PipelineState) -> str:
         """生成日终摘要"""
         if not state.regime:
-            return f"AQF-T {state.date} — Pipeline未运行"
+            return f"AQF-T {state.date}  Pipeline未运行"
 
         lines = [
             f"{'='*60}",
-            f"  AQF-T Production — {state.date}",
+            f"  AQF-T Production  {state.date}",
             f"  Regime: {state.regime.sentiment_phase} ({state.regime.operation_mode})",
-            f"  PathA: {'✅' if state.regime.path_a_allowed else '❌'}  PathB: {'✅' if state.regime.path_b_allowed else '❌'}",
+            f"  PathA: {'[OK]' if state.regime.path_a_allowed else '[FAIL]'}  PathB: {'[OK]' if state.regime.path_b_allowed else '[FAIL]'}",
             f"  MaxPosition: {state.regime.max_position_pct:.0%}",
             f"",
             f"  Candidates: {state.total_candidates}",
@@ -704,7 +704,7 @@ class ProductionPipeline:
         if state.fills:
             lines.append("\n  Fills:")
             for f in state.fills:
-                status_icon = "✅" if f.status == "FILLED" else "❌"
+                status_icon = "[OK]" if f.status == "FILLED" else "[FAIL]"
                 lines.append(
                     f"    {status_icon} {f.symbol} {f.action} "
                     f"{f.fill_quantity}股 @{f.fill_price:.2f} "
@@ -712,24 +712,24 @@ class ProductionPipeline:
                 )
 
         if state.errors:
-            lines.append(f"\n  ⚠️ Errors:")
+            lines.append(f"\n  [WARN] Errors:")
             for e in state.errors:
                 lines.append(f"    - {e}")
 
         return "\n".join(lines)
 
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # Canonical Alias
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 # 统一入口名：AQFTPipeline = ProductionPipeline
 # 使用: from pipeline import AQFTPipeline
 AQFTPipeline = ProductionPipeline
 
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 # 工厂函数
-# ═══════════════════════════════════════════════════════════════
+# ===============================================================
 
 def create_pipeline(mode: str = "paper") -> ProductionPipeline:
     """创建管道实例"""

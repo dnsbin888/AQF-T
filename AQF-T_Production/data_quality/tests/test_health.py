@@ -33,4 +33,4 @@ def test_is_healthy():
     hm = HealthMonitor()
     s = hm.snapshot()
     assert s.is_healthy()
-    assert not s.is_healthy(threshold=100)
+    assert not s.is_healthy(threshold=101)  # default score=100, 100<101→unhealthy

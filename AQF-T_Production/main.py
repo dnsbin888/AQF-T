@@ -1,5 +1,5 @@
 """
-AQF-T Production — 主程序入口
+AQF-T Production  主程序入口
 ==============================
 启动: python main.py [--mode paper|live] [--cmd run|status|test|backtest]
 
@@ -61,7 +61,7 @@ def cmd_status(args):
 
     print(f"""
 {'='*60}
-  AQF-T Production — System Status
+  AQF-T Production  System Status
 {'='*60}
   Mode:        {status['mode']}
   Last Regime: {status['last_regime'] or 'N/A'}
@@ -69,9 +69,9 @@ def cmd_status(args):
   Trades:      {status['trades_today']}
 
   Account:
-    Cash:       ¥{status['account']['cash']:,.2f}
+    Cash:       {status['account']['cash']:,.2f}
     Positions:  {status['account']['positions']}
-    TotalValue: ¥{status['account']['total_value']:,.2f}
+    TotalValue: {status['account']['total_value']:,.2f}
     TotalTrades:{status['account']['total_trades']}
 
   Health:
@@ -94,16 +94,19 @@ def cmd_test(args):
         from run_tests import results as m1_results
         exec(open("run_tests.py", encoding="utf-8").read())
     except Exception as e:
-        print(f"  M1 Tests: ERROR — {e}")
+        print(f"  M1 Tests: ERROR  {e}")
 
     # 端到端 Pipeline 测试
-    print("\n  ── Pipeline E2E Test ──")
+    print("\n  -- Pipeline E2E Test --")
     try:
-        from tests.test_pipeline import test_full_pipeline_single_day
-        test_full_pipeline_single_day()
-        print("  ✅ Pipeline E2E: PASSED")
+        from tests.test_pipeline import run_all_tests
+        passed, failed = run_all_tests()
+        if failed > 0:
+            print(f"  Pipeline E2E: {failed} FAILED")
+        else:
+            print("  Pipeline E2E: ALL PASSED")
     except Exception as e:
-        print(f"  ❌ Pipeline E2E: {e}")
+        print(f"  Pipeline E2E ERROR: {e}")
 
     print("\n  Done.")
 
@@ -121,8 +124,8 @@ def cmd_backtest(args):
     print(f"""
 {'='*60}
   AQF-T Backtest
-  Period: {config.start_date} → {config.end_date}
-  Cash: ¥{config.initial_cash:,.0f}
+  Period: {config.start_date} -> {config.end_date}
+  Cash: {config.initial_cash:,.0f}
 {'='*60}
 """)
 
@@ -134,7 +137,7 @@ def cmd_backtest(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="AQF-T Production — 智能交易系统"
+        description="AQF-T Production  智能交易系统"
     )
     parser.add_argument(
         "--mode", "-m",
