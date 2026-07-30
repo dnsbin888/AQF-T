@@ -336,6 +336,22 @@
 
 ---
 
+## DEC-20260730-022
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Acceptance — Engineering Phase CLOSED, Evidence Phase START
+- **context**: 12 commits, 6 decisions (DEC-016→021), 6 GPT reviews all PASS, 34/34 tests, 10 new files. 22-day replay: 44 signals→2 fills, RMB 999,758
+- **chosen**: 进入 Phase 2.1 — Real Market Data Evidence
+- **reason**: 过去证明的是"系统不会坏"。接下来要证明的是"系统面对真实市场，仍然可解释、可复现、可审计"。QMT只是数据入口，真正Exit条件是Data Integrity + Replay Stability(>=99%) + Pattern Evidence + Risk Evidence
+- **impact**:
+  - Phase 2.1 Exit Gate: Data Integrity / Replay Stability / Pattern Evidence / Risk Evidence
+  - 22天回放正确解读: 证明系统行为(信号/风控/决策/审计)，不证明策略收益
+  - 保持冻结: 不加Pattern/不改公式/不调参/不训练ML
+  - 建议DEC-022: Phase 2.1 Real Market Evidence Start
+  - 当前阶段不是优化，是证据收集
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
