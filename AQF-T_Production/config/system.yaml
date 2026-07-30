@@ -1,50 +1,40 @@
-# AQF-T Production Configuration
-# 国金证券 QMT + Level-2
-
-system:
-  name: "AQF-T Production"
-  version: "1.0"
-  mode: "paper"  # paper | live
-
-qmt:
-  path: "D:\\国金证券\\QMT"  # QMT安装路径
-  account: ""                  # 资金账号
-  session_id: 123456
-
 data:
-  l2_enabled: true
-  database: "data/aqft.db"
   cache_seconds: 300
-
+  database: data/aqft.db
+  l2_enabled: true
+execution:
+  delay_ms: 200
+  mode: paper
+  slippage_bps: 20
+learning:
+  deepseek_enabled: false
+  local_model: lightgbm
+  qwen_enabled: false
+qmt:
+  account: ''
+  path: D:\国金证券\QMT
+  session_id: 123456
+review:
+  daily_report: true
+  monthly_report: true
+  weekly_report: true
+risk:
+  kill_switch: true
+  max_daily_loss: -0.03
+  max_single_position: 0.1
+  max_total_drawdown: -0.15
+  max_total_position: 0.7
 strategy:
   active:
-    - dragon
-    - sentiment
-    - orderflow
+  - dragon
+  - sentiment
+  - orderflow
   dragon:
     min_board_count: 3
     min_sector_limit_up: 5
-    seal_ratio_threshold: 0.05
     position_pct: 0.15
-
-risk:
-  max_single_position: 0.10
-  max_total_position: 0.70
-  max_daily_loss: -0.03
-  max_total_drawdown: -0.15
-  kill_switch: true
-
-execution:
-  mode: "paper"  # paper | live
-  slippage_bps: 20
-  delay_ms: 200
-
-learning:
-  local_model: "lightgbm"
-  qwen_enabled: false
-  deepseek_enabled: false
-
-review:
-  daily_report: true
-  weekly_report: true
-  monthly_report: true
+    seal_ratio_threshold: 0.05
+system:
+  mode: paper
+  name: AQF-T Production
+  version: '1.0'
