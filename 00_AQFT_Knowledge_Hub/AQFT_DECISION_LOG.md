@@ -220,6 +220,25 @@
 
 ---
 
+## DEC-20260730-016
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Engineering Review — V1.0 Integration Phase PASS WITH NOTES, 进入 Runtime Hardening
+- **context**: Claude 完成 M2-M7 主管线串联（pipeline.py / paper_runner.py / 9 tests PASSED）。GPT 评审确认 Pipeline 闭环形成，但 Live Trading 仍需 Runtime Hardening
+- **options**:
+  - A: 直接进入 Live Trading
+  - B: 先 Runtime Hardening（QMT数据/ClockProvider/Report持久化）再考虑Live
+  - C: 先训练ML模型优化收益
+- **chosen**: B — Runtime Hardening 优先，ML训练最后
+- **reason**: AQF-T 当前最大价值不是预测能力，而是可靠交易基础设施。模型训练属于优化收益，但基础设施还有真实风险缺口（datetime硬编码、无真实数据源、Report无持久化）
+- **impact**:
+  - P0执行顺序: QMT Adapter → ClockProvider → Report Persistence → 真实数据Replay → Pattern Evidence扩展 → ML Research
+  - 5个设计调整: Regime Confidence / Path A评分归一化 / Portfolio Exposure Limits / Event Severity Score / ClockProvider
+  - 不新增Pattern、不训练模型
+  - 22天回放结果: 50候选→45信号→1成交，统计意义不足，需至少90交易日
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

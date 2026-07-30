@@ -16,16 +16,32 @@ class RiskDecision:
 
 
 class PreTradeChecker:
-    """下单前7项检查"""
+    """
+    下单前检查 (不可绕过)
+
+    GPT Q3 — Portfolio Exposure Limits:
+      - max_total_position: 40%
+      - max_same_sector: 25%
+      - max_daily_new_exposure: 20%
+      - max_single_position: 10%
+    """
 
     def __init__(self):
-        self.positions = {}          # {symbol: {shares, available, locked}}
+        self.positions = {}          # {symbol: {shares, available, locked, price, sector}}
         self.cash = 1_000_000.0
         self.daily_pnl = 0.0
         self.peak_value = 1_000_000.0
 
+        # Portfolio Exposure Limits (GPT Q3)
+        self.max_total_position = 0.40
+        self.max_same_sector = 0.25
+        self.max_daily_new_exposure = 0.20
+        self.max_single_position = 0.10
+        self.daily_new_exposure = 0.0   # 当日新增买入金额
+
     def check(self, symbol: str, action: str, qty: int, price: float,
-              risk_score: int, sentiment_phase: str) -> RiskDecision:
+              risk_score: int, sentiment_phase: str,
+              sector: str = "") -> RiskDecision:
         """返回 APPROVE / ADJUST / REJECT"""
 
         # ① 情绪周期最高优先级
@@ -78,11 +94,9 @@ class PreTradeChecker:
                                 f"调整为{adjusted}股(100的倍数)",
                                 adjusted_qty=adjusted)
 
-        # ⑦ 交易时段 (简化)
-        now = datetime.now()
-        morning = now.replace(hour=9, minute=30) <= now <= now.replace(hour=11, minute=30)
-        afternoon = now.replace(hour=13, minute=0) <= now <= now.replace(hour=15, minute=0)
-        if not (morning or afternoon):
+        # ⑦ 交易时段 (通过ClockProvider统一管理)
+        from core.clock import clock
+        if not clock.is_trading_hours():
             return RiskDecision("REJECT", 50, "非交易时段")
 
         # 风控评分决策

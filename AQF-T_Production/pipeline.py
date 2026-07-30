@@ -291,20 +291,22 @@ class ProductionPipeline:
         if not should_enter:
             return None
 
-        # Dragon 龙头判定加分
+        # Dragon 龙头判定加分 (归一化: 龙头=1.0, 非龙头=0)
         dragon_signal = self.dragon.is_dragon(ctx)
-        dragon_bonus = 20 if dragon_signal.is_dragon else 0
+        dragon_score = 1.0 if dragon_signal.is_dragon else 0.0
 
-        # 综合评分
+        # 综合评分 (GPT Q2: 归一化权重, Pattern之间可比较)
+        # Score = 0.5*Confidence + 0.3*Position + 0.2*Reseal + 0.1*Dragon
         board_status = self.perception.evaluate_board_status(ctx)
         reseal_quality = self.perception.evaluate_reseal(ctx)
 
-        score = (
-            confidence * 50 +
-            board_status.position_score * 30 +
-            reseal_quality.total_score * 20 +
-            dragon_bonus * 0.5
+        normalized_score = (
+            0.50 * confidence +
+            0.30 * board_status.position_score +
+            0.20 * reseal_quality.total_score +
+            0.10 * dragon_score
         )
+        score = normalized_score * 100  # 转为0-100与Path B统一
 
         # 仓位: 主线15%, 次线8%
         position_hint = 0.15 if board_status.is_main_theme else 0.08
@@ -323,6 +325,8 @@ class ProductionPipeline:
                 "break_type": self.perception.classify_break(ctx).type,
                 "reseal_score": reseal_quality.total_score,
                 "is_dragon": dragon_signal.is_dragon,
+                "dragon_score": dragon_score,
+                "normalized_score": round(normalized_score, 3),
                 "reason": reason,
             },
             path="A",
