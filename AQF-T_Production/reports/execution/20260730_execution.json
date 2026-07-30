@@ -1,18 +1,19 @@
 {
   "report_type": "execution",
   "date": "2026-07-30",
-  "generated_at": "2026-07-30T16:18:08.280740",
+  "generated_at": "2026-07-30T16:25:20.240204",
   "summary": {
-    "total_orders": 2,
+    "total_orders": 3,
     "filled": 0,
-    "rejected": 2,
+    "rejected": 3,
     "fill_rate": 0.0,
     "total_commission": 0,
     "avg_slippage_bps": 0.0
   },
   "rejection_reasons": {
-    "总仓位超40%: 51.9%": 1,
-    "资金不足": 1
+    "总仓位超40%: 51.5%": 1,
+    "单票超10%: 13.0%": 1,
+    "非交易时段": 1
   },
   "fills": []
 }
