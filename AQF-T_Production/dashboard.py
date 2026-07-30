@@ -84,10 +84,10 @@ def render() -> str:
     not_live = evidence_meta.get("not_live", True)
     source = evidence_meta.get("source", "SIMULATOR")
     if not_live:
-        env_badge = f'[SIMULATION] Source: {source} | Not Live'
+        env_badge = f'[模拟] 数据源: {source} | 非实盘'
         env_color = "#e8a838"
     else:
-        env_badge = f'[LIVE] Source: {source}'
+        env_badge = f'[实盘] 数据源: {source}'
         env_color = "#38a838"
 
     # ── 系统状态 ──
@@ -205,17 +205,20 @@ def render() -> str:
         reject_rows += f"<tr><td>{reason}</td><td>{count}</td></tr>"
 
     # ── KillSwitch warning ──
+    qmt_label = "已连接" if qmt == "CONNECTED" else "未连接"
+    db_label = "正常" if db == "OK" else "异常"
+
     ks_html = ""
     if ks_active:
         ks_html = f"""
         <div style="background:#c62828;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:4px;font-weight:bold">
-          [WARN] KILLSWITCH ACTIVE — {ks_reason}
+          [警告] 熔断已触发 — {ks_reason}
         </div>"""
 
     # ── Errors ──
     error_html = ""
     if errors:
-        error_html = "<div style='background:#fff3e0;padding:12px;margin-top:8px;border-radius:4px'><b>Errors:</b><ul>" + \
+        error_html = "<div style='background:#fff3e0;padding:12px;margin-top:8px;border-radius:4px'><b>异常:</b><ul>" + \
                      "".join(f"<li style='font-size:12px'>{e}</li>" for e in errors[:5]) + "</ul></div>"
 
     html = f"""<!DOCTYPE html>
@@ -223,10 +226,10 @@ def render() -> str:
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="refresh" content="30">
-<title>AQF-T Dashboard</title>
+<title>AQF-T 监控台</title>
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:'Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:20px}}
+body{{font-family:'Microsoft YaHei','Segoe UI',sans-serif;background:#0d1117;color:#c9d1d9;padding:20px}}
 h1{{font-size:22px;margin-bottom:4px}}
 h2{{font-size:15px;color:#8b949e;margin-bottom:16px;font-weight:normal}}
 .badge{{display:inline-block;padding:4px 12px;border-radius:3px;font-size:12px;font-weight:bold;color:#fff;background:{env_color};margin-bottom:12px}}
@@ -234,7 +237,7 @@ h2{{font-size:15px;color:#8b949e;margin-bottom:16px;font-weight:normal}}
 .row{{display:flex;gap:12px;flex-wrap:wrap}}
 .col{{flex:1;min-width:200px}}
 .stat{{font-size:28px;font-weight:bold}}
-.stat-label{{font-size:11px;color:#8b949e;text-transform:uppercase}}
+.stat-label{{font-size:11px;color:#8b949e}}
 table{{width:100%;border-collapse:collapse;font-size:13px}}
 th{{text-align:left;padding:6px 8px;border-bottom:1px solid #30363d;color:#8b949e;font-weight:normal;font-size:11px}}
 td{{padding:6px 8px;border-bottom:1px solid #21262d}}
@@ -245,8 +248,8 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 </head>
 <body>
 
-<h1>AQF-T Dashboard</h1>
-<h2>Personal Quant Trading OS — V1.2</h2>
+<h1>AQF-T 监控台</h1>
+<h2>V1.2</h2>
 <div class="badge">{env_badge}</div>
 {ks_html}
 
@@ -254,28 +257,28 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 <div class="card">
   <div class="row">
     <div class="col">
-      <div class="stat-label">Market Regime</div>
-      <div class="stat" style="font-size:20px">{phase} <span style="font-size:13px;color:#8b949e">({mode}, conf={confidence:.2f})</span></div>
+      <div class="stat-label">市场状态</div>
+      <div class="stat" style="font-size:20px">{phase} <span style="font-size:13px;color:#8b949e">({mode}, 置信度={confidence:.2f})</span></div>
     </div>
     <div class="col">
       <div class="stat-label">QMT</div>
-      <div class="stat" style="font-size:16px;color:{'#3fb950' if qmt == 'CONNECTED' else '#f85149'}">{qmt}</div>
+      <div class="stat" style="font-size:16px;color:{'#3fb950' if qmt == 'CONNECTED' else '#f85149'}">{qmt_label}</div>
     </div>
     <div class="col">
-      <div class="stat-label">DB</div>
-      <div class="stat" style="font-size:16px;color:{'#3fb950' if db == 'OK' else '#f85149'}">{db}</div>
+      <div class="stat-label">数据库</div>
+      <div class="stat" style="font-size:16px;color:{'#3fb950' if db == 'OK' else '#f85149'}">{db_label}</div>
     </div>
     <div class="col">
       <div class="stat-label">CPU</div>
       <div class="stat" style="font-size:16px">{cpu:.0f}%</div>
     </div>
     <div class="col">
-      <div class="stat-label">MEM</div>
+      <div class="stat-label">内存</div>
       <div class="stat" style="font-size:16px">{mem:.0f}%</div>
     </div>
     <div class="col">
-      <div class="stat-label">KillSwitch</div>
-      <div class="stat" style="font-size:16px;color:{'#f85149' if ks_active else '#3fb950'}">{'ACTIVE' if ks_active else 'SAFE'}</div>
+      <div class="stat-label">熔断</div>
+      <div class="stat" style="font-size:16px;color:{'#f85149' if ks_active else '#3fb950'}">{'已触发' if ks_active else '安全'}</div>
     </div>
   </div>
 </div>
@@ -284,44 +287,44 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 <div class="card">
   <div class="row">
     <div class="col">
-      <div class="stat-label">Candidates</div>
+      <div class="stat-label">候选</div>
       <div class="stat">{total_candidates}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Signals</div>
+      <div class="stat-label">信号</div>
       <div class="stat">{total_signals}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Fills</div>
+      <div class="stat-label">成交</div>
       <div class="stat green">{total_fills}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Rejected</div>
+      <div class="stat-label">拒绝</div>
       <div class="stat red">{total_rejected}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Positions</div>
+      <div class="stat-label">持仓</div>
       <div class="stat">{positions_count}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Account Value</div>
-      <div class="stat" style="font-size:18px">RMB {total_value:,.0f}</div>
+      <div class="stat-label">账户总值</div>
+      <div class="stat" style="font-size:18px">{total_value:,.0f}</div>
     </div>
     <div class="col">
-      <div class="stat-label">Cash</div>
-      <div class="stat" style="font-size:18px">RMB {cash:,.0f}</div>
+      <div class="stat-label">现金</div>
+      <div class="stat" style="font-size:18px">{cash:,.0f}</div>
     </div>
   </div>
-  <!-- Exposure -->
+  <!-- 敞口 -->
   <div style="margin-top:12px;font-size:12px;color:#8b949e">
-    Total Exposure: {exposure.get('total_exposure_pct',0)}% |
-    Daily New: {exposure.get('daily_new_exposure_pct',0)}% |
-    Sector: {sector_display}
+    总敞口: {exposure.get('total_exposure_pct',0)}% |
+    当日新增: {exposure.get('daily_new_exposure_pct',0)}% |
+    板块: {sector_display}
   </div>
-  <!-- Pattern Evidence -->
+  <!-- Pattern 证据 -->
   <div style="margin-top:8px;font-size:12px;color:#8b949e">
-    Evidence v{evidence_version} |
-    {" | ".join(f"{name}: {p.get('status','?')}" for name, p in pattern_evidence.items()) if pattern_evidence else 'No pattern evidence yet'}
+    证据版本 v{evidence_version} |
+    {" | ".join(f"{name}: {p.get('status','?')}" for name, p in pattern_evidence.items()) if pattern_evidence else '暂无证据'}
   </div>
   {error_html}
 </div>
@@ -330,19 +333,19 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 <div class="row">
   <div class="col" style="flex:2">
     <div class="card">
-      <h2 style="margin-bottom:8px">Fills (Recent 10)</h2>
+      <h2 style="margin-bottom:8px">成交明细 (最近10条)</h2>
       <table>
-        <tr><th>Symbol</th><th>Action</th><th>Qty</th><th>Price</th><th>Status</th><th>Reason</th></tr>
-        {fill_rows if fill_rows else '<tr><td colspan="6" style="color:#8b949e">No fills yet</td></tr>'}
+        <tr><th>标的</th><th>方向</th><th>数量</th><th>价格</th><th>状态</th><th>原因</th></tr>
+        {fill_rows if fill_rows else '<tr><td colspan="6" style="color:#8b949e">暂无成交</td></tr>'}
       </table>
     </div>
   </div>
   <div class="col">
     <div class="card">
-      <h2 style="margin-bottom:8px">Risk Rejects</h2>
+      <h2 style="margin-bottom:8px">风控拒绝</h2>
       <table>
-        <tr><th>Reason</th><th>Count</th></tr>
-        {reject_rows if reject_rows else '<tr><td colspan="2" style="color:#8b949e">None</td></tr>'}
+        <tr><th>原因</th><th>次数</th></tr>
+        {reject_rows if reject_rows else '<tr><td colspan="2" style="color:#8b949e">无</td></tr>'}
       </table>
     </div>
   </div>
@@ -350,16 +353,16 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 
 <!-- 信号明细 -->
 <div class="card">
-  <h2 style="margin-bottom:8px">Decision Signals (Recent 5)</h2>
+  <h2 style="margin-bottom:8px">决策信号 (最近5条)</h2>
   <table>
-    <tr><th>Symbol</th><th>Action</th><th>Strategy</th><th>Position</th><th>Confidence</th><th>Reasoning</th></tr>
-    {signal_rows if signal_rows else '<tr><td colspan="6" style="color:#8b949e">No signals yet</td></tr>'}
+    <tr><th>标的</th><th>方向</th><th>策略</th><th>仓位</th><th>置信度</th><th>依据</th></tr>
+    {signal_rows if signal_rows else '<tr><td colspan="6" style="color:#8b949e">暂无信号</td></tr>'}
   </table>
 </div>
 
 <!-- Footer -->
 <div style="text-align:center;font-size:11px;color:#484f58;margin-top:16px">
-  AQF-T V1.2 | Auto-refresh 30s | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+  AQF-T V1.2 | 每30秒自动刷新 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 </div>
 
 </body>
