@@ -367,6 +367,26 @@
 
 ---
 
+## DEC-20260730-024
+
+- **date**: 2026-07-30
+- **decision**: QMT Role Redefinition — "Execution Adapter" → "Execution Agent" (行业OMS/EMS对齐)
+- **context**: Claude 提出"QMT只是系统手足，但实操中手足也应拥有局部判断能力"。GPT 评审确认符合行业 OMS/EMS 架构，不破坏 AQF-T Frozen Design
+- **options**:
+  - A: QMT保持纯执行器（木偶，无任何智能）
+  - B: QMT升级为Execution Agent（局部执行智能，战略权归AQF-T）
+- **chosen**: B — Execution Agent with local intelligence
+- **reason**: 纯执行器低估了交易执行复杂度（盘口保护/撤改单/拆单/涨停排队），且与行业OMS/EMS分层不一致。但战略决策权/风险否决权/证据记录权不可下放
+- **impact**:
+  - AQF-T保留: 战略决策(买什么/为什么/多少) + 风险否决 + 证据记录
+  - Execution Agent拥有: 订单拆分/盘口保护/撤改单/VWAP-TWAP/涨停排队策略/成交管理
+  - 禁止: 自主发现机会/修改风控参数/绕过AQF-T决策/替代战略判断
+  - V1.3 方向: Execution Intelligence Layer (order_state_machine/execution_agent/cancel_replace/slippage_monitor/fill_quality)
+  - Constitution 已更新: 三层架构 (AQF-T战略层 → Execution Agent执行智能层 → QMT交易通道)
+  - 核心原则: AQF-T决定方向，QMT负责动作。大脑拥有意志，手足拥有反射
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
