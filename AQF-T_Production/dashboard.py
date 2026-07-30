@@ -230,14 +230,58 @@ def render() -> str:
     pattern_evidence = evidence_data.get("pattern_evidence", {}).get("patterns", {})
     evidence_version = evidence_data.get("meta", {}).get("evidence_version", "")
 
+    # ── 股票名称映射 ──
+    STOCK_NAMES = {
+        "000001": "平安银行", "000002": "万科A", "000858": "五粮液",
+        "002594": "比亚迪", "300750": "宁德时代", "600519": "贵州茅台",
+        "601012": "隆基绿能", "688981": "中芯国际", "300059": "东方财富",
+        "002230": "科大讯飞",
+    }
+    def stock_label(sym):
+        name = STOCK_NAMES.get(sym, "")
+        return f"{name}({sym})" if name else sym
+
     # ── 展示映射 ──
     ACTION_LABELS = {"BUY": "买入", "SELL": "卖出", "HOLD": "持有"}
     STATUS_LABELS = {"FILLED": "已成交", "REJECTED": "已拒绝", "QUEUED": "排队中", "PARTIAL": "部分成交"}
 
+    # ── 持仓信息 ──
+    broker_positions = {}
+    try:
+        ks = json.loads((ROOT / "runtime" / "supervisor_state.json").read_text(encoding="utf-8"))
+    except Exception:
+        ks = {}
+    # Read positions from broker summary
+    position_detail = account.get("positions", 0)
+    position_rows = ""
+    # Show position estimate from fills
+    held = {}
+    for f in fills:
+        if f.get("status") == "FILLED":
+            s = f.get("symbol", "")
+            if s not in held:
+                held[s] = {"shares": 0, "cost": 0}
+            if f.get("action") == "BUY":
+                held[s]["shares"] += f.get("fill_quantity", 0)
+                held[s]["cost"] = f.get("fill_price", 0)
+            elif f.get("action") == "SELL":
+                held[s]["shares"] -= f.get("fill_quantity", 0)
+    # Also read from report account
+    for s, info in held.items():
+        if info["shares"] > 0:
+            label = stock_label(s)
+            position_rows += f"""
+            <tr>
+              <td>{label}</td>
+              <td style="text-align:right">{info['shares']}</td>
+              <td style="text-align:right">{info['cost']:.2f}</td>
+              <td style="text-align:right">{info['shares'] * info['cost']:,.0f}</td>
+            </tr>"""
+
     # ── 成交明细 ──
     fill_rows = ""
     for f in fills[:10]:
-        sym = f.get("symbol", "")
+        sym = stock_label(f.get("symbol", ""))
         act = ACTION_LABELS.get(f.get("action", ""), f.get("action", ""))
         qty = f.get("fill_quantity", 0)
         price = f.get("fill_price", 0)
@@ -260,7 +304,7 @@ def render() -> str:
         act_label = ACTION_LABELS.get(s.get('action', ''), s.get('action', ''))
         signal_rows += f"""
         <tr>
-          <td>{s.get('symbol','')}</td><td>{act_label}</td>
+          <td>{stock_label(s.get('symbol',''))}</td><td>{act_label}</td>
           <td>{strat_label}</td><td>{s.get('position_pct',0):.0%}</td>
           <td>{s.get('confidence',0):.2f}</td>
           <td style="font-size:12px;color:#888">{s.get('reasoning','')}</td>
@@ -394,6 +438,15 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
     {" | ".join(f"{name}: {p.get('status','?')}" for name, p in pattern_evidence.items()) if pattern_evidence else '暂无证据'}
   </div>
   {error_html}
+</div>
+
+<!-- 持仓明细 -->
+<div class="card">
+  <h2 style="margin-bottom:8px">当前持仓</h2>
+  <table>
+    <tr><th>标的</th><th style="text-align:right">数量</th><th style="text-align:right">成本</th><th style="text-align:right">市值</th></tr>
+    {position_rows if position_rows else '<tr><td colspan="4" style="color:#8b949e">空仓</td></tr>'}
+  </table>
 </div>
 
 <!-- 交易明细 -->

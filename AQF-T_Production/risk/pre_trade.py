@@ -68,17 +68,17 @@ class PreTradeChecker:
         # if at_limit_up and action == "BUY": return REJECT
         # if at_limit_down and action == "SELL": return REJECT
 
-        # ④ 资金检查 (BUY时)
+        # ④ 资金检查 (BUY时) — 调整后继续走后续检查, 不return
+        adjusted_reason = ""
         if action == "BUY":
-            estimated_fee = price * qty * 0.0003  # 预估万三
+            estimated_fee = price * qty * 0.0003
             total = price * qty + estimated_fee
             if total > self.cash:
                 max_qty = int(self.cash / (price * 1.0003) / 100) * 100
                 if max_qty < 100:
                     return RiskDecision("REJECT", 80, "资金不足")
-                return RiskDecision("ADJUST", risk_score,
-                                    f"资金不足, 调整为{max_qty}股",
-                                    adjusted_qty=max_qty)
+                qty = max_qty
+                adjusted_reason = f"资金不足, 调整为{max_qty}股"
 
         # ⑤ 单票仓位检查
         total_value = self.cash + sum(
@@ -125,9 +125,7 @@ class PreTradeChecker:
             adjusted = (qty // 100) * 100
             if adjusted < 100:
                 return RiskDecision("REJECT", 60, "最小100股")
-            return RiskDecision("ADJUST", risk_score,
-                                f"调整为{adjusted}股(100的倍数)",
-                                adjusted_qty=adjusted)
+            qty = adjusted
 
         # ⑦ 交易时段 (通过ClockProvider统一管理)
         from core.clock import clock
@@ -145,6 +143,11 @@ class PreTradeChecker:
                                     adjusted_qty=adj_qty)
         else:
             decision = RiskDecision("REJECT", risk_score, "极端风险")
+
+        # 资金调整优先于其它调整
+        if adjusted_reason and decision.decision == "APPROVE":
+            decision = RiskDecision("ADJUST", decision.risk_score, adjusted_reason,
+                                    adjusted_qty=qty)
 
         # 记录当日新增敞口 (APPROVE/ADJUST时)
         if decision.decision in ("APPROVE", "ADJUST") and action == "BUY":
