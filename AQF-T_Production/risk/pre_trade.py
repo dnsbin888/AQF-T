@@ -88,8 +88,13 @@ class PreTradeChecker:
         trade_value = price * qty
         position_pct = trade_value / total_value if total_value > 0 else 1
         if position_pct > self.max_single_position:
-            return RiskDecision("REJECT", risk_score + 20,
-                                f"单票超{self.max_single_position:.0%}: {position_pct:.1%}")
+            max_allowed_qty = int(total_value * self.max_single_position / price / 100) * 100
+            if max_allowed_qty < 100:
+                return RiskDecision("REJECT", risk_score + 20,
+                                    f"单票超{self.max_single_position:.0%}且无法调整: {position_pct:.1%}")
+            qty = max_allowed_qty
+            new_reason = f"单票超{self.max_single_position:.0%}, 调整为{max_allowed_qty}股"
+            adjusted_reason = adjusted_reason + "; " + new_reason if adjusted_reason else new_reason
 
         # ⑤b 总仓位检查 (GPT Q3 — Portfolio Exposure)
         current_exposure = sum(

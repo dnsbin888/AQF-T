@@ -1,17 +1,36 @@
 {
   "report_type": "execution",
   "date": "2026-07-30",
-  "generated_at": "2026-07-30T19:21:17.567066",
+  "generated_at": "2026-07-30T19:27:37.808160",
   "summary": {
-    "total_orders": 1,
-    "filled": 0,
+    "total_orders": 3,
+    "filled": 2,
     "rejected": 1,
-    "fill_rate": 0.0,
-    "total_commission": 0,
-    "avg_slippage_bps": 0.0
+    "fill_rate": 66.7,
+    "total_commission": 13.77,
+    "avg_slippage_bps": 20.9
   },
   "rejection_reasons": {
-    "单票超10%: 90.3%": 1
+    "单票超10%且无法调整: 90.5%": 1
   },
-  "fills": []
+  "fills": [
+    {
+      "symbol": "000001",
+      "action": "BUY",
+      "fill_price": 12.55,
+      "fill_quantity": 1500,
+      "fee": 5.19,
+      "slippage_bps": 18.6,
+      "timestamp": "2026-07-30T19:27:37.808160"
+    },
+    {
+      "symbol": "300059",
+      "action": "BUY",
+      "fill_price": 22.01,
+      "fill_quantity": 1500,
+      "fee": 8.58,
+      "slippage_bps": 23.1,
+      "timestamp": "2026-07-30T19:27:37.808160"
+    }
+  ]
 }

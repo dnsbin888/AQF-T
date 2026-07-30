@@ -234,6 +234,10 @@ def run_single_day(pipeline: ProductionPipeline,
         phase: 市场阶段 (None=随机)
         date: 日期 (None=今天)
     """
+    # Paper模式: 时钟固定到交易时段
+    from core.clock import clock
+    from datetime import datetime as dt
+    clock.override(dt(2026, 7, 1, 10, 0, 0))
     sim = MarketDataSimulator()
 
     # 生成市场数据
@@ -284,11 +288,14 @@ def run_single_day(pipeline: ProductionPipeline,
 
 def run_batch(pipeline: ProductionPipeline, days: int = 22):
     """
-    批量回放  连续N天模拟
+    批量回放 — 连续N天模拟
 
-    模拟完整的月度交易周期, 包含不同市场阶段:
-      回暖 -> 高潮 -> 退潮 -> 冰点 -> 回暖
+    模拟完整的月度交易周期: 回暖 → 高潮 → 退潮 → 冰点 → 回暖
     """
+    # Paper模式: 时钟固定到交易时段
+    from core.clock import clock
+    from datetime import datetime as dt
+    clock.override(dt(2026, 7, 1, 10, 0, 0))
     # 一个月的典型情绪周期
     cycle = (
         ["回暖期"] * 3 +
