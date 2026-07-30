@@ -387,6 +387,21 @@
 
 ---
 
+## DEC-20260730-025
+
+- **date**: 2026-07-30
+- **decision**: V1.2 Runtime Layer — Architecture Compliance Verification PASS
+- **context**: 新窗口完成 runtime/ 7模块独立验证。Import 7/7 PASS。Constitution合规(系统信号术语≠策略信号)。模块边界未侵入Strategy/Risk/Decision
+- **chosen**: V1.2 CLOSED, 进入 V1.3 Execution Intelligence Layer
+- **reason**: Runtime层定位为Production Reliability Layer(进程可靠性/状态恢复/风险保护/交易一致性/运行监控)，非策略层。DEC-023需对齐：QMT=Execution Agent(非dumb adapter)
+- **impact**:
+  - ARCHITECTURE_NOTE.md 已更新为三层架构 (Strategic → Execution Intelligence → QMT Channel)
+  - V1.3 模块边界: execution_agent / order_state_machine / order_manager / cancel_replace / slippage_monitor / fill_quality / execution_evidence
+  - 不改变: Strategy / Pattern / Decision / Risk / Evidence
+  - V1.3 目标: Decision Intent → Execution Intelligence → Optimal Execution → Evidence Capture
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

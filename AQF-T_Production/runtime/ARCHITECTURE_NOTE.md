@@ -1,53 +1,84 @@
 # AQF-T Runtime Architecture Note
 
-## QMT is an Execution Adapter
-
-QMT is not AQF-T's core system. QMT is AQF-T's execution terminal.
+## Three-Layer Architecture (DEC-024 Frozen)
 
 ```
-                 AQF-T Intelligence Core
-                         |
-        ---------------------------------
-        |               |               |
-   Perception      Decision Core       Risk
-   (eyes/brain)    (judgment)        (immune)
-        |               |               |
-        ---------------------------------
-                         |
-                  Execution Layer
-                         |
-                         v
-                      QMT
-                  (hands/feet)
+                 AQF-T Strategic Layer
+                 (大脑 — 战略决策)
+
+        | Perception | Pattern | Decision | Risk | Evidence |
+        |  眼睛       | 模式    | 判断     | 免疫  | 记忆     |
+
+                          |
+                          | Decision Intent
+                          v
+
+               Execution Intelligence Layer
+               (反射 — 执行智能)
+
+        | Order Planning | Smart Routing | Cancel/Replace |
+        | Slippage Control | Fill Quality | Execution State |
+
+                          |
+                          | Order
+                          v
+
+                  QMT Trading Channel
+                  (手足 — 交易通道)
+
+        | xtquant | Broker API | Account | Market Data |
 ```
 
-### What AQF-T Owns
-- Perception (what is happening)
-- Pattern Recognition (what pattern is this)
-- Decision (what to do)
-- Risk (should we do it)
-- Evidence (why we did it)
-- Learning (how to improve)
+## What AQF-T Strategic Layer Owns (不可下放)
+- Market Regime — 今天能不能做
+- Perception — 市场在发生什么
+- Pattern Recognition — 什么模式
+- Decision Core — 选什么/多少
+- Portfolio Risk — 能不能做
+- Evidence Framework — 为什么
 
-### What QMT Owns
-- Order routing
-- Trade execution
-- Account interface
+## What Execution Agent Owns (局部智能)
+- Order splitting (大单拆小)
+- Spread/depth protection (盘口保护)
+- Cancel/replace (超时撤改)
+- VWAP/TWAP (成交优化)
+- Limit-up queuing (涨停排队策略)
+- Fill quality analysis
+
+## What QMT Channel Owns
+- Order routing / execution
 - Market data delivery (raw)
+- Account interface
+- Position query
 
-### Principles
-1. No strategy logic shall reside in QMT
-2. No decision logic shall depend on QMT UI
-3. QMT is replaceable: swap adapter, AQF-T core unchanged
-4. AQF-T tells QMT WHAT to do, never asks QMT WHY
+## Prohibited (红线)
+- Execution Agent MUST NOT discover trading opportunities
+- Execution Agent MUST NOT modify risk parameters
+- Execution Agent MUST NOT bypass AQF-T decisions
+- No strategy logic in QMT channel
+- No decision dependency on QMT UI
 
-### Future
+## Data Flow
 ```
-AQF-T
-  |
-Execution Adapter
-  |-- QMT (current)
-  |-- IBKR (possible)
-  |-- Broker API (possible)
-  |-- Paper Simulator (test)
+AQF-T Intent (Decision)
+        |
+        v
+Execution Agent (HOW to execute)
+        |
+        v
+QMT Order (WHAT to send)
+        |
+        v
+Market
 ```
+NOT:
+```
+QMT Data -> Find opportunity -> Auto trade  (FORBIDDEN)
+```
+
+## Version Alignment
+- V1.0: Pipeline Integration ✅
+- V1.1: Runtime Hardening ✅
+- V1.2: Production Runtime Layer ✅ (runtime/ 7 modules)
+- V1.3: Execution Intelligence Layer (direction frozen)
+- DEC-024: QMT Role Redefinition ✅
