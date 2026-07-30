@@ -130,12 +130,43 @@ def render() -> str:
         except Exception:
             pass
 
-    # ── 拒绝原因 ──
+    # ── 拒绝原因 (P0-1: 归类聚合) ──
+    import re
     reject_reasons: dict[str, int] = {}
     for f in fills:
         if f.get("status") != "FILLED":
-            reason = f.get("reason", "unknown")
+            raw = f.get("reason", "unknown")
+            # 去掉百分比数字, 归类: "总仓位超40%: 49.1%" -> "总仓位超40%"
+            reason = re.sub(r':\s*[\d.]+%?$', '', raw).strip()
             reject_reasons[reason] = reject_reasons.get(reason, 0) + 1
+
+    # ── Strategy 展示映射 (P0-2) ──
+    STRATEGY_LABELS = {
+        "reseal": "Path A 回封板",
+        "trend": "Path B1 趋势",
+        "theme": "Path B2 题材",
+        "intraday": "Path B3 日内",
+        "ladder": "LadderScore",
+        "leader": "LeaderLifeCycle",
+        "emotion": "EmotionCycle",
+    }
+
+    # ── Sector 空值处理 (P0-3) ──
+    sector_exposure = exposure.get("sector_exposure", {})
+    sector_display = {}
+    for k, v in sector_exposure.items():
+        label = k if k.strip() else "未分类"
+        sector_display[label] = v
+
+    # ── Pattern Evidence (P0-4) ──
+    evidence_data = {}
+    if EVIDENCE_FILE.exists():
+        try:
+            evidence_data = json.loads(EVIDENCE_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    pattern_evidence = evidence_data.get("pattern_evidence", {}).get("patterns", {})
+    evidence_version = evidence_data.get("meta", {}).get("evidence_version", "")
 
     # ── 成交明细 ──
     fill_rows = ""
@@ -158,10 +189,12 @@ def render() -> str:
     # ── 信号明细 ──
     signal_rows = ""
     for s in signals[:5]:
+        strat_raw = s.get('strategy', '')
+        strat_label = STRATEGY_LABELS.get(strat_raw, strat_raw)
         signal_rows += f"""
         <tr>
           <td>{s.get('symbol','')}</td><td>{s.get('action','')}</td>
-          <td>{s.get('strategy','')}</td><td>{s.get('position_pct',0):.0%}</td>
+          <td>{strat_label}</td><td>{s.get('position_pct',0):.0%}</td>
           <td>{s.get('confidence',0):.2f}</td>
           <td style="font-size:12px;color:#888">{s.get('reasoning','')}</td>
         </tr>"""
@@ -283,7 +316,12 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
   <div style="margin-top:12px;font-size:12px;color:#8b949e">
     Total Exposure: {exposure.get('total_exposure_pct',0)}% |
     Daily New: {exposure.get('daily_new_exposure_pct',0)}% |
-    Sector: {exposure.get('sector_exposure',{})}
+    Sector: {sector_display}
+  </div>
+  <!-- Pattern Evidence -->
+  <div style="margin-top:8px;font-size:12px;color:#8b949e">
+    Evidence v{evidence_version} |
+    {" | ".join(f"{name}: {p.get('status','?')}" for name, p in pattern_evidence.items()) if pattern_evidence else 'No pattern evidence yet'}
   </div>
   {error_html}
 </div>
