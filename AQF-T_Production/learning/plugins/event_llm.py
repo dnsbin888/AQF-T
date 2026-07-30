@@ -95,13 +95,34 @@ class EventEngine:
             timestamp=datetime.now().isoformat(),
         )
 
-    def should_override(self, event: EventSignal) -> Optional[str]:
+    def should_override(self, event: EventSignal) -> Optional[dict]:
         """
-        事件是否应该覆盖模型决策
-        返回: None(不覆盖) / "REDUCE"(降仓) / "BLOCK"(阻止)
+        事件是否应该覆盖模型决策 (GPT V1.1: 增加 evidence 字段)
+
+        返回: None(不覆盖) / {"action": "REDUCE", "evidence": ...} /
+              {"action": "BLOCK", "evidence": ...}
         """
         if event.urgency == "HIGH" and event.direction == "NEGATIVE":
-            return "BLOCK"
+            return {
+                "action": "BLOCK",
+                "evidence": {
+                    "trigger": "HIGH urgency + NEGATIVE direction",
+                    "urgency": event.urgency,
+                    "direction": event.direction,
+                    "impact_score": event.impact_score,
+                    "summary": event.summary,
+                    "reason": "historical drawdown correlation — urgent negative events",
+                }
+            }
         if event.direction == "NEGATIVE" and event.impact_score > 0.5:
-            return "REDUCE"
+            return {
+                "action": "REDUCE",
+                "evidence": {
+                    "trigger": "NEGATIVE + impact>0.5",
+                    "direction": event.direction,
+                    "impact_score": event.impact_score,
+                    "summary": event.summary,
+                    "reason": "negative sentiment with significant impact",
+                }
+            }
         return None

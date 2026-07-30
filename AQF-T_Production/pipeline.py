@@ -103,6 +103,11 @@ class ProductionPipeline:
         self.decision_core = DecisionCore()
         self.risk_checker = PreTradeChecker()
 
+        # ── 行情Provider (GPT P0: 统一接口) ──
+        from data.market_data_provider import create_provider
+        provider_mode = self.config.get("data", {}).get("provider", "simulator")
+        self.market_data = create_provider(provider_mode)
+
         # ── 执行层 ──
         initial_cash = 1_000_000.0
         self.broker = PaperBroker(cash=initial_cash)
@@ -322,6 +327,7 @@ class ProductionPipeline:
             risk=30 if dragon_signal.is_dragon else 50,
             position_hint=position_hint,
             evidence={
+                "score_version": "pathA_v1",   # GPT V1.1: 权重版本追踪
                 "board_status": board_status.position_score,
                 "is_main_theme": board_status.is_main_theme,
                 "break_type": self.perception.classify_break(ctx).type,
@@ -352,12 +358,18 @@ class ProductionPipeline:
         theme_heat = features.get("theme_heat", 0)
         sector_score = features.get("sector_score", 0)
 
-        # Event分析
+        # Event分析 (GPT V1.1: evidence-rich override)
         event_signal = self.event_engine.analyze(symbol, event_texts)
         override = self.event_engine.should_override(event_signal)
 
-        # Event阻止
-        if override == "BLOCK":
+        # Event阻止/降权 (GPT V1.1: dict with evidence)
+        event_action = None
+        event_evidence = {}
+        if override:
+            event_action = override.get("action", "")
+            event_evidence = override.get("evidence", {})
+
+        if event_action == "BLOCK":
             return None
 
         # Alpha必须方向明确
@@ -373,7 +385,7 @@ class ProductionPipeline:
         )
 
         # Event降权
-        if override == "REDUCE":
+        if event_action == "REDUCE":
             score *= 0.7
 
         if score < 40:
@@ -394,6 +406,7 @@ class ProductionPipeline:
             risk=40 if timing_signal.timing == "NOW" else 55,
             position_hint=min(position_hint, 0.10),
             evidence={
+                "score_version": "pathB_v1",
                 "alpha_direction": alpha_signal.direction,
                 "alpha_prob": alpha_signal.probability,
                 "timing": timing_signal.timing,
@@ -401,6 +414,8 @@ class ProductionPipeline:
                 "theme_heat": theme_heat,
                 "event_direction": event_signal.direction,
                 "event_impact": event_signal.impact_score,
+                "event_action": event_action,
+                "event_evidence": event_evidence,
             },
             path="B1" if theme_heat < 0.7 else "B2",
         )
@@ -416,18 +431,21 @@ class ProductionPipeline:
             for sym, p in self.broker.positions.items()
         }
 
-        # 应用 Regime Confidence 仓位倍率 (GPT Q1)
+        # 仓位 = base × confidence_multiplier × regime_multiplier (GPT V1.1)
         confidence = state.regime.regime_confidence if state.regime else 1.0
         if confidence >= 0.8:
-            position_multiplier = 1.0
+            confidence_mult = 1.0
         elif confidence >= 0.6:
-            position_multiplier = 0.70
+            confidence_mult = 0.70
         else:
-            position_multiplier = 0.50
+            confidence_mult = 0.50
+
+        regime_mult = state.regime.regime_multiplier if state.regime else 1.0
+        final_multiplier = confidence_mult * regime_mult
 
         # 调整 Regime max_position
         original_max = state.regime.max_position_pct
-        state.regime.max_position_pct = original_max * position_multiplier
+        state.regime.max_position_pct = original_max * final_multiplier
 
         # 喂入所有候选
         self.decision_core.collect(state.candidates)
@@ -633,15 +651,12 @@ class ProductionPipeline:
     # ═══════════════════════════════════════════════════════════
 
     def _estimate_price(self, symbol: str) -> float:
-        """估算当前价格 (paper模式用随机模拟, live模式从QMT获取)"""
-        # Paper模式: 随机价格模拟
-        base_prices = {
-            "000001": 12.50, "000002": 15.30, "000858": 168.00,
-            "600519": 1850.00, "300750": 210.00, "002594": 260.00,
-        }
-        base = base_prices.get(symbol, 25.00)
-        # 随机波动 ±2%
-        return round(base * (1 + random.uniform(-0.02, 0.02)), 2)
+        """获取当前价格 — 通过 MarketDataProvider 统一接口 (GPT P0)"""
+        snap = self.market_data.get_snapshot(symbol)
+        if snap.price > 0:
+            return snap.price
+        # 终极fallback (不应到达)
+        return 25.0
 
     def _load_config(self, path: str) -> dict:
         p = Path(path)

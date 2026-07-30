@@ -34,6 +34,7 @@ class MarketRegime:
     max_position_pct: float             # 全局仓位上限
     recommended_path: str = ""          # 推荐路径
     regime_confidence: float = 1.0      # 环境置信度 (GPT Q1: 0-1, 影响仓位倍率)
+    regime_multiplier: float = 1.0      # 仓位倍率 (GPT V1.1: 高潮1.0/回暖0.8/冰点0.3/退潮0)
 
     timestamp: str = ""
 
@@ -125,6 +126,7 @@ class MarketRegimeEngine:
             path_b_allowed=path_b,
             max_position_pct=max_pos,
             regime_confidence=confidence,
+            regime_multiplier=self.get_regime_multiplier(phase),
             recommended_path=recommended,
             timestamp=datetime.now().isoformat(),
         )
@@ -175,18 +177,22 @@ class MarketRegimeEngine:
 
     def _decide(self, phase: str, score: float, zhatban: float,
                 promotion: float) -> tuple:
-        """综合决策 — 所有策略的总开关"""
+        """
+        综合决策 — 所有策略的总开关
 
+        Returns: (mode, path_a, path_b, max_pos, recommended)
+        regime_multiplier 按 GPT V1.1: 高潮1.0/回暖0.8/冰点0.3/退潮0
+        """
         if phase == "退潮期":
             return ("stop", False, False, 0.0, "空仓")
 
         if phase == "冰点期":
-            if promotion > 0.20:  # 晋级率还可以
+            if promotion > 0.20:
                 return ("cautious", False, True, 0.20, "B2题材扩散")
             return ("defensive", False, False, 0.10, "观望")
 
         if phase == "高潮期":
-            if zhatban < 0.20:  # 炸板率低, 封板质量好
+            if zhatban < 0.20:
                 return ("aggressive", True, True, 0.70, "A+B全开")
             return ("normal", True, True, 0.50, "A+B")
 
@@ -196,3 +202,14 @@ class MarketRegimeEngine:
             return ("normal", True, False, 0.30, "A优先")
 
         return ("normal", True, True, 0.50, "A+B")
+
+    @staticmethod
+    def get_regime_multiplier(phase: str) -> float:
+        """仓位倍率 (GPT V1.1): 高潮1.0/回暖0.8/冰点0.3/退潮0"""
+        multipliers = {
+            "退潮期": 0.0,
+            "冰点期": 0.30,
+            "回暖期": 0.80,
+            "高潮期": 1.0,
+        }
+        return multipliers.get(phase, 0.50)

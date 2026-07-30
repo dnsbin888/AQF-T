@@ -239,6 +239,31 @@
 
 ---
 
+
+
+## DEC-20260730-017
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Architecture Review — V1.0 Integration PASS WITH NOTES, 进入 V1.1 Runtime Hardening
+- **context**: Claude 完成 V1.0 Integration Phase (ClockProvider / Portfolio Exposure / Regime Confidence / QMT Adapter / Report Persistence)。GPT 最终架构评审确认系统已从"模块集合"进入"可运行交易系统"
+- **options**:
+  - A: 直接进入 Live Trading
+  - B: V1.1 Runtime Hardening — MarketDataProvider统一接口 + 真实数据验证
+  - C: 模型训练
+- **chosen**: B — V1.1 Runtime Hardening
+- **reason**: 当前最大的风险不是alpha，而是"系统看到的数据=真实市场数据吗？"如果不是，CPCV/DSR/PBO全部失去意义。QMT Adapter + 真实数据接入是唯一P0
+- **impact**:
+  - P0: MarketDataProvider统一接口(get_tick/get_orderbook/get_snapshot) → 替换_estimate_price()硬编码
+  - P0: Regime Multiplier (高潮1.0/回暖0.8/冰点0.3/退潮0)
+  - P1: Pipeline拆分为pipeline/orchestrator.py + phases/
+  - P1: Path A评分版本追踪(score_version: pathA_v1)
+  - P2: 真实数据30-60交易日Replay
+  - 不新增Pattern/AI模型/策略
+  - zhatban_rate内部使用，展示层保留"炸板率" — 建立兼容层
+  - 最终仓位 = base_position × regime_multiplier × risk_multiplier
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
