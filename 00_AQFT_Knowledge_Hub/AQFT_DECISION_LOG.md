@@ -302,6 +302,23 @@
 
 ---
 
+## DEC-20260730-020
+
+- **date**: 2026-07-30
+- **decision**: GPT Final Sign-off — V1.1 Phase 1 CLOSED, Phase 2 APPROVED TO START
+- **context**: Pipeline API 一致性修复完成（AQFTPipeline alias）。8/8 Runtime Hardening 项全部达标。决策链 DEC-016→017→018→019→020 完整可追溯
+- **chosen**: 进入 Phase 2 Real Market Evidence
+- **reason**: Phase 2 不再属于 Engineering Phase，进入 Evidence Phase。目标从"代码是否正确"转向"市场是否证明系统有效"
+- **impact**:
+  - Phase 2.1: 数据接入验证 — QMT xtdata → MarketDataProvider → Data Evidence Package (时间连续性/Tick完整性/L2字段完整率/延迟)
+  - Phase 2.2: 30日Replay — 输出 AQFT_PHASE2_EVIDENCE_30D.json (Pattern/Decision/Risk/Execution)
+  - 新增指标: Decision Drift (<1%) / Pattern Drift / Execution Drift
+  - Decision Stability: 10000次Replay一致率 ≥99%
+  - 持续冻结: 新Pattern/AI模型/参数优化/收益导向调参
+  - 核心产物从代码提交转向 Evidence Package 提交
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
