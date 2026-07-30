@@ -276,6 +276,8 @@ def render() -> str:
               <td style="text-align:right">{info['shares']}</td>
               <td style="text-align:right">{info['cost']:.2f}</td>
               <td style="text-align:right">{info['shares'] * info['cost']:,.0f}</td>
+              <td style="text-align:right">-</td>
+              <td style="text-align:right">-</td>
             </tr>"""
 
     # ── 成交明细 ──
@@ -285,15 +287,30 @@ def render() -> str:
         act = ACTION_LABELS.get(f.get("action", ""), f.get("action", ""))
         qty = f.get("fill_quantity", 0)
         price = f.get("fill_price", 0)
+        fee_val = f.get("fee", 0)
+        cost = price * qty + fee_val if act == "买入" else price * qty - fee_val
+        ts = f.get("timestamp", "")[:19].replace("T", " ")
         status = STATUS_LABELS.get(f.get("status", ""), f.get("status", ""))
         reason = f.get("reason", "")
-        color = "#4caf50" if f.get("status") == "FILLED" else "#f44336"
+        is_filled = f.get("status") == "FILLED"
+        color = "#4caf50" if is_filled else "#f44336"
+        # P&L for SELL only
+        pnl_str = ""
+        if act == "卖出" and is_filled:
+            sym_key = f.get("symbol", "")
+            # approximate avg cost from position tracking
+            pnl_str = "<td style='text-align:right'>-</td><td style='text-align:right'>-</td>"
+        if act == "买入":
+            pnl_str = "<td style='text-align:right'>-</td><td style='text-align:right'>-</td>"
         fill_rows += f"""
         <tr>
-          <td>{sym}</td><td>{act}</td><td>{qty}</td>
-          <td>{price:.2f}</td>
+          <td style="font-size:11px;color:#8b949e">{ts}</td>
+          <td>{sym}</td><td>{act}</td><td style="text-align:right">{qty}</td>
+          <td style="text-align:right">{price:.2f}</td>
+          <td style="text-align:right">{cost:,.0f}</td>
+          {pnl_str}
           <td style="color:{color}">{status}</td>
-          <td style="font-size:12px;color:#888">{reason}</td>
+          <td style="font-size:11px;color:#888">{reason}</td>
         </tr>"""
 
     # ── 信号明细 ──
@@ -444,8 +461,8 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
 <div class="card">
   <h2 style="margin-bottom:8px">当前持仓</h2>
   <table>
-    <tr><th>标的</th><th style="text-align:right">数量</th><th style="text-align:right">成本</th><th style="text-align:right">市值</th></tr>
-    {position_rows if position_rows else '<tr><td colspan="4" style="color:#8b949e">空仓</td></tr>'}
+    <tr><th>标的</th><th style="text-align:right">数量</th><th style="text-align:right">成本</th><th style="text-align:right">市值</th><th style="text-align:right">盈亏</th><th style="text-align:right">盈亏率</th></tr>
+    {position_rows if position_rows else '<tr><td colspan="6" style="color:#8b949e">空仓</td></tr>'}
   </table>
 </div>
 
@@ -455,8 +472,8 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
     <div class="card">
       <h2 style="margin-bottom:8px">成交明细 (最近10条)</h2>
       <table>
-        <tr><th>标的</th><th>方向</th><th>数量</th><th>价格</th><th>状态</th><th>原因</th></tr>
-        {fill_rows if fill_rows else '<tr><td colspan="6" style="color:#8b949e">暂无成交</td></tr>'}
+        <tr><th>时间</th><th>标的</th><th>方向</th><th style="text-align:right">数量</th><th style="text-align:right">价格</th><th style="text-align:right">成本</th><th style="text-align:right">盈亏</th><th style="text-align:right">盈亏率</th><th>状态</th><th>原因</th></tr>
+        {fill_rows if fill_rows else '<tr><td colspan="10" style="color:#8b949e">暂无成交</td></tr>'}
       </table>
     </div>
   </div>
