@@ -73,6 +73,68 @@ def get_db_status() -> str:
             return "ERROR"
     return "NO DB"
 
+# ── V1.3 Helpers ──
+
+def _risk_heatmap(reject_reasons: dict) -> str:
+    if not reject_reasons:
+        return '<span style="color:#8b949e">无拒绝记录</span>'
+    total = sum(reject_reasons.values()) or 1
+    colors = {"交易时段": "#58a6ff", "仓位限制": "#f0883e", "单票限制": "#f85149",
+              "资金不足": "#d2991d", "流动性": "#8b949e"}
+    rows = ""
+    for reason, count in sorted(reject_reasons.items(), key=lambda x: -x[1])[:6]:
+        pct = count / total * 100
+        color = "#8b949e"
+        for k, c in colors.items():
+            if k in reason:
+                color = c
+                break
+        rows += f"""<div style="margin-bottom:3px">
+          <span style="display:inline-block;width:120px;font-size:11px">{reason[:12]}</span>
+          <span style="display:inline-block;width:40px;text-align:right;font-size:11px">{count}</span>
+          <span style="display:inline-block;height:8px;width:{max(pct,1)}%;background:{color};border-radius:2px;vertical-align:middle;margin-left:4px"></span>
+        </div>"""
+    return rows
+
+def _regime_calendar() -> str:
+    from datetime import timedelta
+    colors = {"高潮期": "#f85149", "回暖期": "#f0883e", "冰点期": "#58a6ff", "退潮期": "#6e7681"}
+    cells = ""
+    for i in range(6, -1, -1):
+        d = datetime.now() - timedelta(days=i)
+        date_str = d.strftime("%m/%d")
+        # Read daily report for that date
+        f = REPORTS_DAILY / f"{d.strftime('%Y%m%d')}_report.json"
+        phase = "?"
+        color = "#30363d"
+        if f.exists():
+            try:
+                rpt = json.loads(f.read_text(encoding="utf-8"))
+                phase = rpt.get("regime", {}).get("phase", "?")[0]
+                color = colors.get(rpt.get("regime", {}).get("phase", ""), "#30363d")
+            except Exception:
+                pass
+        cells += f"""<div style="text-align:center;padding:6px 8px;background:{color};border-radius:3px;color:#fff;min-width:38px">
+          <div style="font-size:10px;opacity:0.8">{date_str}</div>
+          <div style="font-weight:bold">{phase}</div>
+        </div>"""
+    return cells
+
+def _pattern_ranking(patterns: dict) -> str:
+    if not patterns:
+        return '<tr><td colspan="3" style="color:#8b949e">暂无数据</td></tr>'
+    ranked = sorted(patterns.items(), key=lambda x: x[1].get("trigger_count", 0), reverse=True)
+    labels = {"PositionAnchor": "回封锚定", "LeaderLifeCycle": "龙头周期", "LadderScore": "梯队评分",
+              "EmotionCycle": "情绪周期", "SectorFlow": "板块资金", "RelativeStrength": "相对强度"}
+    rows = ""
+    for name, p in ranked:
+        label = labels.get(name, name)
+        count = p.get("trigger_count", 0)
+        status = p.get("status", "?")
+        sc = "#3fb950" if status == "validated" else "#f85149"
+        rows += f"""<tr><td>{label}</td><td style="text-align:right">{count}</td><td style="color:{sc};font-size:11px">{status}</td></tr>"""
+    return rows
+
 # ── HTML renderer ──
 
 def render() -> str:
@@ -363,6 +425,50 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
     <tr><th>标的</th><th>方向</th><th>策略</th><th>仓位</th><th>置信度</th><th>依据</th></tr>
     {signal_rows if signal_rows else '<tr><td colspan="6" style="color:#8b949e">暂无信号</td></tr>'}
   </table>
+</div>
+
+<!-- V1.3: 收益摘要 + 风控热力 -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <h2 style="margin-bottom:8px">收益摘要</h2>
+      <div style="font-size:13px">
+        <div style="margin-bottom:4px">账户总值: <b>{total_value:,.0f}</b></div>
+        <div style="margin-bottom:4px">可用现金: <b>{cash:,.0f}</b></div>
+        <div style="margin-bottom:4px">持仓市值: <b>{total_value - cash:,.0f}</b></div>
+        <div style="color:#8b949e;font-size:11px">总成交 {account.get('total_trades',0)} 笔 | 当前持仓 {positions_count} 只</div>
+      </div>
+    </div>
+  </div>
+  <div class="col" style="flex:2">
+    <div class="card">
+      <h2 style="margin-bottom:8px">风控热力</h2>
+      <div style="font-size:12px">
+        {self._risk_heatmap(reject_reasons)}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V1.3: 7日Regime日历 + Pattern排序 -->
+<div class="row">
+  <div class="col" style="flex:2">
+    <div class="card">
+      <h2 style="margin-bottom:8px">7日市场状态</h2>
+      <div style="display:flex;gap:6px;font-size:12px">
+        {self._regime_calendar()}
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <h2 style="margin-bottom:8px">Pattern 排序</h2>
+      <table style="font-size:12px">
+        <tr><th>Pattern</th><th style="text-align:right">触发</th><th>状态</th></tr>
+        {self._pattern_ranking(pattern_evidence)}
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
