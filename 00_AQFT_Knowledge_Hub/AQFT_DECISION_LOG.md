@@ -462,6 +462,26 @@
 
 ---
 
+## DEC-20260731-027
+
+- **date**: 2026-07-31
+- **decision**: ExitPipeline Architecture Freeze — AQF-T 从 Entry-only Pipeline 进入完整交易生命周期管理
+- **context**: GPT 最终评审 PASS。补齐 AQF-T 最大架构缺口：Entry 完整但 Exit 无独立治理链。CAD 二次审计确认与现有代码零冲突
+- **chosen**: 冻结 ExitPipeline 设计，进入工程实现 (E1→E4)
+- **reason**: Entry管理开仓决策，Exit管理持仓生命周期，两者平级不互相侵入。Risk Exit > Strategy Exit。每笔卖出必须可归因(Evidence First)
+- **impact**:
+  - 架构: AQF-T Strategic Layer → Entry Pipeline + ExitPipeline (平级) → Execution Intelligence → QMT
+  - Exit Reason Taxonomy: RISK_STOP/DRAWDOWN_LIMIT/KILLSWITCH/REGIME_BREAK + PATTERN_INVALID/LEADER_END/MOMENTUM_FADE/TIME_EXIT
+  - Exit Evidence Schema: position_before/trigger/decision/execution/position_after
+  - Event Bus 新增: POSITION_UPDATED + EXIT_TRIGGERED
+  - DecisionCore SELL盲区: 未来 ExitOrder + TradingCandidate 统一进入 Decision
+  - SELL > BUY 冲突规则
+  - 不批准: 分仓/分批/移动止盈 → V2 Execution Optimization
+  - 工程路线: E1 ExitPipeline Skeleton → E2 Risk Exit → E3 Strategy Exit → E4 Exit Evidence
+  - 现有代码兼容性: 零冲突 (TradingCandidate.action已有SELL, PaperBroker SELL完整, dragon.exit_signal待接入)
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
