@@ -1,0 +1,108 @@
+{
+  "report_type": "pattern_contribution",
+  "measurement_type": "estimated",
+  "measurement_note": "Funnel ratios from global averages. QMT real data will upgrade to 'observed' with per-pattern causal attribution.",
+  "generated_at": "2026-07-30T17:32:02.376652",
+  "git_commit": "ffdcc997",
+  "global_funnel": {
+    "total_candidates": 73,
+    "total_signals": 58,
+    "total_risk_pass": 1,
+    "total_fills": 1,
+    "candidate_to_signal_pct": "79.5%",
+    "signal_to_fill_pct": "1.7%"
+  },
+  "patterns": {
+    "PositionAnchor": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 31,
+        "candidate": 13,
+        "decision_pass": 10,
+        "risk_pass": 3,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "41.9%",
+        "candidate_to_signal": "76.9%",
+        "signal_to_fill": "0.0%"
+      }
+    },
+    "LeaderLifeCycle": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 22,
+        "candidate": 9,
+        "decision_pass": 7,
+        "risk_pass": 2,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "40.9%",
+        "candidate_to_signal": "77.8%",
+        "signal_to_fill": "0.0%"
+      }
+    },
+    "LadderScore": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 42,
+        "candidate": 23,
+        "decision_pass": 18,
+        "risk_pass": 6,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "54.8%",
+        "candidate_to_signal": "78.3%",
+        "signal_to_fill": "0.0%"
+      }
+    },
+    "EmotionCycle": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 25,
+        "candidate": 10,
+        "decision_pass": 7,
+        "risk_pass": 2,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "40.0%",
+        "candidate_to_signal": "70.0%",
+        "signal_to_fill": "0.0%"
+      }
+    },
+    "SectorFlow": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 34,
+        "candidate": 13,
+        "decision_pass": 10,
+        "risk_pass": 3,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "38.2%",
+        "candidate_to_signal": "76.9%",
+        "signal_to_fill": "0.0%"
+      }
+    },
+    "RelativeStrength": {
+      "status": "validated",
+      "funnel": {
+        "trigger": 54,
+        "candidate": 21,
+        "decision_pass": 16,
+        "risk_pass": 5,
+        "filled": 0
+      },
+      "conversion": {
+        "trigger_to_candidate": "38.9%",
+        "candidate_to_signal": "76.2%",
+        "signal_to_fill": "0.0%"
+      }
+    }
+  },
+  "note": "Funnel ratios from 60D data. Real values with QMT will refine."
+}

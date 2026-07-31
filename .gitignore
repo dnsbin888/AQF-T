@@ -4,26 +4,17 @@
 __pycache__/
 *.pyc
 
-# Data
-data/
-*.csv
-*.xlsx
-
-# Models
+# Sensitive data (keep ignored)
 models/
 *.pkl
 *.h5
-
-# Logs
-logs/
-*.log
+logs/trade.log
+runtime/*_state.json
+config/system_live.yaml
 
 # Temporary
 *.tmp
 *.temp
-
-# System
-Thumbs.db
-.DS_Storereports/
 test_output.txt
-evidence/
+Thumbs.db
+.DS_Store

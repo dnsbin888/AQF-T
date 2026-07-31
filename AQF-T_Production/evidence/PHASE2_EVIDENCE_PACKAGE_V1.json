@@ -1,0 +1,238 @@
+{
+  "package": "AQF-T Evidence Package V1",
+  "version": "1.0",
+  "generated_at": "2026-07-30T17:32:02.408846",
+  "git_commit": "ffdcc997",
+  "source": "SIMULATOR",
+  "environment": "TEST",
+  "not_live": true,
+  "provenance": {
+    "evidence_version": "2.1",
+    "git_commit": "ffdcc997",
+    "config_hash": "sim_default",
+    "provider": "SIMULATOR"
+  },
+  "pipeline_evidence": {
+    "period_days": 30,
+    "trading_days": 29,
+    "stopped_days": 1,
+    "total_signals": 58,
+    "total_fills": 1,
+    "total_rejects": 57,
+    "execution": {
+      "total_signals": 58,
+      "total_fills": 1,
+      "total_rejected": 57,
+      "fill_rate": 1.7,
+      "account": {
+        "cash": 60295.76,
+        "positions": 1,
+        "total_value": 999755.74,
+        "total_trades": 1
+      },
+      "exposure": {
+        "total_value": 1939460.0,
+        "total_exposure_pct": 48.4,
+        "daily_new_exposure_pct": 0.0,
+        "sector_exposure": {
+          "白酒": 48.4
+        },
+        "max_total_limit_pct": 40.0,
+        "max_sector_limit_pct": 25.0
+      },
+      "note": "PaperBroker execution — slippage/fill modeled, not real"
+    }
+  },
+  "regime_evidence": {
+    "distribution": {
+      "高潮期": 16,
+      "回暖期": 4,
+      "冰点期": 9,
+      "退潮期": 1
+    },
+    "gate_triggers": 1,
+    "data_integrity": {
+      "source": "SIMULATOR",
+      "total_ticks": 7300,
+      "missing_rate": 0.0,
+      "duplicate_rate": 0.0,
+      "timestamp_gaps": 0,
+      "l2_field_completeness": 1.0,
+      "note": "Simulator baseline — no real data integrity concerns"
+    }
+  },
+  "decision_evidence": {
+    "consistency_proxy_pct": 100.0,
+    "measurement_type": "proxy",
+    "phase_variance": {
+      "高潮期": {
+        "days": 16,
+        "avg_candidates": 3.8,
+        "variance": 4.94,
+        "stable": true
+      },
+      "回暖期": {
+        "days": 4,
+        "avg_candidates": 3.2,
+        "variance": 0.19,
+        "stable": true
+      },
+      "冰点期": {
+        "days": 9,
+        "avg_candidates": 0.0,
+        "variance": 0.0,
+        "stable": true
+      }
+    }
+  },
+  "pattern_evidence": {
+    "patterns": {
+      "PositionAnchor": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 31,
+          "candidate": 13,
+          "decision_pass": 10,
+          "risk_pass": 3,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "41.9%",
+          "candidate_to_signal": "76.9%",
+          "signal_to_fill": "0.0%"
+        }
+      },
+      "LeaderLifeCycle": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 22,
+          "candidate": 9,
+          "decision_pass": 7,
+          "risk_pass": 2,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "40.9%",
+          "candidate_to_signal": "77.8%",
+          "signal_to_fill": "0.0%"
+        }
+      },
+      "LadderScore": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 42,
+          "candidate": 23,
+          "decision_pass": 18,
+          "risk_pass": 6,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "54.8%",
+          "candidate_to_signal": "78.3%",
+          "signal_to_fill": "0.0%"
+        }
+      },
+      "EmotionCycle": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 25,
+          "candidate": 10,
+          "decision_pass": 7,
+          "risk_pass": 2,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "40.0%",
+          "candidate_to_signal": "70.0%",
+          "signal_to_fill": "0.0%"
+        }
+      },
+      "SectorFlow": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 34,
+          "candidate": 13,
+          "decision_pass": 10,
+          "risk_pass": 3,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "38.2%",
+          "candidate_to_signal": "76.9%",
+          "signal_to_fill": "0.0%"
+        }
+      },
+      "RelativeStrength": {
+        "status": "validated",
+        "funnel": {
+          "trigger": 54,
+          "candidate": 21,
+          "decision_pass": 16,
+          "risk_pass": 5,
+          "filled": 0
+        },
+        "conversion": {
+          "trigger_to_candidate": "38.9%",
+          "candidate_to_signal": "76.2%",
+          "signal_to_fill": "0.0%"
+        }
+      }
+    },
+    "global_funnel": {
+      "total_candidates": 73,
+      "total_signals": 58,
+      "total_risk_pass": 1,
+      "total_fills": 1,
+      "candidate_to_signal_pct": "79.5%",
+      "signal_to_fill_pct": "1.7%"
+    }
+  },
+  "risk_evidence": {
+    "fingerprint": {
+      "交易时段": {
+        "count": 28,
+        "pct": 49.1
+      },
+      "仓位限制": {
+        "count": 17,
+        "pct": 29.8
+      },
+      "单票限制": {
+        "count": 10,
+        "pct": 17.5
+      },
+      "资金不足": {
+        "count": 2,
+        "pct": 3.5
+      },
+      "流动性/其他": {
+        "count": 0,
+        "pct": 0.0
+      }
+    },
+    "risk_profile": "CONSERVATIVE",
+    "top_reasons": {
+      "非交易时段": 28,
+      "总仓位超40%: 52.2%": 2,
+      "总仓位超40%: 49.1%": 2,
+      "总仓位超40%: 49.8%": 2,
+      "总仓位超40%: 51.1%": 2,
+      "总仓位超40%: 49.6%": 2,
+      "资金不足": 2,
+      "单票超10%: 13.3%": 1,
+      "单票超10%: 93.6%": 1,
+      "单票超10%: 13.2%": 1
+    }
+  },
+  "sub_reports": [
+    "DECISION_STABILITY_REPORT.json",
+    "PATTERN_CONTRIBUTION_REPORT.json",
+    "RISK_FINGERPRINT_REPORT.json"
+  ],
+  "acceptance": {
+    "decision_consistency_proxy_pass": true,
+    "pattern_funnel_complete": true,
+    "risk_fingerprint_complete": true,
+    "evidence_chain_intact": true
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "report_type": "risk_fingerprint",
+  "generated_at": "2026-07-30T17:32:02.395848",
+  "git_commit": "ffdcc997",
+  "total_rejects": 57,
+  "fingerprint": {
+    "交易时段": {
+      "count": 28,
+      "pct": 49.1
+    },
+    "仓位限制": {
+      "count": 17,
+      "pct": 29.8
+    },
+    "单票限制": {
+      "count": 10,
+      "pct": 17.5
+    },
+    "资金不足": {
+      "count": 2,
+      "pct": 3.5
+    },
+    "流动性/其他": {
+      "count": 0,
+      "pct": 0.0
+    }
+  },
+  "top_reasons": {
+    "非交易时段": 28,
+    "总仓位超40%: 52.2%": 2,
+    "总仓位超40%: 49.1%": 2,
+    "总仓位超40%: 49.8%": 2,
+    "总仓位超40%: 51.1%": 2,
+    "总仓位超40%: 49.6%": 2,
+    "资金不足": 2,
+    "单票超10%: 13.3%": 1,
+    "单票超10%: 93.6%": 1,
+    "单票超10%: 13.2%": 1
+  },
+  "gate_active": true,
+  "risk_profile": "CONSERVATIVE",
+  "note": "Fingerprint baseline from 60D Simulator. Compare with QMT real data for drift detection."
+}

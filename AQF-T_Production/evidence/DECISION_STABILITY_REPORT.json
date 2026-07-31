@@ -1,0 +1,54 @@
+{
+  "report_type": "decision_stability",
+  "generated_at": "2026-07-30T17:32:02.353556",
+  "git_commit": "ffdcc997",
+  "period_days": 30,
+  "trading_days": 29,
+  "stopped_days": 1,
+  "decision_consistency_proxy_pct": 100.0,
+  "measurement_type": "proxy",
+  "measurement_note": "Single-run internal consistency. True Decision Stability requires 3x replay with identical input.",
+  "regime_consistency": {
+    "高潮期": {
+      "days": 16,
+      "consistent": true,
+      "state": true
+    },
+    "回暖期": {
+      "days": 4,
+      "consistent": true,
+      "state": true
+    },
+    "冰点期": {
+      "days": 9,
+      "consistent": true,
+      "state": true
+    },
+    "退潮期": {
+      "days": 1,
+      "consistent": true,
+      "state": false
+    }
+  },
+  "phase_candidate_variance": {
+    "高潮期": {
+      "days": 16,
+      "avg_candidates": 3.8,
+      "variance": 4.94,
+      "stable": true
+    },
+    "回暖期": {
+      "days": 4,
+      "avg_candidates": 3.2,
+      "variance": 0.19,
+      "stable": true
+    },
+    "冰点期": {
+      "days": 9,
+      "avg_candidates": 0.0,
+      "variance": 0.0,
+      "stable": true
+    }
+  },
+  "verdict": "PASS"
+}

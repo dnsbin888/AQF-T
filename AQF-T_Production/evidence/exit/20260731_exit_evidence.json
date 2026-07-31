@@ -1,0 +1,49 @@
+{
+  "total_exits": 1,
+  "by_reason": {
+    "leader_end": 1
+  },
+  "by_trigger_type": {
+    "strategy_exit": 1
+  },
+  "avg_holding_days": 5.0,
+  "total_pnl": 2400.0,
+  "win_count": 1,
+  "loss_count": 0,
+  "win_rate": 100.0,
+  "evidence_log": [
+    {
+      "symbol": "000001",
+      "exit_reason": "leader_end",
+      "position_before": {
+        "shares": 3000,
+        "avg_cost": 10.0,
+        "holding_days": 5
+      },
+      "trigger": {
+        "type": "strategy_exit",
+        "priority": 50,
+        "reason": "龙头结束"
+      },
+      "decision": {
+        "action": "SELL",
+        "quantity": 3000
+      },
+      "execution": {
+        "action": "SELL",
+        "quantity": 3000,
+        "fill_price": 10.8,
+        "fee": 8.1,
+        "status": "FILLED"
+      },
+      "position_after": {
+        "shares": 0
+      },
+      "counterfactual": {},
+      "timestamp": "2026-07-31T11:30:46.111040"
+    }
+  ],
+  "generated_at": "2026-07-31T11:30:46.111040",
+  "source": "SIMULATOR",
+  "not_live": true
+}
