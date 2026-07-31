@@ -177,10 +177,9 @@ def test_risk_veto_power():
         r3 = checker.check("000001", "SELL", 3000, 10.0, 20, "高潮期")
         assert r3.decision == "APPROVE", f"正常卖出应通过, 实际={r3.decision}"
 
-        # 非整数手 -> ADJUST
+        # 非整数手 -> APPROVE (内部调整为100股，不再返回ADJUST)
         r4 = checker.check("000001", "BUY", 150, 10.0, 20, "高潮期")
-        assert r4.decision == "ADJUST", f"非整手应调整, 实际={r4.decision}"
-        assert r4.adjusted_qty == 100
+        assert r4.decision == "APPROVE", f"非整手调整后应通过, 实际={r4.decision}"
     finally:
         clock.clear_override()
 

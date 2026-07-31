@@ -1,0 +1,28 @@
+{
+  "report_type": "execution",
+  "date": "2026-07-31",
+  "generated_at": "2026-07-31T10:45:31.897784",
+  "summary": {
+    "total_orders": 3,
+    "filled": 1,
+    "rejected": 2,
+    "fill_rate": 33.3,
+    "total_commission": 10.45,
+    "avg_slippage_bps": 28.4
+  },
+  "rejection_reasons": {
+    "总仓位超40%: 40.6%": 1,
+    "单票超10%且无法调整: 56.0%": 1
+  },
+  "fills": [
+    {
+      "symbol": "300750",
+      "action": "HOLD",
+      "fill_price": 201.04,
+      "fill_quantity": 100,
+      "fee": 10.45,
+      "slippage_bps": 28.4,
+      "timestamp": "2026-07-31T10:45:31.897784"
+    }
+  ]
+}
