@@ -1,7 +1,7 @@
 {
   "report_type": "daily",
   "date": "2026-07-31",
-  "generated_at": "2026-07-31T10:50:08.886598",
+  "generated_at": "2026-07-31T10:57:37.999161",
   "regime": {
     "phase": "高潮期",
     "operation_mode": "normal",
@@ -47,7 +47,7 @@
       "fill_quantity": 0,
       "fee": 0,
       "reason": "可卖数量不足(T+1)",
-      "timestamp": "2026-07-31T10:50:08.886598"
+      "timestamp": "2026-07-31T10:57:37.999161"
     },
     {
       "symbol": "600519",
