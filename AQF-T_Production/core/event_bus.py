@@ -72,4 +72,6 @@ EVENTS = {
     "ORDER_REJECTED":  "OrderRejectedEvent",    # 订单拒绝
     "DAILY_REPORT":    "DailyReportEvent",      # 日终报告
     "KILL_SWITCH":     "KillSwitchEvent",       # 紧急熔断
+    "EXIT_TRIGGERED":  "ExitTriggeredEvent",    # 退出触发 (DEC-027)
+    "POSITION_UPDATED":"PositionUpdatedEvent",  # 持仓更新 (DEC-027)
 }
