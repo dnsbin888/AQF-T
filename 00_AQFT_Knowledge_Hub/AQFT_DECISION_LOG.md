@@ -502,6 +502,30 @@
 
 ---
 
+## DEC-20260731-028-REFINED
+
+- **date**: 2026-07-31
+- **decision**: E3 Strategy Exit 范围冻结 — 只做 Adapter + 3个策略退出，不做ATR/MA/Alpha/分仓
+- **context**: 2026年行业数据显示：游资打板止损3-5%（盘中炸板场景），量化机构全面转向 ATR 动态止损（非固定%）。炸板退出才是游资核心风控，非固定比例。AQF-T 当前 Risk Exit 已闭环，Strategy Exit 只缺转换层
+- **chosen**: E3.1 StrategyExitAdapter（转换层，不修改Dragon代码）+ 3个优先策略退出
+- **E3 接入清单**:
+  - 1. BREAK_EXIT 炸板退出 (pri=50, 炸板>10分钟, 融入炸板卖一半)
+  - 2. LEADER_END 龙头结束 (pri=50, LifeCycle→END)
+  - 3. PATTERN_INVALID 依据失效 (pri=50, 买入时的Pattern条件不再满足)
+- **不接入**: ATR Stop / MA破位 / Alpha SELL(placeholder) / 时间止损
+- **硬止损分层**:
+  - 打板票(PositionAnchor): 炸板优先, 不依赖固定8%
+  - 龙头票(Leader ACTIVE): 10%（避免洗盘误杀）
+  - 普通票(因子): 8%不变
+- **行业对标**: 游资炸板卖一半→尾盘不板卖全部/ 机构ATR×2动态止损(归V2)/ 章盟主单票8%但A股波动率60%下固定10%触发概率85%
+- **impact**:
+  - 新建 exit/strategy_exit_adapter.py（只转换, 不改Dragon）
+  - AQF-T独有闭环: LeaderLifeCycle Pattern → END → ExitPipeline
+  - 入口→持仓→生命周期→失效→退出→证据 六步闭环
+  - 完成后60天Replay验证完整性
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
