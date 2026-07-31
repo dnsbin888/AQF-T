@@ -1,0 +1,26 @@
+{
+  "test": "E1 ExitPipeline smoke — risk_over_strategy",
+  "dec": "DEC-027-E1",
+  "timestamp": "2026-07-31",
+  "input": {
+    "triggers": 3,
+    "orders": [
+      {"symbol": "000001", "type": "risk_stop", "rule": "hard_stop", "priority": 80, "quantity_pct": 0.5},
+      {"symbol": "000001", "type": "strategy_exit", "rule": "pattern_invalid", "priority": 50, "quantity_pct": 1.0},
+      {"symbol": "000002", "type": "risk_stop", "rule": "atr_stop", "priority": 80, "quantity_pct": 0.3}
+    ]
+  },
+  "output": {
+    "resolved_orders": 2,
+    "merged_count": 1,
+    "orders": [
+      {"symbol": "000001", "winner": "risk_stop", "priority": 80, "quantity_pct": 0.5, "overridden": "strategy_exit"},
+      {"symbol": "000002", "winner": "risk_stop", "priority": 80, "quantity_pct": 0.3}
+    ]
+  },
+  "rules_verified": {
+    "risk_over_strategy": true,
+    "sell_over_buy": true,
+    "same_priority_max_pct": true
+  }
+}
