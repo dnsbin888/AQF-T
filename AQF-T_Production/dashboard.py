@@ -146,6 +146,51 @@ def _pattern_ranking(patterns: dict) -> str:
         rows += f"""<tr><td>{label}</td><td style="text-align:right">{count}</td><td style="color:{sc};font-size:11px">{status}</td></tr>"""
     return rows
 
+def _exit_summary() -> str:
+    """E4: 退出统计 — 从 evidence/exit/ 读取最新"""
+    exit_dir = ROOT / "evidence" / "exit"
+    if not exit_dir.exists():
+        return '<span style="color:#8b949e">暂无退出证据</span>'
+    files = sorted(exit_dir.glob("*_exit_evidence.json"), reverse=True)
+    if not files:
+        return '<span style="color:#8b949e">暂无退出证据</span>'
+    try:
+        data = json.loads(files[0].read_text(encoding="utf-8"))
+    except Exception:
+        return '<span style="color:#8b949e">退出证据读取失败</span>'
+
+    total = data.get("total_exits", 0)
+    if total == 0:
+        return '<span style="color:#8b949e">暂无退出事件</span>'
+
+    by_reason = data.get("by_reason", {})
+    labels = {"hard_stop": "硬止损", "drawdown_limit": "回撤限制", "regime_break": "退潮清仓",
+              "killswitch": "熔断", "break_exit": "炸板退出", "leader_end": "龙头结束",
+              "pattern_invalid": "依据失效"}
+
+    rows = ""
+    for reason, count in sorted(by_reason.items(), key=lambda x: -x[1]):
+        label = labels.get(reason, reason)
+        rows += f"<tr><td>{label}</td><td style=\"text-align:right\">{count}</td><td style=\"font-size:11px;color:#8b949e\">{reason}</td></tr>"
+
+    win_rate = data.get("win_rate", 0)
+    avg_hold = data.get("avg_holding_days", 0)
+    total_pnl = data.get("total_pnl", 0)
+    pnl_color = "#3fb950" if total_pnl > 0 else ("#f85149" if total_pnl < 0 else "#8b949e")
+
+    return f"""
+    <div class="row" style="font-size:13px;margin-bottom:8px">
+      <div class="col"><b>{total}</b> 次退出</div>
+      <div class="col">胜率 <b>{win_rate}%</b></div>
+      <div class="col">均持 <b>{avg_hold}</b>天</div>
+      <div class="col">盈亏 <b style="color:{pnl_color}">{total_pnl:+,.0f}</b></div>
+    </div>
+    <table style="font-size:12px">
+      <tr><th>退出类型</th><th style="text-align:right">次数</th><th>标识</th></tr>
+      {rows}
+    </table>
+    """
+
 # ── HTML renderer ──
 
 def render() -> str:
@@ -550,6 +595,12 @@ td{{padding:6px 8px;border-bottom:1px solid #21262d}}
       </table>
     </div>
   </div>
+</div>
+
+<!-- E4 Exit Evidence -->
+<div class="card">
+  <h2 style="margin-bottom:8px">退出统计</h2>
+  {_exit_summary()}
 </div>
 
 <!-- Footer -->
