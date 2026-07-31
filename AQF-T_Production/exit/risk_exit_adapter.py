@@ -87,11 +87,13 @@ class RiskExitAdapter:
                     evidence={"regime": regime_phase, "action": "full_exit"},
                 ))
 
-        # 4. Risk Stop — 持仓级, 单票亏损超限
+        # 4. Risk Stop — 持仓级, 硬止损分层 (DEC-028-REFINED)
         if positions:
             for symbol, pos in positions.items():
                 loss_pct = pos.get("loss_pct", 0)
-                if loss_pct < -0.08:  # 硬止损8%
+                is_leader = pos.get("is_leader", False)
+                hard_stop = -0.10 if is_leader else -0.08  # 龙头10%, 普通8%
+                if loss_pct < hard_stop:
                     orders.append(ExitOrder.from_risk(
                         symbol=symbol,
                         reason=ExitReason.HARD_STOP,
@@ -101,7 +103,8 @@ class RiskExitAdapter:
                             "entry_price": pos.get("avg_cost", 0),
                             "current_price": pos.get("current_price", 0),
                             "loss_pct": round(loss_pct, 3),
-                            "limit": -0.08,
+                            "limit": hard_stop,
+                            "is_leader": is_leader,
                         },
                     ))
 
