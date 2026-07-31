@@ -13,7 +13,7 @@
 - **full_name**: Autonomous Quantitative Fusion Trading System
 - **version**: V1.2 Production Runtime
 - **git_branch**: design
-- **last_updated**: 2026-07-31 (DEC-027 ExitPipeline Frozen)
+- **last_updated**: 2026-07-31 (DEC-028 E3 Strategy Exit Scoped)
 
 ---
 

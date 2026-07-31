@@ -482,6 +482,26 @@
 
 ---
 
+## DEC-20260731-028
+
+- **date**: 2026-07-31
+- **decision**: E3 Strategy Exit — 仅接入炸板/龙头结束/题材死亡，暂缓Alpha/ATR/MA/TimeStop
+- **context**: 卖出审计完成。Risk Exit(E2)已可生产级运行。Strategy Exit 的 Dragon 5条不能直接接入，需经过 StrategyExitAdapter → ExitPipeline → DecisionCore 完整链路
+- **chosen**: E3-1 炸板退出(BREAK_EXIT) + E3-2 龙头结束(LEADER_END) + E3-3 题材死亡(SECTOR_DIE)
+- **暂缓**: Alpha SELL(无真实模型) / ATR Stop(非趋势系统) / MA破位(同理) / Time Stop(延后) / 连板中断/竞价转弱/异动(延后到E3-4)
+- **参数调整**:
+  - 硬止损8% → 龙头票放宽到10%（需LeaderLifeCycle=ACTIVE），普通票保持8%
+  - Regime Break全清 → 保留当前设计（退潮=全清），V2再引入分级（高位清/低位观察/防御保留）
+- **impact**:
+  - E3核心原则: 买入可以错，卖出不能乱
+  - 新建 exit/strategy_exit_adapter.py（只转换，不判断）
+  - 炸板条件: 封单归零 + >10分钟 + 非指数极端波动
+  - 龙头结束: LeaderLifeCycle=END → 触发 LEADER_END
+  - 题材死亡: SectorFlow下降 + 涨停家数下降 + 核心票跌停 → SECTOR_DIE
+  - 完成后跑60天Replay验证完整闭环: 买入→持仓→卖出→Evidence
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先
