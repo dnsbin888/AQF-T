@@ -62,8 +62,14 @@
         "name": "Semantic Correctness",
         "threshold": "Definition unique and verifiable",
         "action_on_fail": "Contract revision required before validation retry"
-      }
-    }
+      },
+      "_scope": "System-wide fixed standard. ALL new Features must pass G1-G5. No exceptions."
+    },
+    "d1_rules": {
+      "D1-Rule-001": "Feature is the smallest trusted unit — AQF-T trusts neither Market nor Model, only Validated Feature. Producers SHALL only consume ACTIVE Features.",
+      "D1-Rule-002": "Feature validation precedes evidence generation — Market→Feature→Validation→ACTIVE→Evidence→Decision. NEVER skip validation."
+    },
+    "feature_lifecycle": "PENDING → VALIDATING → VALIDATED → ACTIVE → DEPRECATED → ARCHIVED"
   },
   "features": {
     "l1_speed_1m": {
