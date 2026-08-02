@@ -13,7 +13,8 @@
       "CR-001": "One Capability, One Market Phenomenon — Each Producer observes exactly one market phenomenon.",
       "CR-002": "One Feature, One Class — Each feature SHALL belong to exactly one Feature Class.",
       "CR-003": "Feature Lifecycle — PENDING → VALIDATED → ACTIVE → DEPRECATED → ARCHIVED",
-      "CR-004": "Every Feature Must Be Measurable — Coverage/Missing/Stability/IC/Drift independently assessable"
+      "CR-004": "Every Feature Must Be Measurable — Coverage/Missing/Stability/IC/Drift independently assessable",
+      "CR-005": "No Producer Shall Consume Non-ACTIVE Features — Any Producer consuming non-ACTIVE Feature SHALL be rejected at Code Review"
     },
     "layer_responsibilities": {
       "Market": {
