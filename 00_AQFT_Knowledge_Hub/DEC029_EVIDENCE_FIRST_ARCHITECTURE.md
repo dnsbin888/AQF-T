@@ -7,6 +7,12 @@ Type: Architecture Decision Record (ADR-001)
 Authority: GPT (Chief Architect) + 老板 (Project Owner) + CC (Secondary Audit)
 Scope: AQF-T × 潜龙 融合架构 — 未来数年演进边界
 
+> **本设计不是为了连接两个项目，而是为了建立一个长期稳定演进的交易智能体系。**
+>
+> **Evidence First — 以事实统一智能，以契约替代耦合，以能力平台支撑智能演进。**
+>
+> 本文件是 AQF-T 从"交易系统设计"进入"决策操作系统（Decision OS）设计"的分水岭。
+
 ---
 
 ## 一、设计原则 (Principles)
@@ -396,6 +402,36 @@ Phase 6: Real-time Evidence Fusion
 
 ---
 
+## 十一、未来 DEC 候选（已识别，待后续正式设计）
+
+### DEC-030 候选: Evidence Governance（证据治理）
+
+**风险**: Evidence First 架构下，Evidence 数量会持续增长（ML/Pattern/Regime/Risk/北向/龙虎榜/盘口/竞价/新闻/LLM/Agent…），如果不分层治理，Fusion Engine 将面临"Evidence Spaghetti"——几十种证据无差别涌入，Fusion 质量退化，可解释性丧失。
+
+**方向**: Evidence 分为三层
+
+```
+L0: Raw Evidence      — 盘口/成交量/龙虎榜（原始观测）
+L1: Derived Evidence  — Path A/Regime/ML/Sector（经过计算的）
+L2: Decision Evidence — BUY/SELL/WAIT（Fusion 输出）
+```
+
+Fusion 永远发生在固定层（L1→L2），不接受 L0 证据直接进入 Fusion。
+
+### DEC-031 候选: Decision Memory（决策记忆）
+
+**缺口**: AQF-T 目前没有"经验记忆"。每次决策是独立的，无法利用历史决策结果来影响未来决策。
+
+**方向**: 不是日志，不是 Evidence。而是 Pattern Memory——系统记录"在什么条件下做了什么决策、结果如何"，下次遇到相似条件时，自动调整 Evidence 权重或置信度。这不是 ML 训练，是经验驱动的权重修正。
+
+```
+例: Regime=回暖 + PathA=Yes + ML=Strong → 历史胜率42%
+    → EFE 对该类组合降低权重 → 决策更保守
+```
+
+---
+
 *DEC-029: Evidence-First Integration Architecture V1.0 — FROZEN*
 *2026-08-02 | GPT + 老板 + CC 三方共识*
 *本文件为架构级冻结文档，修改需 Architecture Review + 老板重新批准*
+*后续 DEC 候选: DEC-030(Evidence Governance) / DEC-031(Decision Memory)*
