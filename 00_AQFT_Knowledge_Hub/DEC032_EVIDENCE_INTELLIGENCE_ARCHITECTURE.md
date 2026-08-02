@@ -1,11 +1,19 @@
 # DEC-032: Evidence Intelligence Architecture
 
 Version: V1.0.0
-Status: 🟡 CANDIDATE — 待 AR Gate 验证后冻结
+Status: ✅ FROZEN — Architecture Contracts Only
 Date: 2026-08-03
 Type: Architecture Decision Record (ADR-002)
+Approval: GPT + 老板 (2026-08-03)
 Based on: DEC-029 Evidence First / DEC-031 EFL v1.0
-Sub-documents: DEC-032A/B/C/D
+
+## Frozen Scope
+
+> **This document freezes architectural contracts only.**
+> **It does not freeze algorithms, models, features, parameters, or implementation details.**
+>
+> Trend Producer 可以从 LightGBM 换成 Transformer——只要它仍然只回答"趋势是否成立"。
+> Fusion Weight 可以变化——只要它仍然只综合已有 Evidence，不产生新事实。
 
 ---
 

@@ -18,11 +18,13 @@ M1: Evidence Foundation
 
 M2: Evidence Intelligence
     └── Ontology + Responsibility + Specialization + Fusion
-    🟡 CANDIDATE (2026-08-03) — AR-1 ✅ AR-2 ✅ AR-3 ⏳
+    ✅ FROZEN (2026-08-03) — Architecture Contracts Only. AR-1/2/3 ALL PASSED.
 
 M3: Decision Engine
-    └── Evidence Fusion Engine (EFE) + Decision Contract
-    ⏳ Not Started
+    └── DEC-033: Decision Engine Architecture (先设计)
+    └── DEC-034: Decision Replay & Learning Architecture
+    └── Evidence Fusion Engine (EFE) 实现
+    ⏳ Not Started — Do NOT implement before DEC-033 reviewed.
 
 M4: Learning System
     └── Weight Learning + Adaptive Fusion + Experience Memory
