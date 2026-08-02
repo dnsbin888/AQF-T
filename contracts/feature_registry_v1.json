@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "description": "L1 Intraday Feature Registry — MomentumML V2 消费的特征资产",
+    "principle": "先定义 Feature Contract, 再实现 Feature Engineering",
+    "registry_version": "v1.0",
+    "contract_version": "feature.v1",
+    "last_updated": "2026-08-02",
+    "capability_rule": "CR-001: One Capability, One Market Phenomenon"
+  },
+
+  "features": {
+    "l1_speed_1m": {
+      "feature_id": "l1_speed_1m",
+      "display_name": "1分钟涨速",
+      "phenomenon": "Short-term Acceleration",
+      "definition": "1分钟价格变化百分比",
+      "producer": "MomentumML",
+      "unit": "percent",
+      "window": 60,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_last_price"]
+    },
+    "l1_speed_5m": {
+      "feature_id": "l1_speed_5m",
+      "display_name": "5分钟涨速",
+      "phenomenon": "Short-term Acceleration",
+      "definition": "5分钟价格变化百分比",
+      "producer": "MomentumML",
+      "unit": "percent",
+      "window": 300,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_last_price"]
+    },
+    "l1_volume_ratio": {
+      "feature_id": "l1_volume_ratio",
+      "display_name": "量比",
+      "phenomenon": "Volume Anomaly",
+      "definition": "当前分钟成交量 / 过去5日均分钟成交量",
+      "producer": "MomentumML",
+      "unit": "ratio",
+      "window": 300,
+      "sampling": "1min",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_volume", "historical_avg_volume"]
+    },
+    "l1_turnover_accel": {
+      "feature_id": "l1_turnover_accel",
+      "display_name": "换手率加速",
+      "phenomenon": "Volume Acceleration",
+      "definition": "当前换手率 vs 过去N分钟换手率的变化率",
+      "producer": "MomentumML",
+      "unit": "ratio",
+      "window": 300,
+      "sampling": "1min",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_turnover", "L1_volume"]
+    },
+    "l1_seal_duration": {
+      "feature_id": "l1_seal_duration",
+      "display_name": "封板持续时间",
+      "phenomenon": "Limit-Up Seal Quality",
+      "definition": "涨停板之后持续封板的时间（分钟）",
+      "producer": "MomentumML",
+      "unit": "minutes",
+      "window": 0,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_last_price", "L1_limit_up_price"]
+    },
+    "l1_open_count": {
+      "feature_id": "l1_open_count",
+      "display_name": "开板次数",
+      "phenomenon": "Limit-Up Break Risk",
+      "definition": "涨停后开板的次数",
+      "producer": "MomentumML",
+      "unit": "count",
+      "window": 0,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_last_price", "L1_limit_up_price"]
+    },
+    "l1_bid_ask_ratio": {
+      "feature_id": "l1_bid_ask_ratio",
+      "display_name": "委比",
+      "phenomenon": "Order Imbalance",
+      "definition": "(买一量 - 卖一量) / (买一量 + 卖一量)",
+      "producer": "MomentumML",
+      "unit": "ratio",
+      "window": 0,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_bid_volume", "L1_ask_volume"]
+    },
+    "l1_bid_ask_spread": {
+      "feature_id": "l1_bid_ask_spread",
+      "display_name": "买卖价差",
+      "phenomenon": "Liquidity Quality",
+      "definition": "(卖一价 - 买一价) / 买一价",
+      "producer": "MomentumML",
+      "unit": "percent",
+      "window": 0,
+      "sampling": "1s",
+      "source": "L1_full_tick",
+      "health": "PENDING",
+      "version": "1.0",
+      "depends_on": ["L1_ask_price", "L1_bid_price"]
+    }
+  },
+
+  "phenomena": {
+    "Short-term Acceleration": "短期价格加速 — 分时涨速",
+    "Volume Anomaly": "成交量异常 — 量比/放量",
+    "Volume Acceleration": "换手加速 — 换手率变化",
+    "Limit-Up Seal Quality": "封板质量 — 封板时间/开板次数",
+    "Order Imbalance": "委比 — 买卖力量对比",
+    "Liquidity Quality": "流动性 — 买卖价差"
+  },
+
+  "health_states": {
+    "PENDING": "特征已定义, 尚未验证",
+    "PASS": "特征稳定可用",
+    "WARNING": "特征存在漂移或数据不稳定",
+    "FAIL": "特征不可用, 应从模型输入中移除"
+  }
+}

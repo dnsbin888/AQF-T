@@ -95,7 +95,11 @@ BUY / SELL / 仓位 / 止损 — 这些属于 DEC-033 Fusion/Policy Gate
 - Data Readiness Gate (DRG-1): 连续5交易日, 完整率>99%
 - 验证: 时间戳连续/不丢盘口/不丢逐笔/重连恢复
 
-### C1-2b: L2 Feature Engineering ⏳
+### C1-2b: L1 Feature Contract & Feature Engineering ⏳
+- ✅ Feature Registry V1.0 已创建 (contracts/feature_registry_v1.json)
+- 8个 L1 Intraday 特征已注册: 涨速/量比/换手加速/封板时间/开板/委比/买卖价差
+- 健康状态: 全部 PENDING (待盘中验证)
+- 下一阶段: 实现特征计算 → DRG-3/4/5 验证
 - 从 L2 数据提取特征: 封单强度/撤单率/盘口失衡/成交速度
 - DRG-2: 特征分布正常, 无NaN/异常值
 
