@@ -6,6 +6,7 @@
     "contract_version": "feature.v1",
     "last_updated": "2026-08-02",
     "capability_rule": "CR-001: One Capability, One Market Phenomenon",
+    "capability_charter": "CR-000: Feature Once, Reuse Everywhere — 每个Feature只定义一次, 任何Producer只能引用, 不允许重复定义",
     "validation_lifecycle": "PENDING → COLLECTING → VALIDATED → PRODUCTION"
   },
   "features": {

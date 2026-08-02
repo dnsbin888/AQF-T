@@ -28,6 +28,24 @@ Purpose: 任何人 5 分钟内理解整个 Decision OS 的演进路线
 ## Architecture Layers
 
 ```
+                    Market (事实来源)
+                       │
+                       ▼
+               Feature Registry (统一事实表达)
+                  ▲            │
+          Producer │            ▼
+        (Feature Consumer)   Evidence
+                               │
+                               ▼
+                           Decision
+```
+
+**Producer 是 Feature 的消费者, 不是架构中心。**
+**Feature 定义一次, 任何 Producer 只能引用, 禁止重复定义。** (CR-000)
+
+## Milestones
+
+```
 M6  Architecture Governance (FUTURE)
 
 M5  Adaptive Decision Gov   (FUTURE)
