@@ -16,6 +16,7 @@
       "responsibility": "判断趋势是否成立",
       "feature_domain": ["qmt_composite", "fund_v2", "chip_v2", "trend_score", "industry_momentum", "sector_strength"],
       "feature_philosophy": "偏中长期结构因子: 资金/筹码/趋势/板块/行业",
+      "migration_phase": "ACTIVE",
       "implementation_status": "CURRENT",
       "implementation": {
         "algorithm": "LightGBM",
@@ -40,6 +41,7 @@
       "responsibility": "判断是否存在持续加速",
       "feature_domain": ["bull_line", "chase_v2", "momentum_score", "L2_orderbook", "L2_tick", "seal_strength", "cancel_rate"],
       "feature_philosophy": "偏实时动量因子: 突破/追涨/加速/L2盘口/封单/撤单. C1-4重训后切换",
+      "migration_phase": "CONTRACT_ONLY",
       "implementation_status": "TARGET",
       "current_features": ["bull_line", "chase_v2", "momentum_score", "fund_v2", "defensive_v2", "trend_score", "chip_v2", "qmt_composite"],
       "implementation": {
