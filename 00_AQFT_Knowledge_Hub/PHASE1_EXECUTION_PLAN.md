@@ -13,6 +13,31 @@ Authority: GPT (设计) + 老板 (批复) + CC (执行)
 > **Observability before Optimization**
 > 先提升可观测性，再优化决策。所有改动只增强"解释自己"的能力，不改变交易决策逻辑。
 
+## Phase 1 Gate 系统
+
+每完成一个 P0，必须通过对应 Gate 才能进入下一任务。任何 Gate 未通过 → 整个 Phase 暂停。
+
+| P0 | Gate | 必须满足 |
+|:--:|------|----------|
+| P0-0 | **G0** | Registry Validation 100% 通过（7项校验全绿） |
+| P0-1 | **G1** | Decision Equivalence Test = 100%（新旧 Replay 逐笔一致） |
+| P0-2 | **G2** | 双编号唯一性验证（无重复 ID） |
+| P0-3 | **G3** | Evaluation 与历史数据一致（不改变任何历史分数） |
+| P0-4 | **G4** | Evidence Health 不影响任何交易输出（可关闭验证） |
+| P0-5 | **G5** | Exit Reason 全覆盖 + Replay 一致 |
+
+## Pluggable 原则
+
+Phase 1 所有新增模块必须可插拔：
+
+```
+ENABLE_EVIDENCE = False        → 系统恢复今天状态
+ENABLE_EVALUATION = False      → 系统恢复今天状态
+ENABLE_HEALTH = False          → 系统恢复今天状态
+```
+
+**不是删代码，是关闭模块。** 所有 Feature Toggle 集中在 `evidence_registry.py` 的 `ENABLE_EVIDENCE` 总开关。
+
 ## Phase 1 验收标准
 
 - 相同输入 → 相同决策（买/卖/仓位不变）
