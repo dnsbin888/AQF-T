@@ -12,8 +12,16 @@ Purpose: 任何人 5 分钟内理解整个 Decision OS 的演进路线
 > Evidence Contract / Ontology / Decision Contract / Learning Contract — frozen.
 > Producer / Model / Feature / Weight / Parameter / Fusion Strategy — all replaceable.
 >
-> 此原则来自 Meta Constitution MC-020 (Contract Before Code) + MC-022 (Truth Over Ownership)。
-> 应出现在所有 ADR 首页。
+> 来源: MC-020 (Contract Before Code) + MC-022 (Truth Over Ownership)。
+
+## Architecture Principle #2
+
+> **Evidence is the architectural center. Algorithms are evidence producers. Decision is evidence interpretation.**
+>
+> LGBM / XGBoost / Rules / LLM / Agent — all are Producers. Not the Decision.
+> Decision Engine / Learning / Replay / Governance — all operate on Evidence.
+>
+> 来源: DEC-029 Evidence First + AR-4 Architecture Lineage Verification。
 
 ---
 
