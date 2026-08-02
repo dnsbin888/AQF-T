@@ -1,0 +1,18 @@
+{
+  "report_type": "execution",
+  "date": "2026-08-02",
+  "generated_at": "2026-08-02T09:27:48.827990",
+  "summary": {
+    "total_orders": 2,
+    "filled": 0,
+    "rejected": 2,
+    "fill_rate": 0.0,
+    "total_commission": 0,
+    "avg_slippage_bps": 0.0
+  },
+  "rejection_reasons": {
+    "可卖数量不足(T+1)": 1,
+    "单票超10%且无法调整: 73.1%": 1
+  },
+  "fills": []
+}
