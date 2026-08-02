@@ -82,7 +82,29 @@
       "lifecycle": "ACTIVE",
       "registered_at": "2026-08-02",
       "notes": "",
-      "l2_status": "NOT_AVAILABLE — external commercial dependency, deferred"
+      "l2_status": "NOT_AVAILABLE — deferred until ROI proven. V3 may upgrade to L2_ORDERBOOK",
+      "implementation_source": "L1_INTRADAY",
+      "feature_boundary_v2": {
+        "allowed": [
+          "intraday_speed",
+          "volume_ratio",
+          "turnover_accel",
+          "seal_time",
+          "open_count",
+          "bid_ask_ratio",
+          "bull_line",
+          "chase_v2",
+          "momentum_score"
+        ],
+        "forbidden": [
+          "L2_tick",
+          "L2_orderbook",
+          "L2_depth",
+          "cancel_rate",
+          "big_order_split"
+        ],
+        "version": "v2 (L1 Intraday)"
+      }
     },
     "catboost_ml": {
       "producer_id": "catboost_ml",

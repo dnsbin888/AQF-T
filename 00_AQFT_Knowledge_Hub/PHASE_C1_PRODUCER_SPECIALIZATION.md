@@ -45,6 +45,15 @@ Evidence Diversity: 低
 | 实现 | XGBoost (需重训) |
 | 频率 | 分钟级 |
 | L2状态 | NOT_AVAILABLE — 外部商业约束(¥5500/年), ROI未证明, 转为Optional Capability |
+| implementation_source | L1_INTRADAY (V3可升级为 L2_ORDERBOOK) |
+
+### MomentumML V2 Feature Boundary (FROZEN)
+
+**Allowed (L1 Intraday):**
+分时涨速 / 量比 / 换手率加速 / 买一卖一 / 委比 / 委差 / 封板持续时间 / 开板次数 / 分钟成交量
+
+**Forbidden (V3 再开放):**
+L2逐笔 / L2十档 / 撤单速度 / 大单拆单 / 盘口吸筹
 
 ## 执行步骤 (修订版 V1.1 — 拆分 L2 数据管线)
 
