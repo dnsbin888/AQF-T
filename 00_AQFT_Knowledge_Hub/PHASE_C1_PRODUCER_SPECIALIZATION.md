@@ -40,10 +40,11 @@ Evidence Diversity: 低
 |------|-----|
 | Domain | momentum_evidence |
 | 问题 | 现在是否正在加速？ |
-| 特征域 | L2盘口/逐笔/封单/撤单/炸板/成交速度 |
-| 因子 | bull_line, chase_v2, momentum_score + L2实时特征 |
+| 特征域 | L1盘中: 分时涨速/量比/换手加速/封板时间/开板/委比委差/买一卖一/分钟K |
+| 因子 | bull_line, chase_v2, momentum_score + L1 intraday features |
 | 实现 | XGBoost (需重训) |
-| 频率 | 分钟级/Tick级 |
+| 频率 | 分钟级 |
+| L2状态 | NOT_AVAILABLE — 外部商业约束(¥5500/年), ROI未证明, 转为Optional Capability |
 
 ## 执行步骤 (修订版 V1.1 — 拆分 L2 数据管线)
 
