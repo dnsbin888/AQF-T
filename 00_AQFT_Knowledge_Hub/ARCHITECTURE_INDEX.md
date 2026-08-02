@@ -1,8 +1,19 @@
 # AQF-T Architecture Index
 
-Version: V1.0.0
+Version: V2.0.0
 Date: 2026-08-03
+Status: Architecture Baseline Established — M0→M4 COMPLETE
 Purpose: 任何人 5 分钟内理解整个 Decision OS 的演进路线
+
+## Architecture Principle #1
+
+> **Contracts are stable. Implementations are replaceable.**
+>
+> Evidence Contract / Ontology / Decision Contract / Learning Contract — frozen.
+> Producer / Model / Feature / Weight / Parameter / Fusion Strategy — all replaceable.
+>
+> 此原则来自 Meta Constitution MC-020 (Contract Before Code) + MC-022 (Truth Over Ownership)。
+> 应出现在所有 ADR 首页。
 
 ---
 
@@ -71,7 +82,45 @@ M0  Capability Platform     ✅ STABLE
 | `EFL-v1.0` | M1 Evidence Foundation Layer |
 | `M2-Evidence-Intelligence-v1.0` | M2 |
 | `M3-Decision-Engine-v1.0` | M3 |
+| `M4-Decision-Learning-v1.0` | M4 |
+
+## Architecture Baseline Declaration
+
+```
+M0→M4 COMPLETE. Architecture Baseline Established.
+
+Contracts Frozen:
+  Evidence Contract (M1)
+  Ontology Contract (M2)
+  Decision Contract (M3)
+  Learning Contract (M4)
+
+Implementations Replaceable:
+  Producer / Model / Feature / Weight / Parameter / Fusion Strategy / Replay Engine / Learning Algorithm
+```
+
+## Architecture Stability Index (ASI)
+
+| 维度 | 当前状态 |
+|------|:--:|
+| Contract Stability | 100% — 4 Contracts Frozen |
+| Replay Stability | 100% — AR-3.1 passed |
+| Compatibility | 100% — AR-1/AR-2 no conflicts |
+| Determinism | 100% — Decision Equivalence verified |
+| Governance Compliance | 100% — Meta Constitution aligned |
+
+**ASI: 100%** — Architecture Baseline established.
+
+## Constitution Cross-Reference
+
+| DEC | Aligned MC |
+|-----|-----------|
+| DEC-029 Evidence First | MC-001 Design Evidence First |
+| DEC-032 Evidence Intelligence | MC-023 Minimal Cognitive Core, MC-019 Canonical Interface |
+| DEC-033 Decision Engine | C-004 Strategy≠Decision, C-007 Execution≠Decision |
+| DEC-034 Decision Learning | MC-022 Truth Over Ownership, MC-016 Reality Over Architecture |
+| Architecture Principle #1 | MC-020 Contract Before Code + MC-022 |
 
 ---
 
-*AQF-T Architecture Index V1.0*
+*AQF-T Architecture Index V2.0 — Architecture Baseline Established 2026-08-03*
