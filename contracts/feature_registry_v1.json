@@ -5,9 +5,9 @@
     "registry_version": "v1.0",
     "contract_version": "feature.v1",
     "last_updated": "2026-08-02",
-    "capability_rule": "CR-001: One Capability, One Market Phenomenon"
+    "capability_rule": "CR-001: One Capability, One Market Phenomenon",
+    "validation_lifecycle": "PENDING → COLLECTING → VALIDATED → PRODUCTION"
   },
-
   "features": {
     "l1_speed_1m": {
       "feature_id": "l1_speed_1m",
@@ -21,7 +21,12 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_last_price"]
+      "depends_on": [
+        "L1_last_price"
+      ],
+      "feature_class": "Momentum",
+      "update_frequency": "1s",
+      "validation_status": "PENDING"
     },
     "l1_speed_5m": {
       "feature_id": "l1_speed_5m",
@@ -35,7 +40,12 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_last_price"]
+      "depends_on": [
+        "L1_last_price"
+      ],
+      "feature_class": "Momentum",
+      "update_frequency": "1s",
+      "validation_status": "PENDING"
     },
     "l1_volume_ratio": {
       "feature_id": "l1_volume_ratio",
@@ -49,7 +59,13 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_volume", "historical_avg_volume"]
+      "depends_on": [
+        "L1_volume",
+        "historical_avg_volume"
+      ],
+      "feature_class": "Volume",
+      "update_frequency": "1min",
+      "validation_status": "PENDING"
     },
     "l1_turnover_accel": {
       "feature_id": "l1_turnover_accel",
@@ -63,7 +79,13 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_turnover", "L1_volume"]
+      "depends_on": [
+        "L1_turnover",
+        "L1_volume"
+      ],
+      "feature_class": "Volume",
+      "update_frequency": "1min",
+      "validation_status": "PENDING"
     },
     "l1_seal_duration": {
       "feature_id": "l1_seal_duration",
@@ -77,7 +99,13 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_last_price", "L1_limit_up_price"]
+      "depends_on": [
+        "L1_last_price",
+        "L1_limit_up_price"
+      ],
+      "feature_class": "Auction",
+      "update_frequency": "Event",
+      "validation_status": "PENDING"
     },
     "l1_open_count": {
       "feature_id": "l1_open_count",
@@ -91,7 +119,13 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_last_price", "L1_limit_up_price"]
+      "depends_on": [
+        "L1_last_price",
+        "L1_limit_up_price"
+      ],
+      "feature_class": "Auction",
+      "update_frequency": "Event",
+      "validation_status": "PENDING"
     },
     "l1_bid_ask_ratio": {
       "feature_id": "l1_bid_ask_ratio",
@@ -105,7 +139,13 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_bid_volume", "L1_ask_volume"]
+      "depends_on": [
+        "L1_bid_volume",
+        "L1_ask_volume"
+      ],
+      "feature_class": "OrderBook",
+      "update_frequency": "Tick",
+      "validation_status": "PENDING"
     },
     "l1_bid_ask_spread": {
       "feature_id": "l1_bid_ask_spread",
@@ -119,10 +159,15 @@
       "source": "L1_full_tick",
       "health": "PENDING",
       "version": "1.0",
-      "depends_on": ["L1_ask_price", "L1_bid_price"]
+      "depends_on": [
+        "L1_ask_price",
+        "L1_bid_price"
+      ],
+      "feature_class": "Liquidity",
+      "update_frequency": "Tick",
+      "validation_status": "PENDING"
     }
   },
-
   "phenomena": {
     "Short-term Acceleration": "短期价格加速 — 分时涨速",
     "Volume Anomaly": "成交量异常 — 量比/放量",
@@ -131,7 +176,6 @@
     "Order Imbalance": "委比 — 买卖力量对比",
     "Liquidity Quality": "流动性 — 买卖价差"
   },
-
   "health_states": {
     "PENDING": "特征已定义, 尚未验证",
     "PASS": "特征稳定可用",
