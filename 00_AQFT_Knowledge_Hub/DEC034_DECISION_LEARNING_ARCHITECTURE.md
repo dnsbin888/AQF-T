@@ -1,11 +1,37 @@
 # DEC-034: Decision Learning Architecture
 
-Version: V1.0.0
-Status: DESIGN — 待评审
+Version: V1.1.0
+Status: ✅ FROZEN — GPT revisions applied
 Date: 2026-08-03
 Type: Architecture Decision Record (ADR-004)
 Based on: DEC-033 Decision Engine (FROZEN) / DEC-032 Evidence Intelligence (FROZEN)
 Scope: M4 — Decision Learning
+Review: GPT Architecture Review — APPROVED with minor refinements → ALL APPLIED
+
+---
+
+## Principle 0: Learning Independence
+
+> **AQF-T never learns model parameters. AQF-T only learns Evidence Trustworthiness.**
+>
+> ✅ 学习: Trend Evidence 在高潮期的权重、Momentum Evidence 的健康阈值
+> ❌ 不学习: LGBM 超参数、XGBoost max_depth、任何 Producer 内部实现
+
+## Principle 1: Human Governance
+
+> **Every Learning Proposal SHALL be reviewable, auditable, and revertible before activation.**
+>
+> Learning → Proposal → Architecture Review → Approval → Activation
+> 不自动修改任何 Evidence Weight。只出建议，人审批。
+
+## Architecture Invariant
+
+```
+Learning Never Updates Models.
+Learning Only Updates Evidence Knowledge.
+
+任何直接修改 Producer 实现的学习机制 → 直接拒绝。
+```
 
 ---
 
@@ -20,10 +46,6 @@ Evidence → Decision → Execution → Outcome → Evaluation → Learning → 
                                                               学习的是 Evidence 的可信度
 ```
 
-核心闭环:
-
-> 不是更新 LGBM，是更新"Trend Evidence 最近30天可信度下降 → Health下降 → Fusion权重下降"。
-
 ## Part A: Replay Runtime
 
 ### A.1 定义
@@ -31,19 +53,25 @@ Evidence → Decision → Execution → Outcome → Evaluation → Learning → 
 Replay 不是测试工具。Replay 是 Learning 的基础设施。
 
 ```
-历史 Evidence（EFL 存储）
+历史 Evidence（EFL 存储，Immutable）
         │
         ▼
    Replay Runtime
-        │  用历史 Evidence 重放 Decision Lifecycle
+        │  用历史 Evidence Snapshot 重放 Decision Lifecycle
         │  相同 Evidence → 相同 Decision（确定性）
         ▼
    Compare: 历史 Decision vs 实际 Outcome
 ```
 
-### A.2 要求
+### A.2 铁律
 
-- 确定性: 相同 Evidence → 100% 相同 Decision
+> **Replay Runtime SHALL NEVER recompute historical Evidence.**
+> Replay 只能 Replay Evidence Snapshot，不能重新生成 Evidence。
+> 否则 Replay 永远无法保证 100% 确定性。
+
+### A.3 要求
+
+- 确定性: 相同 Evidence Snapshot → 100% 相同 Decision
 - 可追溯: 每次 Replay 记录 runtime_version
 - 可并行: 60 天 Replay 可并行执行
 
@@ -62,7 +90,8 @@ Decision(t) → Execution(t) → Outcome(t+N)
                     ┌───────────────┼───────────────┐
                     ▼               ▼               ▼
               Direction OK?    Timing OK?      Magnitude OK?
-              (涨了吗?)        (准时吗?)        (仓位够吗?)
+                                    │
+                               Alpha vs Benchmark?
 ```
 
 ### B.2 评估维度
@@ -73,6 +102,7 @@ Decision(t) → Execution(t) → Outcome(t+N)
 | Timing Quality | 时机好吗？ | → Entry Timing Evidence |
 | Magnitude Appropriateness | 仓位合适吗？ | → Policy Gate 参数 |
 | Regime Appropriateness | Regime判断对吗？ | → Regime Evidence 权重 |
+| Alpha vs Benchmark | 跑赢基准了吗？ | → Decision 有效性 |
 
 ### B.3 Outcome Object
 
@@ -82,6 +112,8 @@ class DecisionOutcome:
     decision_id: str
     direction_correct: bool
     forward_return: float        # t+N 日收益
+    benchmark_return: float      # 同期基准收益（沪深300）
+    alpha_return: float          # forward_return - benchmark_return
     max_adverse: float           # 持有期间最大回撤
     holding_days: int            # 实际持有天数
     exit_reason: str             # 退出原因
@@ -102,21 +134,27 @@ class DecisionOutcome:
    Pattern Extraction
         │  什么条件下 → 什么 Decision → 什么结果？
         ▼
-   Pattern Memory
+   Pattern Memory（Versioned, Append-only）
         │
-        ├── "高潮期 + Trend>0.8 + Board>0.9 → BUY 胜率 78%"
-        ├── "退潮期 + 任何 BUY → 胜率 12%"
-        └── "Trend>0.7 + Momentum<0.5 → 持仓<3天胜率最高"
+        ├── Pattern-001 v1: "高潮期 + Trend>0.8 + Board>0.9 → BUY 胜率 78%"
+        ├── Pattern-001 v2: "高潮期 + Trend>0.8 + Board>0.9 → BUY 胜率 74%" (更新)
+        └── Pattern-002 v1: "退潮期 + 任何 BUY → 胜率 12%"
 ```
 
-### C.2 Pattern Object
+### C.2 铁律
+
+> **Pattern SHALL be Versioned. Never overwrite. Always append.**
+> Pattern v1 → v2 → v3，永远保留历史。Pattern 本身也是 Evidence。
+
+### C.3 Pattern Object
 
 ```python
 @dataclass
 class DecisionPattern:
     pattern_id: str
-    conditions: dict        # {regime: "高潮期", trend_min: 0.8, board_min: 0.9}
-    action: str             # BUY / SELL / HOLD
+    version: int               # v1, v2, v3...
+    conditions: dict           # {regime: "高潮期", trend_min: 0.8}
+    action: str                # BUY / SELL / HOLD
     sample_size: int
     win_rate: float
     avg_return: float
@@ -138,10 +176,48 @@ Pattern Memory
         └── Momentum Evidence 近30天衰减 → drift=MEDIUM → weight 0.20
         │
         ▼
-   Fusion Weight Table（回写到 DEC-032D 的权重模型）
+   Learning Proposal（不直接生效）
+        │
+        ▼
+   Architecture Review → 人审批 → Activation
 ```
 
-### D.2 学习的是 Evidence，不是模型
+### D.2 Learning Policy
+
+> **Learning SHALL NOT auto-modify. Learning → Proposal → Review → Approval → Activation.**
+
+```
+Learning Discovery
+        │
+        ▼
+   Learning Proposal (auto-generated, human-reviewed)
+        │
+        ▼
+   Architecture Review Gate
+        │
+        ▼
+   Approval → Activation
+   或 Reject → Record & Skip
+```
+
+### D.3 Learning Contract
+
+```python
+@dataclass
+class LearningUpdate:
+    update_id: str              # LRN-20260803-000001
+    target: str                 # "trend_evidence"
+    update_type: str            # confidence | weight | calibration | health
+    before: float               # 0.30
+    after: float                # 0.26
+    reason: str                 # "近30天命中率从74%降至68%"
+    evidence_ids: list[str]     # 支撑此更新的 Evidence 列表
+    proposal_status: str        # PROPOSED / APPROVED / REJECTED / ACTIVATED
+    runtime_version: str        # "decision.runtime.v1.2"
+    reviewed_by: str            # "Human" | "AR-Gate"
+```
+
+### D.4 学习的是 Evidence，不是模型
 
 ```
 ✅ 学习: Trend Evidence 的 Regime-自适应权重
@@ -151,6 +227,7 @@ Pattern Memory
 ❌ 不学习: LGBM 的超参数
 ❌ 不学习: XGBoost 的 max_depth
 ❌ 不学习: 任何模型内部参数
+❌ 不学习: 不自动修改 Evidence Weight（只出 Proposal）
 ```
 
 ## Part E: Self Evolution（M5 扩展位）
@@ -159,10 +236,10 @@ Pattern Memory
 Knowledge Update
         │
         ▼
-   Producer Health → 自动调整
+   Producer Health → 自动检测（不自动调整）
         │
         ▼
-   Fusion Weight → 自动调整
+   Fusion Weight → 自动检测 → Learning Proposal
         │
         ▼
    New Producer Discovery → 人工审批
@@ -170,6 +247,9 @@ Knowledge Update
         ▼
    Architecture Evolution → Architecture Review Gate
 ```
+
+> **Self Evolution IS Architecture Governed.**
+> 任何 Self Evolution 必须经过 Architecture Review，不是 Runtime 自主决定。
 
 M4 不做 Self Evolution。只预留接口。
 
@@ -184,4 +264,5 @@ M4 不做 Self Evolution。只预留接口。
 
 ---
 
-*DEC-034 Decision Learning Architecture V1.0 — 待评审*
+*DEC-034 Decision Learning Architecture V1.1 — FROZEN*
+*GPT 修订: Learning Contract + Learning Policy + Immutable Replay + Benchmark + Versioned Pattern*
