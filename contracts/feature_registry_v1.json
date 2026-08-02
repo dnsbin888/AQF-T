@@ -7,7 +7,35 @@
     "last_updated": "2026-08-02",
     "capability_rule": "CR-001: One Capability, One Market Phenomenon",
     "capability_charter": "CR-000: Feature Once, Reuse Everywhere — 每个Feature只定义一次, 任何Producer只能引用, 不允许重复定义",
-    "validation_lifecycle": "PENDING → COLLECTING → VALIDATED → PRODUCTION"
+    "validation_lifecycle": "PENDING → COLLECTING → VALIDATED → PRODUCTION",
+    "capability_constitution": {
+      "CR-000": "Feature Once, Reuse Everywhere — Every market feature SHALL have exactly one canonical definition. Producers MAY consume but SHALL NOT redefine.",
+      "CR-001": "One Capability, One Market Phenomenon — Each Producer observes exactly one market phenomenon.",
+      "CR-002": "One Feature, One Class — Each feature SHALL belong to exactly one Feature Class.",
+      "CR-003": "Feature Lifecycle — PENDING → VALIDATED → ACTIVE → DEPRECATED → ARCHIVED"
+    },
+    "layer_responsibilities": {
+      "Market": {
+        "role": "提供市场事实",
+        "never": "不解释/不决策"
+      },
+      "Feature Registry": {
+        "role": "定义 Feature Contract",
+        "never": "不计算 Evidence"
+      },
+      "Producer": {
+        "role": "Feature → Evidence",
+        "never": "不直接交易"
+      },
+      "Evidence": {
+        "role": "统一事实表达",
+        "never": "不持有模型状态"
+      },
+      "Decision": {
+        "role": "Evidence Fusion",
+        "never": "不知道 Feature 如何产生"
+      }
+    }
   },
   "features": {
     "l1_speed_1m": {
