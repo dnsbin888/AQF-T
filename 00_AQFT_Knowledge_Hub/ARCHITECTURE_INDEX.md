@@ -9,11 +9,13 @@ Purpose: 任何人 5 分钟内理解整个 Decision OS 的演进路线
 ## Architecture Layers
 
 ```
-M5  Adaptive Decision      (FUTURE)
-    └── Autonomous Evolution / Self-Governance
+M6  Architecture Governance (FUTURE)
 
-M4  Decision Learning       (DESIGN)
-    └── Replay Runtime / Outcome Evaluation / Pattern Memory / Knowledge Update
+M5  Adaptive Decision Gov   (FUTURE)
+    └── Learning Proposal → Governance → Activation
+
+M4  Decision Learning       ✅ FROZEN
+    └── Replay / Outcome Eval / Pattern Memory / Knowledge Update
 
 M3  Decision Engine         ✅ FROZEN
     └── 8-stage Lifecycle: Normalize→Validate→Filter→Fusion→Policy Gate→Risk Override→Decision→Trace

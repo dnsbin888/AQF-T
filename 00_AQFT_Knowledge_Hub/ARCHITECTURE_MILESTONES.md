@@ -26,8 +26,17 @@ M3: Decision Engine
     └── Evidence Fusion Engine (EFE) 实现
     ⏳ Not Started — Do NOT implement before DEC-033 reviewed.
 
-M4: Learning System
-    └── Weight Learning + Adaptive Fusion + Experience Memory
+M4: Decision Learning
+    └── Replay + Outcome Eval + Pattern Memory + Knowledge Update
+    ✅ FROZEN (2026-08-03) — Learning Independence + Human Governance.
+
+M5: Adaptive Decision Governance
+    └── Learning Proposal → Governance → Activation
+    └── Human-in-the-loop for automated changes
+    ⏳ Not Started
+
+M6: Architecture Governance
+    └── Multi-App Platform Governance
     ⏳ Not Started
 ```
 
