@@ -166,7 +166,13 @@ PRODUCTION      → 正式上线
 ## Phase D: Implementation (READY ⏳)
 
 ```
-D1: Feature Validation     — 8个L1特征逐一验证 (CR-004)
+D1: Feature Validation     — 8个L1特征 × 5 Gate
+    ├── G1 Completeness    — Missing Rate < 1%
+    ├── G2 Freshness       — Delay < 1s
+    ├── G3 Consistency     — QMT vs cache一致
+    ├── G4 Stability       — 无NaN/Inf/异常值
+    └── G5 Semantic        — 定义唯一可验证
+    ↓ ALL PASS → Feature Card ACTIVE → 可被Producer消费
 D2: Feature Engineering    — Raw Feature → Derived Feature
 D3: MomentumML V2 Training — 仅用VALIDATED Feature
 D4: Shadow Mode            — 30天对比, 不交易

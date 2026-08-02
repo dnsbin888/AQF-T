@@ -36,6 +36,33 @@
         "role": "Evidence Fusion",
         "never": "不知道 Feature 如何产生"
       }
+    },
+    "validation_gates": {
+      "D1-G1": {
+        "name": "Completeness",
+        "threshold": "Missing Rate < 1%",
+        "action_on_fail": "Feature blocked from Producer consumption"
+      },
+      "D1-G2": {
+        "name": "Freshness",
+        "threshold": "Delay < 1s",
+        "action_on_fail": "Health → WARNING, continuous >60s → FAIL"
+      },
+      "D1-G3": {
+        "name": "Consistency",
+        "threshold": "QMT vs cache values match",
+        "action_on_fail": "Flag for investigation, fallback to primary source"
+      },
+      "D1-G4": {
+        "name": "Stability",
+        "threshold": "No NaN/Inf/negative_volume/ratio>1000%",
+        "action_on_fail": "Feature blocked from Producer consumption"
+      },
+      "D1-G5": {
+        "name": "Semantic Correctness",
+        "threshold": "Definition unique and verifiable",
+        "action_on_fail": "Contract revision required before validation retry"
+      }
     }
   },
   "features": {
@@ -66,6 +93,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Short-term Acceleration",
+        "unit": "percent",
+        "refresh": "1s",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_speed_5m": {
@@ -95,6 +141,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Short-term Acceleration",
+        "unit": "percent",
+        "refresh": "1s",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_volume_ratio": {
@@ -125,6 +190,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Volume Anomaly",
+        "unit": "ratio",
+        "refresh": "1min",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_turnover_accel": {
@@ -155,6 +239,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Volume Acceleration",
+        "unit": "ratio",
+        "refresh": "1min",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_seal_duration": {
@@ -185,6 +288,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Limit-Up Seal Quality",
+        "unit": "minutes",
+        "refresh": "Event",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_open_count": {
@@ -215,6 +337,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Limit-Up Break Risk",
+        "unit": "count",
+        "refresh": "Event",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_bid_ask_ratio": {
@@ -245,6 +386,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Order Imbalance",
+        "unit": "ratio",
+        "refresh": "Tick",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     },
     "l1_bid_ask_spread": {
@@ -275,6 +435,25 @@
         ],
         "evaluation_frequency": "daily",
         "evaluation_method": "DRG automated check"
+      },
+      "feature_card": {
+        "phenomenon": "Liquidity Quality",
+        "unit": "percent",
+        "refresh": "Tick",
+        "range": "0~∞",
+        "validation_gates": {
+          "G1": "PENDING",
+          "G2": "PENDING",
+          "G3": "PENDING",
+          "G4": "PENDING",
+          "G5": "PENDING"
+        },
+        "owner": "Feature Registry",
+        "consumers": [
+          "MomentumML"
+        ],
+        "status": "PENDING",
+        "activated_at": null
       }
     }
   },
