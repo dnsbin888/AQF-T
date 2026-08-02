@@ -35,18 +35,72 @@ Authority: GPT (设计) + 老板 (批复) + CC (执行)
 {
   "registry_version": "v1",
   "producers": {
-    "LGBM":       {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
-    "XGBoost":    {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
-    "CatBoost":   {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
-    "TDX":        {"type": "formula_signal","version": "v1", "health": true, "owner": "潜龙"},
-    "PathA":      {"type": "path_a_signal", "version": "v1", "health": true, "owner": "AQF-T"},
-    "Regime":     {"type": "market_regime", "version": "v1", "health": true, "owner": "AQF-T"},
-    "ExitPipeline":{"type": "exit_event",   "version": "v1", "health": true, "owner": "AQF-T"}
+    "trend_ml": {
+      "producer_id": "trend_ml",
+      "evidence_type": "trend_evidence",
+      "responsibility": "趋势是否成立？",
+      "implementation": {"algorithm": "LightGBM", "version": "v2.8.6"},
+      "lifecycle": "ACTIVE",
+      "owner": "潜龙"
+    },
+    "momentum_ml": {
+      "producer_id": "momentum_ml",
+      "evidence_type": "momentum_evidence",
+      "responsibility": "是否存在持续加速？",
+      "implementation": {"algorithm": "XGBoost", "version": "v2.8.6"},
+      "lifecycle": "ACTIVE",
+      "owner": "潜龙"
+    },
+    "catboost_ml": {
+      "producer_id": "catboost_ml",
+      "evidence_type": "ml_signal",
+      "responsibility": "多模型投票(已退役)",
+      "implementation": {"algorithm": "CatBoost", "version": "v2.8.6"},
+      "lifecycle": "ARCHIVED",
+      "archived_reason": "标签退化+stacking泄露 (2026-07-12)",
+      "owner": "潜龙"
+    },
+    "tdx_formula": {
+      "producer_id": "tdx_formula",
+      "evidence_type": "formula_evidence",
+      "responsibility": "通达信公式技术信号",
+      "implementation": {"algorithm": "TDX", "version": "v1"},
+      "lifecycle": "ACTIVE",
+      "owner": "潜龙"
+    },
+    "path_a": {
+      "producer_id": "path_a",
+      "evidence_type": "board_evidence",
+      "responsibility": "回封板确认",
+      "implementation": {"algorithm": "AQF-T Perception", "version": "v1"},
+      "lifecycle": "ACTIVE",
+      "owner": "AQF-T"
+    },
+    "regime": {
+      "producer_id": "regime",
+      "evidence_type": "regime_evidence",
+      "responsibility": "市场状态判断",
+      "implementation": {"algorithm": "AQF-T RegimeEngine", "version": "v1"},
+      "lifecycle": "ACTIVE",
+      "owner": "AQF-T"
+    },
+    "exit_pipeline": {
+      "producer_id": "exit_pipeline",
+      "evidence_type": "exit_evidence",
+      "responsibility": "策略退出信号",
+      "implementation": {"algorithm": "AQF-T ExitPipeline", "version": "v1"},
+      "lifecycle": "ACTIVE",
+      "owner": "AQF-T"
+    }
   }
 }
 ```
 
-**规则**: 任何新 Producer 必须先在此注册，否则不承认其 Evidence。
+**规则**:
+- 任何新 Producer 必须先注册
+- `producer_id` 是稳定身份（内部实现可替换，身份不变）
+- `lifecycle`: ACTIVE → DEPRECATED → ARCHIVED（不删除，保留历史追溯）
+- `responsibility`: 回答"这个 Producer 解决什么问题"，而非"用什么算法"
 
 ### P0-1: ML Evidence Producer（原 Signal Attribution）
 
@@ -233,5 +287,42 @@ Exit Attribution (P0-5)
 
 ---
 
-*Phase 1 执行计划 V1.0 — 2026-08-02 APPROVED*
-*下一步: CC 逐个模块落盘，每个模块完成后 git commit*
+## Phase 2 候选: DEC-032 — Evidence Specialization
+
+> Phase 1 只改身份（Identity），不改能力（Behavior）。Phase 2 进入真正的 ML 架构重组。
+
+### 核心原则
+
+- **Evidence Specialization > Feature Ownership** — 先定义 Producer 回答什么问题，再决定用什么特征
+- **Implementation Independence** — `producer_id` 稳定，内部算法可替换
+- **Evidence Diversity > Low Correlation** — 目标是不同的证据视角，不是低相关性数字
+
+### DEC-032 目录（GPT 待设计）
+
+1. Producer Identity — 稳定身份 vs 可变实现
+2. Producer Responsibility — 每个 Producer 回答什么市场问题
+3. Evidence Boundary — 不同 Evidence 之间的领地边界
+4. Evidence Diversity — 互补性度量（非相关性）
+5. Implementation Independence — 算法可替换，Contract 不变
+6. Feature Ownership — 特征分配到 Producer（最后一步，非第一步）
+
+### 与 Phase 1 的关系
+
+```
+Phase 1: 零影响交易结果
+  ├── 改命名: LGBM→TrendML, XGB→MomentumML
+  ├── 改身份: Evidence Registry 注册
+  └── 不改: 因子/模型/信号
+
+Phase 2: 允许影响交易结果（需完整回测+模拟验证）
+  ├── 重分配: 因子归属到不同 Producer
+  ├── 重训练: 各自用专属因子子集
+  ├── 相关性: 从 ~0.9 降到 <0.7（作为副作用，非目标）
+  └── 算法升级: 内部实现可替换
+```
+
+---
+
+*Phase 1 执行计划 V1.2 — 2026-08-02 APPROVED*
+*DEC-032 候选已标记 — Phase 2 GPT 正式设计*
+*下一步: CC 从 P0-0 Evidence Registry 开始落盘*
