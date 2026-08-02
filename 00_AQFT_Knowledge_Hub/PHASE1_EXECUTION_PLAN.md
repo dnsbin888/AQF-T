@@ -16,8 +16,8 @@ Authority: GPT (设计) + 老板 (批复) + CC (执行)
 ## Phase 1 验收标准
 
 - 相同输入 → 相同决策（买/卖/仓位不变）
-- 新增内容仅增加日志、证据、归因、统计、健康状态
-- 所有新增模块可关闭（不影响现有交易流程）
+- **Decision Equivalence Test: 新旧系统 Replay → 决策 Binary Compare = 100% identical（非 99.8%）**
+- 所有新增模块支持 Feature Toggle，关闭后系统照常交易
 - 新增字段向后兼容（`confidence=None` 时照常运行）
 - 禁止修改任何已有输出字段的语义
 
@@ -61,34 +61,45 @@ Authority: GPT (设计) + 老板 (批复) + CC (执行)
 
 **红线**: 不修改 `score`/`buy_signal`/`level` 字段语义，只新增。
 
-### P0-2: Evidence ID 系统 (P0.5)
+### P0-2: Evidence ID 系统
 
 **目标文件**: 新建 `evidence_id.py`
 
-**格式**: `EVD-{YYYYMMDD}-{6位序号}`，全局唯一
-- 每个 Evidence 带上 `producer` / `version` / `git_commit`
-- 支持 Parent 引用（Signal-00021 → EVD-xxx）
+**双编号体系**:
+- 人类可读: `AQFT-{YYYYMMDD}-{6位序号}` → `AQFT-20260802-000018`
+- 机器索引: UUID v7 (时间有序)
 
-### P0-3: Online Evaluation（第二个做）
+**元数据**: 每个 Evidence 带 `producer` / `contract_version` / `git_commit` / `parent_id`
+
+### P0-3: Online Evaluation
 
 **目标文件**: 新建 `signal_eval.py`
 
-**输出**:
+**评估维度**:
 - `rolling_hit_rate`: 1d / 5d / 20d / 60d / lifetime
-- `rolling_return`: 同期平均收益
-- `rolling_sharpe`: 滚动夏普
-- `rolling_max_drawdown`: 滚动最大回撤
+- `rolling_return` / `rolling_sharpe` / `rolling_max_drawdown`
 
-**存储**: `data/signal_eval.json`，每日收盘后更新
+**不只是评估模型，也评估 Evidence 可信度**:
+- 每个 Evidence Producer (LGBM/XGB/TDX/Path A/Regime) 独立评估
+- 输出: `evidence_trustworthiness = f(hit_rate, sharpe, stability)`
+- 未来直接决定 AQF-T Evidence Fusion 权重
 
-### P0-4: Drift Detection（第三个做）
+**存储**: `data/signal_eval.json`，每日收盘更新
 
-**目标文件**: 新建 `factor_drift.py`
+### P0-4: Evidence Health (Drift Detection)
 
-**逻辑**: 基于 Online Evaluation 的 IC 趋势
-- `drift_score`: 连续值（0-1，保留精度）
+**目标文件**: 新建 `evidence_health.py`
+
+**定位**: 不是 ML 专属的 Drift Detection，而是所有 Evidence Producer 的健康监控
+- ML 模型: IC趋势 / 特征分布偏移 / 预测分布偏移
+- TDX 公式: 信号密度变化 / 选股重合度
+- Path A: 回封确认率趋势
+- 未来任何 Producer 都可注册到此模块
+
+**输出**:
+- `drift_score`: 连续值 0-1（保留精度，不损失信息）
 - `drift_level`: LOW (<0.2) / MEDIUM (0.2-0.5) / HIGH (>0.5)
-- 检测指标: IC 趋势 / 特征分布偏移 / 预测分布偏移
+- `health_status`: healthy / watch / danger
 
 ### P0-5: Exit Attribution（第四个做）
 
@@ -128,7 +139,7 @@ D:\AQF-T\contracts\
 ├── health_contract_v1.json        ← Health + Capabilities (DEC-029 §5.3)
 ├── decision_contract_v1.json      ← Request/Response/Fallback (DEC-029 §5.1-5.2)
 ├── producer_contract_v1.json      ← Producer 注册规范
-└── mapping_table_v1.json          ← 潜龙字段 → Evidence 字段映射
+└── ontology_v1.json               ← 统一语义层 (非字段映射，是概念对齐)
 ```
 
 ### Contract 顺序
@@ -137,7 +148,7 @@ D:\AQF-T\contracts\
 2. **Health Contract** — 比 Decision 更底层（AQF-T DOWN → Decision 不存在）
 3. **Decision Contract** — 依赖 Evidence + Health
 4. **Producer Contract** — Producer 注册/发现/版本规范
-5. **Mapping Table** — 潜龙现有字段 → Evidence Schema 映射
+5. **Ontology** — 统一语义层。潜龙的 `BUY_SIGNAL` 和 AQF-T 的 `ENTRY_SIGNAL` 不互相转换，而是共同映射到 `ENTRY_INTENT`。未来任何系统的字段都映射到此 Ontology，这是 Evidence Fusion 真正的基础。
 
 **原则**: 只定义，不实现。
 
