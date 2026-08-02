@@ -526,6 +526,36 @@
 
 ---
 
+---
+
+## DEC-20260802-029
+
+- **date**: 2026-08-02
+- **decision**: 确立 Evidence-First Integration Architecture — AQF-T × 潜龙融合架构
+- **context**: 经过设计资产审计 + 潜龙vsAQF-T九维深度比对 + GPT与CC多轮方案讨论，从"决策增强层"收敛为"Evidence First"架构
+- **options**:
+  - A: 代码合并
+  - B: 桥接层 (API点对点对接)
+  - C: Evidence-First Integration (Evidence Schema → Evidence Fusion Engine → TIC Contract)
+- **chosen**: C — Evidence-First Integration Architecture
+- **reason**: 
+  - Evidence First 统一了两个系统的数据语义，不是简单 API 对接
+  - 所有模块输出 Evidence，EFE 唯一输出 Decision — 架构简化且可追溯
+  - Capability(潜龙) 与 Intelligence(AQF-T) 完全解耦，各自独立演进
+  - Platform Agnostic: 未来可更换任一方的实现
+  - Failure Isolation: AQF-T 故障不影响潜龙运行
+- **impact**:
+  - 新核心模块: Evidence Fusion Engine (EFE) — AQF-T 中唯一可输出 Decision 的模块
+  - 新接口标准: Trading Intelligence Contract (TIC) — 替代简单 API
+  - Evidence Schema V1.0 冻结: 所有系统统一证据格式
+  - Evidence Taxonomy V1.0: 6大类证据分类体系
+  - Roadmap Phase 1-6 锁定 (Evidence Schema → Signal Attribution → EFE → TIC → QMT Bridge → Real-time)
+  - Never 红线: AQF-T不调QMT/不执行交易/不训练ML；潜龙不做Fusion
+  - 相关文档: DEC029_EVIDENCE_FIRST_ARCHITECTURE.md
+- **milestone**: ARD-001 — AQF-T 第一篇 Architecture Decision Record
+
+---
+
 ## 决策原则
 
 1. 风险优先 — 任何可能引入风险的决策，保守方案优先

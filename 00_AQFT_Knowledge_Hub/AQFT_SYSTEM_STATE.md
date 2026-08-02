@@ -13,7 +13,7 @@
 - **full_name**: Autonomous Quantitative Fusion Trading System
 - **version**: V1.2 Production Runtime
 - **git_branch**: design
-- **last_updated**: 2026-07-31 (DEC-028-REFINED — E3 Adapter+3exits frozen)
+- **last_updated**: 2026-08-02 (DEC-029 FROZEN — Evidence-First Integration Architecture)
 
 ---
 
@@ -29,10 +29,19 @@
 
 ## Current Focus
 
-- **module**: AQF-T_Production
-- **version**: V1.2
-- **task**: Phase 2.4 — QMT Real Market Validation (等待环境)
-- **priority**: high (blocked by QMT)
+- **module**: AQF-T × 潜龙融合
+- **version**: DEC-029 FROZEN
+- **task**: Phase 1 — Evidence Schema V1.0 定义
+- **priority**: highest — Evidence-First Integration Architecture
+- **new_architecture**: Evidence Fusion Engine (EFE) — 全系统核心模块
+
+## Latest Decision
+
+- **2026-08-02**: DEC-029 — Evidence-First Integration Architecture FROZEN
+  - Evidence First 原则确立: 所有模块输出Evidence，EFE唯一输出Decision
+  - 潜龙 = Capability Platform / AQF-T = Trading Intelligence
+  - Trading Intelligence Contract (TIC) 定义三方接口
+  - Roadmap Phase1-6 锁定
 
 ---
 
