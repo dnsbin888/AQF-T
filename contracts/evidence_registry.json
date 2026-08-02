@@ -37,7 +37,8 @@
       "enabled": true,
       "lifecycle": "ACTIVE",
       "registered_at": "2026-08-02",
-      "notes": ""
+      "notes": "",
+      "phenomenon": "Trend Persistence (趋势持续性)"
     },
     "momentum_ml": {
       "producer_id": "momentum_ml",
@@ -104,7 +105,8 @@
           "big_order_split"
         ],
         "version": "v2 (L1 Intraday)"
-      }
+      },
+      "phenomenon": "Momentum Acceleration (动量加速)"
     },
     "catboost_ml": {
       "producer_id": "catboost_ml",
@@ -125,7 +127,8 @@
       "lifecycle": "ARCHIVED",
       "archived_reason": "标签退化 + stacking泄露 (DEC-20260712). 未参与过正式运行，直接归档",
       "registered_at": "2026-08-02",
-      "notes": "保留 Historical Evidence 追溯，不删除"
+      "notes": "保留 Historical Evidence 追溯，不删除",
+      "phenomenon": "Model Voting (已退役)"
     },
     "tdx_formula": {
       "producer_id": "tdx_formula",
@@ -145,7 +148,8 @@
       "enabled": true,
       "lifecycle": "ACTIVE",
       "registered_at": "2026-08-02",
-      "notes": "6个活跃公式: 双信号共振/终极选股/涨停突破/底部反转/擒龙决/波段擒妖"
+      "notes": "6个活跃公式: 双信号共振/终极选股/涨停突破/底部反转/擒龙决/波段擒妖",
+      "phenomenon": "Formula Pattern Detection (公式模式识别)"
     },
     "path_a": {
       "producer_id": "path_a",
@@ -166,7 +170,8 @@
       "lifecycle": "ACTIVE",
       "enabled_note": "待 QMT 数据接入后激活",
       "registered_at": "2026-08-02",
-      "notes": ""
+      "notes": "",
+      "phenomenon": "Board Seal Quality (封板质量)"
     },
     "regime": {
       "producer_id": "regime",
@@ -187,7 +192,8 @@
       "lifecycle": "ACTIVE",
       "enabled_note": "待 QMT 数据接入后激活",
       "registered_at": "2026-08-02",
-      "notes": ""
+      "notes": "",
+      "phenomenon": "Market Environment (市场环境)"
     },
     "exit_pipeline": {
       "producer_id": "exit_pipeline",
@@ -208,7 +214,8 @@
       "lifecycle": "ACTIVE",
       "enabled_note": "待 QMT 数据接入后激活",
       "registered_at": "2026-08-02",
-      "notes": ""
+      "notes": "",
+      "phenomenon": "Exit Quality (退出质量)"
     }
   },
   "lifecycle_states": {

@@ -55,6 +55,34 @@ Evidence Diversity: 低
 **Forbidden (V3 再开放):**
 L2逐笔 / L2十档 / 撤单速度 / 大单拆单 / 盘口吸筹
 
+### MomentumML Feature Type Contract (FROZEN)
+
+| Input Type | Allowed | Forbidden |
+|------------|:------:|:---------:|
+| Market Microstructure (L1) | ✅ 分时/成交/委托/封板/开板 | — |
+| Fundamental | — | ❌ PE/ROE/利润/基金持仓 |
+| Industry/Sector | — | ❌ 行业动量/板块强度 |
+| Macro | — | ❌ 利率/政策/宏观指标 |
+
+### MomentumML Evidence Output Contract (FROZEN)
+
+**Must output:**
+score / confidence / direction / health / feature_snapshot
+
+**Must NOT output:**
+BUY / SELL / 仓位 / 止损 — 这些属于 DEC-033 Fusion/Policy Gate
+
+### Capability Rule CR-001
+
+> **One Capability, One Market Phenomenon.**
+>
+> TrendML     → Trend Persistence (趋势持续性)
+> MomentumML  → Momentum Acceleration (动量加速)
+> Regime      → Market Environment (市场环境)
+> ExitPipeline → Exit Quality (退出质量)
+
+任何 Producer 必须先回答"观测哪种市场现象"，再决定"用什么模型"。
+
 ## 执行步骤 (修订版 V1.1 — 拆分 L2 数据管线)
 
 ### C1-1: Contract Freeze ✅ FROZEN
