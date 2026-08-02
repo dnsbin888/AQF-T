@@ -106,6 +106,20 @@ PRODUCTION      → 正式上线
 当前:
   TrendML:     PRODUCTION
   MomentumML:  CONTRACT_ONLY (→ 目标 PRODUCTION via L2)
+
+## Producer Status Table
+
+| Producer | Lifecycle | DRG | Shadow | Production |
+|----------|:---------:|:---:|:------:|:----------:|
+| TrendML | PRODUCTION | PASS | — | ACTIVE |
+| MomentumML | CONTRACT_ONLY | — | — | NO |
+| TDX Formula | PRODUCTION | PASS | — | ACTIVE |
+| Path A | PRODUCTION | PASS | — | ACTIVE |
+| Regime | PRODUCTION | PASS | — | ACTIVE |
+| ExitPipeline | PRODUCTION | PASS | — | ACTIVE |
+| CatBoost | ARCHIVED | — | — | NO |
+
+*C2/C3 扩展: 未来新增 Producer (SentimentML/BoardML/FlowML) 均沿用此表*
 ```
 
 ---
