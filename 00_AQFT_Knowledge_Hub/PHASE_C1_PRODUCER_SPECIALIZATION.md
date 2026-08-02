@@ -1,7 +1,7 @@
 # Phase C1: Producer Feature Ownership 正式分家
 
 Version: V1.0.0
-Status: PLAN — 待执行
+Status: ✅ FROZEN — Capability Evolution Baseline
 Date: 2026-08-02
 Based on: DEC-032C Evidence Specialization + GPT Capability Phase Design
 
@@ -86,6 +86,27 @@ Evidence Diversity: 低
 | DRG-4 | Feature Drift | PSI < 0.1 |
 | DRG-5 | Latency | P99 < 100ms |
 **所有 DRG PASS 才能进 C1-4 训练。**
+
+## Architecture Rule
+
+> **No Training Without DRG PASS.**
+> Data quality is governed before model quality.
+> 任何 Producer 训练前，必须先通过全部 DRG Gate。
+
+## Capability Lifecycle（统一状态机）
+
+```
+CONTRACT_ONLY   → 仅 Contract 声明, 无数据/无训练
+DATA_READY      → L2 数据可用, DRG-1/2 PASS
+FEATURE_READY   → 特征工程完成, DRG-3/4/5 PASS
+MODEL_READY     → 模型训练完成, 回测验证 PASS
+SHADOW_READY    → Shadow 30天对比, Decision Quality 达标
+PRODUCTION      → 正式上线
+
+当前:
+  TrendML:     PRODUCTION
+  MomentumML:  CONTRACT_ONLY (→ 目标 PRODUCTION via L2)
+```
 
 ---
 
