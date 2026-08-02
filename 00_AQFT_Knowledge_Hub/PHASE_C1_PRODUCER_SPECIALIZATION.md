@@ -162,6 +162,18 @@ PRODUCTION      → 正式上线
 | CatBoost | ARCHIVED | — | — | NO |
 
 *C2/C3 扩展: 未来新增 Producer (SentimentML/BoardML/FlowML) 均沿用此表*
+
+## Phase D: Implementation (READY ⏳)
+
+```
+D1: Feature Validation     — 8个L1特征逐一验证 (CR-004)
+D2: Feature Engineering    — Raw Feature → Derived Feature
+D3: MomentumML V2 Training — 仅用VALIDATED Feature
+D4: Shadow Mode            — 30天对比, 不交易
+D5: Production             — 赢了替换, 输了回滚
+```
+
+原则: Contract 不变, 只验证实现. 任一步失败 → 停, 不污染生产.
 ```
 
 ---

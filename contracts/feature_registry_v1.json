@@ -12,7 +12,8 @@
       "CR-000": "Feature Once, Reuse Everywhere — Every market feature SHALL have exactly one canonical definition. Producers MAY consume but SHALL NOT redefine.",
       "CR-001": "One Capability, One Market Phenomenon — Each Producer observes exactly one market phenomenon.",
       "CR-002": "One Feature, One Class — Each feature SHALL belong to exactly one Feature Class.",
-      "CR-003": "Feature Lifecycle — PENDING → VALIDATED → ACTIVE → DEPRECATED → ARCHIVED"
+      "CR-003": "Feature Lifecycle — PENDING → VALIDATED → ACTIVE → DEPRECATED → ARCHIVED",
+      "CR-004": "Every Feature Must Be Measurable — Coverage/Missing/Stability/IC/Drift independently assessable"
     },
     "layer_responsibilities": {
       "Market": {
@@ -55,7 +56,17 @@
       ],
       "feature_class": "Momentum",
       "update_frequency": "1s",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_speed_5m": {
       "feature_id": "l1_speed_5m",
@@ -74,7 +85,17 @@
       ],
       "feature_class": "Momentum",
       "update_frequency": "1s",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_volume_ratio": {
       "feature_id": "l1_volume_ratio",
@@ -94,7 +115,17 @@
       ],
       "feature_class": "Volume",
       "update_frequency": "1min",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_turnover_accel": {
       "feature_id": "l1_turnover_accel",
@@ -114,7 +145,17 @@
       ],
       "feature_class": "Volume",
       "update_frequency": "1min",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_seal_duration": {
       "feature_id": "l1_seal_duration",
@@ -134,7 +175,17 @@
       ],
       "feature_class": "Auction",
       "update_frequency": "Event",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_open_count": {
       "feature_id": "l1_open_count",
@@ -154,7 +205,17 @@
       ],
       "feature_class": "Auction",
       "update_frequency": "Event",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_bid_ask_ratio": {
       "feature_id": "l1_bid_ask_ratio",
@@ -174,7 +235,17 @@
       ],
       "feature_class": "OrderBook",
       "update_frequency": "Tick",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     },
     "l1_bid_ask_spread": {
       "feature_id": "l1_bid_ask_spread",
@@ -194,7 +265,17 @@
       ],
       "feature_class": "Liquidity",
       "update_frequency": "Tick",
-      "validation_status": "PENDING"
+      "validation_status": "PENDING",
+      "measurability": {
+        "metrics": [
+          "coverage",
+          "missing_rate",
+          "stability",
+          "drift"
+        ],
+        "evaluation_frequency": "daily",
+        "evaluation_method": "DRG automated check"
+      }
     }
   },
   "phenomena": {
