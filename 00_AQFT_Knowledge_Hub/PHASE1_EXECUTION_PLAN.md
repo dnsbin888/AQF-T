@@ -25,11 +25,51 @@ Authority: GPT (设计) + 老板 (批复) + CC (执行)
 
 ## 第一周: 潜龙工程债
 
-### P0-1: Signal Attribution（最先做）
+### P0-0: Evidence Registry（半天，最先做）
 
-**目标文件**: `ml_daily_report.py` / 新建 `evidence_builder.py`
+**目标文件**: 新建 `evidence_registry.json`
 
-**改动**: ML 信号输出从散字段升级为结构化 Evidence 对象
+**定位**: 所有 Evidence Producer 的统一注册表。必须先注册，再生产。
+
+```json
+{
+  "registry_version": "v1",
+  "producers": {
+    "LGBM":       {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
+    "XGBoost":    {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
+    "CatBoost":   {"type": "ml_signal",    "version": "v1", "health": true, "owner": "潜龙"},
+    "TDX":        {"type": "formula_signal","version": "v1", "health": true, "owner": "潜龙"},
+    "PathA":      {"type": "path_a_signal", "version": "v1", "health": true, "owner": "AQF-T"},
+    "Regime":     {"type": "market_regime", "version": "v1", "health": true, "owner": "AQF-T"},
+    "ExitPipeline":{"type": "exit_event",   "version": "v1", "health": true, "owner": "AQF-T"}
+  }
+}
+```
+
+**规则**: 任何新 Producer 必须先在此注册，否则不承认其 Evidence。
+
+### P0-1: ML Evidence Producer（原 Signal Attribution）
+
+**目标文件**: 新建 `evidence_builder.py`（不修改 `ml_daily_report.py` 核心逻辑）
+
+**定位**: 不是"增强输出"，而是 Evidence 体系第一个 Producer。只做三件事：
+```
+ML Signal → Evidence Object → Evidence Store
+```
+
+**不在 Producer 里做**: Fusion / Decision / Arbitration / Weight
+
+**验收标准**:
+- 旧版 Signal → 新版 Signal+Evidence，交易结果 Binary Compare = **100% 逐笔一致**
+- Evidence 可单独关闭 (`ENABLE_EVIDENCE=false` → 系统恢复今天状态)
+- LGBM/XGB/CatBoost 全部通过同一个 `evidence_builder.build()` 产出 Evidence
+
+**五个问题**（每个 Evidence 必须能回答）:
+1. 谁产生？（producer）
+2. 什么时候产生？（timestamp）
+3. 为什么产生？（top_features + reason）
+4. 可信度是多少？（confidence + ic + calibration）
+5. 后来证明它对了吗？（evaluation，P0-3 回填）
 
 ```json
 {
@@ -168,13 +208,28 @@ D:\AQF-T\contracts\
 ## 依赖关系
 
 ```
-Signal Attribution ──→ Online Evaluation ──→ Drift Detection
-         │                                          │
-         └──→ Evidence ID 系统                       │
-                                                    │
-Exit Attribution ←──────────────────────────────────┘
-    (独立，但受益于统一的 Reason Code 体系)
+Evidence Registry (P0-0)
+        ↓
+ML Evidence Producer (P0-1) ──→ Evidence ID (P0-2)
+        ↓
+Online Evaluation (P0-3)
+        ↓
+Evidence Health (P0-4)
+        ↓
+Exit Attribution (P0-5)
 ```
+
+**演进链**: Producer → Evidence → Identity → Evaluation → Health → Attribution
+
+## Phase 1 成功标准
+
+以后系统里的任何信息，都能回答五个问题：
+
+1. **谁产生？** (producer)
+2. **什么时候产生？** (timestamp)
+3. **为什么产生？** (top_features + reason)
+4. **可信度是多少？** (confidence + ic + calibration)
+5. **后来证明它对了吗？** (evaluation，回填)
 
 ---
 
