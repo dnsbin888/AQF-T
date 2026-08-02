@@ -45,25 +45,47 @@ Evidence Diversity: 低
 | 实现 | XGBoost (需重训) |
 | 频率 | 分钟级/Tick级 |
 
-## 执行步骤
+## 执行步骤 (修订版 V1.1 — 拆分 L2 数据管线)
 
-### Step 1: Registry 定义 (今天, 零风险)
-- 更新 evidence_registry.json 中 trend_ml / momentum_ml 的 feature_domain
+### C1-1: Contract Freeze ✅ FROZEN
+- Registry 中声明 TrendML/MomentumML 的目标特征域
+- migration_phase: TrendML=ACTIVE, MomentumML=CONTRACT_ONLY
+- 零风险, 不改 Runtime
 
-### Step 2: TrendML 补齐因子 (Phase C4)
-- 恢复缺失的17个因子 → TrendML 以完整24因子重训
+### C1-2a: L2 Data Acquisition ⏳
+- 接入 xtdata Level2 数据 (逐笔成交/十档盘口)
+- Data Readiness Gate (DRG-1): 连续5交易日, 完整率>99%
+- 验证: 时间戳连续/不丢盘口/不丢逐笔/重连恢复
 
-### Step 3: MomentumML L2接入 (需要QMT L2数据)
-- xgb_factor_weight.py 增加 L2 特征计算
-- 接入 xtdata Level2 数据 (逐笔/十档)
+### C1-2b: L2 Feature Engineering ⏳
+- 从 L2 数据提取特征: 封单强度/撤单率/盘口失衡/成交速度
+- DRG-2: 特征分布正常, 无NaN/异常值
 
-### Step 4: MomentumML 重训
+### C1-3: Data Readiness Validation ⏳
+- DRG-3: Feature Drift 监测
+- DRG-4: 延迟监测 (<100ms)
+- 连续运行验证
+
+### C1-4: Momentum v2 Training ⏳
 - 仅用 L2 + 实时特征训练新的 XGBoost 模型
 - 回测验证 vs 旧模型
+- 必须 DRG-1~4 全部 PASS 才能进入
 
-### Step 5: 相关性验收
-- 目标: Trend Evidence 与 Momentum Evidence 相关性 < 0.7
-- 验收: 60天 Replay Evidence Diversity 报告
+### C1-5: Shadow / A-B Validation ⏳
+- 旧 Momentum 维持 Decision
+- 新 Momentum 只产生 Shadow Decision, 不交易
+- 连续30天对比: Evidence Quality / WinRate / Return / Stability
+- 赢了 → 替换; 输了 → 回滚
+
+### Data Readiness Gate (DRG) — 新增
+| Gate | 检查项 | 标准 |
+|:--:|------|------|
+| DRG-1 | L2 Availability | 连续5日完整率>99% |
+| DRG-2 | Data Completeness | 0 丢盘口, 0 丢逐笔 |
+| DRG-3 | Feature Stability | 无 NaN, 分布正常 |
+| DRG-4 | Feature Drift | PSI < 0.1 |
+| DRG-5 | Latency | P99 < 100ms |
+**所有 DRG PASS 才能进 C1-4 训练。**
 
 ---
 
