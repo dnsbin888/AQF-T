@@ -1,0 +1,63 @@
+{
+  "report_type": "daily",
+  "date": "2026-08-19",
+  "generated_at": "2026-08-19T15:30:10.005786",
+  "regime": {
+    "phase": "退潮期",
+    "operation_mode": "stop",
+    "sentiment_score": -246,
+    "regime_confidence": 0.4,
+    "zhatban_rate": 0.67,
+    "promotion_rate": 0.24,
+    "path_a_allowed": false,
+    "path_b_allowed": false,
+    "max_position_pct": 0.0
+  },
+  "pipeline": {
+    "total_candidates": 0,
+    "total_signals": 0,
+    "total_fills": 0,
+    "total_rejected": 0,
+    "errors": [],
+    "warnings": [
+      "Regime=stop (退潮期), 今日不交易"
+    ]
+  },
+  "signals": [],
+  "fills": [],
+  "exposure": {
+    "total_value": 1000000.0,
+    "total_exposure_pct": 0.0,
+    "daily_new_exposure_pct": 0.0,
+    "sector_exposure": {},
+    "max_total_limit_pct": 40.0,
+    "max_sector_limit_pct": 25.0
+  },
+  "account": {
+    "cash": 1000000.0,
+    "positions": 0,
+    "total_value": 1000000.0,
+    "total_trades": 0
+  },
+  "health": {
+    "qmt": "SKIPPED",
+    "l2_age": "SKIPPED",
+    "l1_age": "999.0s",
+    "db": "OK",
+    "report_storage": "OK",
+    "models": {
+      "lgbm_trend": false,
+      "xgb_timing": false
+    },
+    "cpu": "27%",
+    "memory": "84%",
+    "disk": "641GB",
+    "skipped": [
+      "QMT",
+      "L2",
+      "DB",
+      "MarketProvider(SKIPPED)"
+    ],
+    "overall": "HEALTHY"
+  }
+}

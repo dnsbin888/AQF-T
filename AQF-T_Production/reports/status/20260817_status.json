@@ -1,0 +1,27 @@
+{
+  "date": "20260817",
+  "timestamp": "2026-08-17T15:30:03.434569",
+  "source": "real",
+  "success": true,
+  "data_source": "AKSHARE_EOD",
+  "regime": {
+    "phase": "回暖期",
+    "score": 80,
+    "mode": "normal",
+    "path_a": true,
+    "path_b": false,
+    "max_position_pct": 0.3
+  },
+  "candidates": 0,
+  "signals": 0,
+  "fills": 0,
+  "rejected": 0,
+  "errors": [],
+  "warnings": [],
+  "account": {
+    "cash": 1000000.0,
+    "positions": 0,
+    "total_value": 1000000.0,
+    "total_trades": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "date": "20260806",
+  "timestamp": "2026-08-06T00:00:00",
+  "source": "UNKNOWN",
+  "success": null,
+  "data_source": "PRE_HEALTH_PROTOCOL",
+  "regime": {
+    "phase": "UNKNOWN",
+    "score": null,
+    "mode": "UNKNOWN",
+    "path_a": null,
+    "path_b": null,
+    "max_position_pct": null
+  },
+  "candidates": null,
+  "signals": null,
+  "fills": null,
+  "rejected": null,
+  "errors": [],
+  "account": {},
+  "note": "Health Protocol v1.0未建立, 此日状态不可追溯。08-08起系统进入AVP冻结观察。"
+}

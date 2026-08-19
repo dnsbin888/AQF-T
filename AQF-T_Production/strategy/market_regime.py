@@ -54,18 +54,19 @@ class MarketRegimeEngine:
     """
 
     def evaluate(self, market_stats: dict) -> MarketRegime:
-        # ── 情绪值 ──
-        up = market_stats.get("limit_up_count", 0)
-        down = market_stats.get("limit_down_count", 0)
-        height = market_stats.get("max_board_height", 0)
-        zhatban = market_stats.get("zhatban_rate", market_stats.get("炸板率", 0))
-        north = market_stats.get("north_bound_net", 0)
+        # ── 情绪值 (B-2: 北向降级为辅助, 不进主分 — 2024年后北向实时披露关闭) ──
+        up = market_stats.get("limit_up_count")
+        down = market_stats.get("limit_down_count")
+        height = market_stats.get("max_board_height") or 0
+        zhatban = market_stats.get("zhatban_rate", market_stats.get("炸板率")) or 0
+        north = market_stats.get("north_bound_net")  # None=缺失(中性)
+
+        # B-4: 市场数据不可得 (fail-safe fallback) → 强制 退潮/stop, 绝不伪造数据放行
+        if up is None or down is None:
+            reason = (market_stats.get("_meta") or {}).get("reason", "市场数据不可得")
+            return self._fail_safe(reason)
 
         score = up * 2 - down * 3 + height * 5
-        if north > 10:
-            score += 10
-        elif north < -10:
-            score -= 10
 
         # ── 四阶段 ──
         if down > 30 and height <= 2:
@@ -85,17 +86,21 @@ class MarketRegimeEngine:
         ladder = market_stats.get("board_ladder", {})
         promotion = market_stats.get("promotion_rate", 0)
 
-        # ── 北向 ──
-        if north > 10:
+        # ── 北向 (B-2: 辅助字段, 缺失=中性) ──
+        if north is None:
+            nb_dir = "中性"
+        elif north > 10:
             nb_dir = "流入"
         elif north < -10:
             nb_dir = "流出"
         else:
             nb_dir = "中性"
 
-        # ── 融资 ──
-        margin_chg = market_stats.get("margin_balance_change", 0)
-        if margin_chg > 0.02:
+        # ── 融资 (B-2: 辅助字段, 数据源缺失=平稳/中性) ──
+        margin_chg = market_stats.get("margin_balance_change")
+        if margin_chg is None:
+            margin_t = "平稳"
+        elif margin_chg > 0.02:
             margin_t = "上升"
         elif margin_chg < -0.02:
             margin_t = "下降"
@@ -119,7 +124,7 @@ class MarketRegimeEngine:
             promotion_rate=round(promotion, 2),
             zhatban_rate=round(zhatban, 2),
             north_bound_direction=nb_dir,
-            north_bound_amount=round(north, 1),
+            north_bound_amount=round(north, 1) if north is not None else 0.0,
             margin_trend=margin_t,
             operation_mode=mode,
             path_a_allowed=path_a,
@@ -128,6 +133,30 @@ class MarketRegimeEngine:
             regime_confidence=confidence,
             regime_multiplier=self.get_regime_multiplier(phase),
             recommended_path=recommended,
+            timestamp=datetime.now().isoformat(),
+        )
+
+    @staticmethod
+    def _fail_safe(reason: str = "") -> MarketRegime:
+        """B-4: 数据不可得时的 fail-safe 判定 — 退潮/stop/0仓位 (保守不交易)。"""
+        return MarketRegime(
+            sentiment_phase="退潮期",
+            sentiment_score=-999.0,
+            limit_up_count=0,
+            limit_down_count=0,
+            board_ladder={},
+            promotion_rate=0.0,
+            zhatban_rate=0.0,
+            north_bound_direction="中性",
+            north_bound_amount=0.0,
+            margin_trend="平稳",
+            operation_mode="stop",
+            path_a_allowed=False,
+            path_b_allowed=False,
+            max_position_pct=0.0,
+            recommended_path=reason,
+            regime_confidence=0.10,
+            regime_multiplier=0.0,
             timestamp=datetime.now().isoformat(),
         )
 
@@ -155,10 +184,10 @@ class MarketRegimeEngine:
         elif zhatban > 0.50:
             confidence -= 0.10
 
-        # 晋级率高 → 情绪判断更确定
-        if promotion > 0.40:
+        # 晋级率高 → 情绪判断更确定 (B-3: 阈值对齐真实口径, PERCEPTION_DESIGN 文档 >30%强/<15%弱)
+        if promotion > 0.30:
             confidence += 0.15
-        elif promotion > 0.25:
+        elif promotion > 0.15:
             confidence += 0.10
         elif promotion < 0.10:
             confidence -= 0.10
@@ -187,7 +216,7 @@ class MarketRegimeEngine:
             return ("stop", False, False, 0.0, "空仓")
 
         if phase == "冰点期":
-            if promotion > 0.20:
+            if promotion > 0.15:  # B-3: 真实口径下晋级率>15%=弱复苏信号, 才做题材扩散
                 return ("cautious", False, True, 0.20, "B2题材扩散")
             return ("defensive", False, False, 0.10, "观望")
 

@@ -73,6 +73,7 @@ class PipelineState:
     # 状态
     tradable: bool = True
     errors: list = field(default_factory=list)
+    warnings: list = field(default_factory=list)  # P1: 非错误状态消息 (Gate关闭/风控保护/数据延迟等)
 
 
 # ===============================================================
@@ -167,6 +168,7 @@ class ProductionPipeline:
             # -- Phase 1: Market Regime (M2 验证可信) --
             state.regime = self._run_regime(state, market_stats)
             if not state.tradable:
+                self._publish_results(state)  # 退潮期也写入日报（Health Protocol v1.0）
                 return state
 
             # -- Phase 2: 系统健康检查 --
@@ -174,6 +176,7 @@ class ProductionPipeline:
             if health.overall == "CRITICAL":
                 state.errors.append(f"系统CRITICAL: {health.to_dict()}")
                 state.tradable = False
+                self._publish_results(state)  # 严重异常也写入日报（Health Protocol v1.0）
                 return state
             bus.publish(EVENTS["MARKET_REGIME"], {
                 "regime": state.regime.sentiment_phase,
@@ -239,7 +242,7 @@ class ProductionPipeline:
         # 退潮/停止 -> 不交易
         if regime.operation_mode == "stop":
             state.tradable = False
-            state.errors.append(f"Regime=stop ({regime.sentiment_phase}), 今日不交易")
+            state.warnings.append(f"Regime=stop ({regime.sentiment_phase}), 今日不交易")
 
         return regime
 
@@ -644,6 +647,7 @@ class ProductionPipeline:
             "fills": state.total_fills,
             "rejected": state.total_rejected,
             "errors": len(state.errors),
+            "warnings": len(state.warnings),
             "account": self.broker.summary(),
         }
         bus.publish(EVENTS["DAILY_REPORT"], summary, source="pipeline")

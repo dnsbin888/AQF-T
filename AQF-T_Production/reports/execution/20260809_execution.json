@@ -1,0 +1,27 @@
+{
+  "report_type": "execution",
+  "date": "2026-08-09",
+  "generated_at": "2026-08-09T05:00:02.484556",
+  "summary": {
+    "total_orders": 2,
+    "filled": 1,
+    "rejected": 1,
+    "fill_rate": 50.0,
+    "total_commission": 18.8,
+    "avg_slippage_bps": 20.0
+  },
+  "rejection_reasons": {
+    "可卖数量不足(T+1)": 1
+  },
+  "fills": [
+    {
+      "symbol": "002230",
+      "action": "BUY",
+      "fill_price": 48.22,
+      "fill_quantity": 1500,
+      "fee": 18.8,
+      "slippage_bps": 20.0,
+      "timestamp": "2026-08-09T05:00:02.483557"
+    }
+  ]
+}

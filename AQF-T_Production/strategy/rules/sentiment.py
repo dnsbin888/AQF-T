@@ -38,12 +38,8 @@ class SentimentEngine:
         炸板率 = ctx.get("炸板率", 0)
         north = ctx.get("north_bound_net", 0)
 
-        # V2.8.6 03_AI_Brain §4.4 情绪值公式
+        # V2.8.6 03_AI_Brain §4.4 情绪值公式 (B-2: 北向降级为辅助, 不进主分)
         score = up * 2 - down * 3 + height * 5
-        if north > 10:
-            score += 10
-        elif north < -10:
-            score -= 10
 
         phase = self._classify(score, 炸板率, down, height)
         strategy, position = self._recommend(phase, score)

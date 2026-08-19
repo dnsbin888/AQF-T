@@ -24,6 +24,15 @@ from typing import Optional
 
 from pipeline import ProductionPipeline, PipelineState
 
+# 真实数据适配器 (Phase 1: AKSHARE EOD)
+try:
+    from data.market_data_adapter import MarketDataAdapter, create_adapter
+    REAL_DATA_AVAILABLE = True
+except ImportError:
+    REAL_DATA_AVAILABLE = False
+    MarketDataAdapter = None
+    create_adapter = None
+
 
 # ===============================================================
 # Mock Data Generators (Paper Trading)
@@ -225,54 +234,120 @@ class MarketDataSimulator:
 
 def run_single_day(pipeline: ProductionPipeline,
                    phase: str = None,
-                   date: str = None) -> PipelineState:
+                   date: str = None,
+                   use_real_data: bool = False) -> PipelineState:
     """
     单日运行  Paper Trading
 
     Args:
         pipeline: 已初始化的管道
-        phase: 市场阶段 (None=随机)
+        phase: 市场阶段 (None=随机, 仅 use_real_data=False 时生效)
         date: 日期 (None=今天)
+        use_real_data: True=真实数据(AKSHARE EOD), False=模拟器
     """
-    # Paper模式: 时钟固定到交易时段
     from core.clock import clock
     from datetime import datetime as dt
-    clock.override(dt(2026, 7, 1, 10, 0, 0))
-    sim = MarketDataSimulator()
-
-    # 生成市场数据
-    market_stats = sim.generate_market_stats(phase)
-
-    # 先生成 MarketRegime 看允许哪些路径
     from strategy.market_regime import MarketRegimeEngine
+
+    clock.override(dt(2026, 7, 1, 10, 0, 0))
     regime_engine = MarketRegimeEngine()
-    regime = regime_engine.evaluate(market_stats)
 
-    # 生成监控列表
-    watchlist = sim.generate_watchlist(
-        regime_allows_a=regime.path_a_allowed,
-        regime_allows_b=regime.path_b_allowed,
-    )
-
-    # 生成事件文本 (随机)
-    event_sources = [
-        "公司公告: 2026年半年度业绩预告增长30%",
-        "行业新闻: 政策利好出台, 板块集体走强",
-        "龙虎榜: 游资净买入5000万",
-        "北向资金加仓, 连续3日净流入",
-        "大股东减持计划, 6个月内减持不超过2%",
-        "机构调研密集, 近一月20家机构调研",
-    ]
+    data_source = "SIMULATOR"
+    market_stats = None
+    watchlist = []
     event_texts = {}
-    for w in watchlist[:3]:  # 30%标的有事件
-        if random.random() < 0.3:
-            event_texts[w["symbol"]] = random.sample(
-                event_sources, random.randint(1, 2)
-            )
 
-    # 运行主管线
+    # ═══════════════════════════════════════════════════════════
+    # Phase 1: 真实数据路径 (AKSHARE EOD)
+    # ═══════════════════════════════════════════════════════════
+    if use_real_data and REAL_DATA_AVAILABLE:
+        print("[CC] 尝试接入真实数据 (AKSHARE EOD)...")
+        try:
+            adapter = MarketDataAdapter()
+            adapter_status = adapter.status()
+            print(f"[CC] 数据源: {adapter_status['primary_source']}")
+
+            # ① 全市场统计
+            market_stats = adapter.fetch_market_stats(date)
+            _meta = market_stats.get("_meta", {})
+            if _meta.get("source") == "akshare":
+                data_source = "AKSHARE_EOD"
+                print(f"[CC] 真实数据获取成功 "
+                      f"(涨停{market_stats['limit_up_count']}, "
+                      f"跌停{market_stats['limit_down_count']}, "
+                      f"最高{market_stats['max_board_height']}板)")
+            else:
+                data_source = "FALLBACK_FAILSAFE"  # B-4: 诚实标记, 非 SIMULATOR
+                print("[CC] WARNING: 使用 fail-safe fallback (无真实数据) → 市场判定=退潮/stop")
+
+            # ② Regime 判断
+            regime = regime_engine.evaluate(market_stats)
+            print(f"[CC] Regime: {regime.sentiment_phase} "
+                  f"(mode={regime.operation_mode}, "
+                  f"path_a={regime.path_a_allowed}, "
+                  f"path_b={regime.path_b_allowed})")
+
+            # ③ 监控列表 (从涨停池取活跃股票)
+            symbols = adapter.fetch_active_symbols(limit=20)
+            if symbols:
+                watchlist = adapter.fetch_watchlist(symbols)
+                print(f"[CC] Watchlist: {len(watchlist)}/{len(symbols)} 只获取成功")
+            else:
+                print("[CC] WARNING: 无法获取活跃股票列表，watchlist 为空")
+
+            # ④ 事件文本 (Phase 1 暂用空，后续可接 LLM 情绪层)
+            event_texts = {}
+
+        except Exception as e:
+            print(f"[CC] ERROR 真实数据获取失败: {e}")
+            print("[CC] 回退到模拟器...")
+            use_real_data = False  # 触发下方 fallback
+
+    # ═══════════════════════════════════════════════════════════
+    # Fallback: 模拟器路径 (保持兼容)
+    # ═══════════════════════════════════════════════════════════
+    if not use_real_data or market_stats is None:
+        if use_real_data:
+            print("[CC] FALLBACK: 真实数据不可用，使用模拟器")
+        data_source = "SIMULATOR"
+        sim = MarketDataSimulator()
+
+        # 生成市场数据
+        market_stats = sim.generate_market_stats(phase)
+
+        # 先生成 MarketRegime 看允许哪些路径
+        regime = regime_engine.evaluate(market_stats)
+
+        # 生成监控列表
+        watchlist = sim.generate_watchlist(
+            regime_allows_a=regime.path_a_allowed,
+            regime_allows_b=regime.path_b_allowed,
+        )
+
+        # 生成事件文本 (随机)
+        event_sources = [
+            "公司公告: 2026年半年度业绩预告增长30%",
+            "行业新闻: 政策利好出台, 板块集体走强",
+            "龙虎榜: 游资净买入5000万",
+            "北向资金加仓, 连续3日净流入",
+            "大股东减持计划, 6个月内减持不超过2%",
+            "机构调研密集, 近一月20家机构调研",
+        ]
+        event_texts = {}
+        for w in watchlist[:3]:
+            if random.random() < 0.3:
+                event_texts[w["symbol"]] = random.sample(
+                    event_sources, random.randint(1, 2)
+                )
+
+    # ═══════════════════════════════════════════════════════════
+    # 运行主管线 (不改变 — 接线不改脑)
+    # ═══════════════════════════════════════════════════════════
     if date:
-        pipeline._last_regime = None  # 重置
+        pipeline._last_regime = None
+
+    # 注入数据源标识到 market_stats
+    market_stats["_data_source"] = data_source
 
     state = pipeline.run_daily(
         market_stats=market_stats,

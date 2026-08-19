@@ -1,0 +1,193 @@
+{
+  "report_type": "market_sensor",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-18",
+  "timestamp": "2026-08-18 15:30:14",
+  "sensors": {
+    "margin": {
+      "total_balance": 26572.94,
+      "total_buy_amount": 2349.2,
+      "balance_change_5d_pct": 1.1,
+      "buy_change_5d_pct": -0.26,
+      "balance_change_20d_pct": -1.2,
+      "trend": "stable",
+      "strength_score": 53.2,
+      "latest_date": "2026-08-17"
+    },
+    "lhb": {
+      "total_buy": 9479244.4,
+      "total_sell": 8277213.93,
+      "net_flow": 1202030.47,
+      "stocks_on_board": 175,
+      "institution_buy": 3033665.68,
+      "institution_sell": 2930172.02,
+      "institution_net": 103493.66,
+      "institution_records": 185,
+      "institution_flow": "positive",
+      "institution_participation_pct": 33.6
+    },
+    "etf": {
+      "etfs": {
+        "510050": {
+          "name": "上证50",
+          "category": "large",
+          "close": 30.47,
+          "change_pct": -0.16,
+          "volume": 4514901
+        },
+        "510300": {
+          "name": "沪深300",
+          "category": "large",
+          "close": 47.87,
+          "change_pct": -0.29,
+          "volume": 6576444
+        },
+        "510500": {
+          "name": "中证500",
+          "category": "mid",
+          "close": 81.85,
+          "change_pct": -0.15,
+          "volume": 3072561
+        },
+        "512100": {
+          "name": "中证1000",
+          "category": "small",
+          "close": 32.13,
+          "change_pct": -0.37,
+          "volume": 10663955
+        },
+        "588000": {
+          "name": "科创50",
+          "category": "small",
+          "close": 18.88,
+          "change_pct": 0.0,
+          "volume": 32297188
+        },
+        "159915": {
+          "name": "创业板",
+          "category": "small",
+          "close": 37.23,
+          "change_pct": -0.88,
+          "volume": 11634372
+        }
+      },
+      "avg_large_cap_chg": -0.22,
+      "avg_small_cap_chg": -0.47,
+      "risk_spread": -0.24,
+      "risk_appetite": "neutral",
+      "data_source": "pytdx"
+    },
+    "southbound": {
+      "channels": {
+        "sh2hk": {
+          "label": "沪市→港股通",
+          "recent_5d": [
+            {
+              "date": "2026-08-18",
+              "quota_remaining": 0.0
+            }
+          ]
+        },
+        "sz2hk": {
+          "label": "深市→港股通",
+          "recent_5d": []
+        }
+      },
+      "trend": "stable",
+      "note": "南向资金权重低，仅作为跨市场情绪辅助参考"
+    },
+    "sentiment": {
+      "market_sentiment": {
+        "score": 87.4,
+        "label": "🔥 极乐",
+        "advance_ratio_pct": 80.3,
+        "breadth_pct": 84.2,
+        "limit_up": 110,
+        "limit_down": 1,
+        "limit_ratio": 110.0,
+        "total_stocks": 5198,
+        "hot_sectors": [
+          {
+            "name": "电子",
+            "chg": 4.0
+          },
+          {
+            "name": "有色金属",
+            "chg": 2.8
+          },
+          {
+            "name": "基础化工",
+            "chg": 2.5
+          }
+        ],
+        "cold_sectors": [
+          {
+            "name": "传媒",
+            "chg": -0.1
+          },
+          {
+            "name": "煤炭",
+            "chg": -0.1
+          },
+          {
+            "name": "银行",
+            "chg": 0.1
+          }
+        ],
+        "_source": "EOD-parquet"
+      },
+      "cycle": {
+        "stage": "startup",
+        "label": "🌱 启动期(推定)",
+        "position_scale": 0.5,
+        "sentiment_score": 87.4,
+        "limit_up": 0,
+        "limit_down": 0,
+        "advance_ratio": 80.3,
+        "breadth": 84.2,
+        "regime": "sideways",
+        "advice": "轻仓试错首板, 等龙头出现"
+      },
+      "llm_sentiment": {
+        "score": 50,
+        "label": "中性",
+        "reason": "新闻标题中包含了多种信息，既有积极的消息（如业绩增长、市场表现等），也有中性或消极的消息（如市场波动、风险提示等），整体情绪较为平衡，因此判断为中性。"
+      },
+      "sentiment_confidence": {
+        "value": 50.0,
+        "status": "neutral",
+        "signals": [
+          "市场情绪过热",
+          "周期:🌱 启动期(推定)"
+        ]
+      },
+      "sentiment_extreme": {
+        "state": "overheat",
+        "description": "情绪极端过热，警惕见顶",
+        "score": 87.4,
+        "limit_up": 110,
+        "limit_down": 1
+      },
+      "sentiment_velocity": {
+        "change_1d": 8.8,
+        "change_5d": 12.2,
+        "note": "情绪回暖(+8.8)"
+      }
+    }
+  },
+  "summary": {
+    "risk_appetite": "mixed",
+    "confidence": 62.5,
+    "signals": [
+      "机构净买入",
+      "市场情绪过热",
+      "周期:🌱 启动期(推定)",
+      "⚠️情绪极端:情绪极端过热，警惕见顶",
+      "情绪回暖(+8.8)"
+    ],
+    "description": "市场资金信号分化，方向不明确",
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}

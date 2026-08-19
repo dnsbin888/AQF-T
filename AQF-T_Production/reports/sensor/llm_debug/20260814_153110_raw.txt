@@ -1,0 +1,27 @@
+=== LLM Exception at 20260814_153110 ===
+Error: 'choices'
+
+=== Raw Response ===
+{"error":{"message":"Insufficient Balance","type":"unknown_error","param":null,"code":"invalid_request_error"}}
+Status: 402
+Headers: {'Server': 'openresty', 'Content-Type': 'application/json', 'vary': 'origin, access-control-request-method, access-control-request-headers', 'access-control-allow-credentials': 'true', 'x-ds-trace-id': 'b846d40ce64027e8e62e83722f000d4d', 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload', 'X-Content-Type-Options': 'nosniff', 'Content-Length': '111', 'Connection': 'keep-alive', 'Date': 'Fri, 14 Aug 2026 07:31:10 GMT', 'EO-LOG-UUID': '6170849619791977688', 'EO-Cache-Status': 'MISS'}
+
+=== Prompt ===
+分析以下A股新闻标题的市场情绪, 返回JSON格式:
+{"score": <整数 -100到100, -100=极度恐慌, 0=中性, 100=极度乐观>,
+ "label": "<乐观/中性/悲观/恐慌>",
+ "reason": "<一句话原因>"}
+
+新闻标题:
+涓婃捣杩濇硶鍜岃繚瑙勪俊鎭涓炬姤涓蹇
+涓鍥戒簰鑱旂綉杩濇硶鍜屼笉鑹淇℃伅涓炬姤涓蹇
+鍒╁ソ绐佽嚦锛丄鑲¤姱鐗囧法澶翠笟缁╁ぇ瓒呴勬湡
+A鑲¤烦绌洪珮寮 灏剧洏鍗寸獊鍙戣烦姘 瓒4300鑲′笅璺岋紒鍙戠敓浜嗕粈涔堬紵
+DeepSeek姝ｅ紡娑ㄤ环锛佺畻鍔涗緵闇缂哄彛鍑告樉 鍥戒骇AI鑺鐗囨垨杩庝环鍊奸噸浼(闄勮偂)
+20%娑ㄥ仠锛佷竾浜垮法澶17浜块噸浠撴潃鍏ワ紒26涓囨墜灏佸崟閿佹 寮曠垎绠楀姏纭浠惰禌閬
+楂樿揪100% 缇庡浗灏嗗硅繘鍙ｆ棤浜烘満鍙婇浂閮ㄤ欢寰佹敹鍏崇◣
+8鏈13鏃ユ櫄闂存勃娣变笂甯傚叕鍙搁噸澶т簨椤瑰叕鍛婃渶鏂板揩閫
+闀块懌绉戞妧甯傚间粖鏃ヨ秴瓒婅吘璁鎺ц偂
+澶琛岋細8鏈14鏃ュ紑灞10000浜垮厓涔版柇寮忛嗗洖璐鎿嶄綔
+鍑鍒╂渶澶氬ぇ澧2559%锛佸氬彧A鑲″彂涓氱哗鍒╁ソ
+绀句繚銆佸吇鑰侀噾鎶曡祫

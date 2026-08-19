@@ -1,0 +1,276 @@
+{
+  "registry": "Model Capability Registry",
+  "version": "0.1",
+  "status": "DRAFT",
+  "date": "2026-08-03",
+  "contract_ref": "model_capability_contract_v0.1.md",
+  "description": "Learning Domain — 每个模型的 Capability 声明。Capability stable, Implementation replaceable.",
+  "governance_rule": "CR-006 — Every Mandatory Capability Must Be Verifiable",
+
+  "capabilities": [
+    {
+      "id": "CAP-LEARN-001",
+      "capability": "TrendDetection",
+      "capability_version": "1.0",
+      "lifecycle": "ACTIVE",
+      "category": "Learning",
+      "owner": "Learning",
+      "criticality": "QUALITY",
+      "severity": "MANDATORY",
+      "description": "中期趋势发现 — 从日线结构因子中识别具有持续上涨潜力的标的",
+
+      "model": {
+        "name": "LGBM-Stock",
+        "algorithm": "LightGBM Regressor (CSRank)",
+        "implementation": "lgbm_strategy.py",
+        "model_file": "lgbm_model_stock.pkl",
+        "training_date": "2026-07-19",
+        "framework": "sklearn-compatible"
+      },
+
+      "purpose": {
+        "role": "trend_detection",
+        "horizon": "5-20 days",
+        "decision_role": "trend_evidence",
+        "what_it_answers": "这只股票的趋势是否成立？"
+      },
+
+      "data_contract": {
+        "source": "stock_data.parquet (QMT xtdata)",
+        "frequency": "daily",
+        "min_history_days": 60,
+        "survivorship_correction": true
+      },
+
+      "feature_contract": {
+        "source": "FactorRegistry (factor_registry.json)",
+        "feature_count": 8,
+        "features": [
+          "bull_line", "chase_v2", "chip_v2", "defensive_v2",
+          "fund_v2", "momentum_score", "qmt_composite", "trend_score"
+        ],
+        "feature_domain": "DailyStructural",
+        "ic_verified": true,
+        "missing_policy": "WARN — 缺失因子记录日志但不阻断",
+        "known_gap": "17个因子在注册表中存在但计算函数不可用，当前生产中仅8因子可用"
+      },
+
+      "output_contract": {
+        "type": "regression_score",
+        "range": "0-100 (CSRank percentile)",
+        "signal_levels": "Lv1(>=40) to Lv5(>=90)",
+        "confidence_field": "score_norm (min-max normalized)",
+        "outputs_to": "all_signals[sym]['lgbm'] → signal_table.json"
+      },
+
+      "production_status": {
+        "signal_count_today": 50,
+        "ic_5d": "from Registry",
+        "last_backtest_sharpe": -18.23,
+        "known_issues": [
+          "17个因子缺失导致训练/预测特征不一致",
+          "bull_line (IC=-0.006) 仍在特征集中",
+          "模型基于7/19数据训练，Registry IC已变化"
+        ]
+      },
+
+      "upgrade_path": {
+        "priority": "P1",
+        "action": "retrain_with_cleaned_features",
+        "blockers": ["待 L1 Data Audit 确认因子健康后重选特征"]
+      },
+
+      "assertions": [
+        {"id": "L01", "type": "FILE_EXISTS", "check": "模型文件存在", "pattern": "lgbm_model_stock.pkl"},
+        {"id": "L02", "type": "PATTERN_EXISTS", "check": "默认MODEL_PATH指向Stock模型", "pattern": "lgbm_model_stock.pkl"},
+        {"id": "L03", "type": "FEATURE_COUNT", "check": "训练特征数≥5", "expected": 8},
+        {"id": "L04", "type": "REGISTRY_ALIGNED", "check": "所有特征在Registry中active或已声明lifecycle", "expected": "all"}
+      ]
+    },
+
+    {
+      "id": "CAP-LEARN-002",
+      "capability": "IntradayTiming",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Learning",
+      "owner": "Learning",
+      "criticality": "QUALITY",
+      "severity": "MANDATORY",
+      "description": "盘中机会发现 — 从量价变化中识别正在启动的短线标的",
+
+      "model": {
+        "name": "XGBoost",
+        "algorithm": "XGBoost Binary Classifier",
+        "implementation": "xgb_factor_weight.py",
+        "model_file": "xgb_model.json",
+        "training_date": "2026-07-19",
+        "framework": "sklearn-compatible"
+      },
+
+      "purpose": {
+        "role": "intraday_timing",
+        "horizon": "1-5 days (FORWARD_DAYS=5)",
+        "decision_role": "timing_evidence",
+        "what_it_answers": "这只股票是否正在启动？"
+      },
+
+      "data_contract": {
+        "planned_source": "QMT Level-2 (盘口/逐笔)",
+        "current_source": "L1 intraday proxies (OHLCV)",
+        "status": "DEGRADED — L2 data source unavailable; running in OHLCV proxy feature mode",
+        "frequency": "daily",
+        "upgrade_path": "L2 microstructure when QMT L2 data pipeline ready. Do NOT retrain before L2 — current proxy mode is internally consistent (train=OHLCV, inference=OHLCV)."
+      },
+
+      "feature_contract": {
+        "source": "OHLCV proxies (_compute_stock_proxies)",
+        "feature_count": 8,
+        "features": [
+          "intraday_trend", "intraday_volatility", "intraday_composite_score",
+          "intraday_momentum_5d", "intraday_volume_ratio", "intraday_momentum_10d",
+          "intraday_ma60_position", "intraday_volume_flow"
+        ],
+        "feature_domain": "IntradayFeature",
+        "ic_verified": false,
+        "note": "OHLCV-derived intraday proxies — 独立于 FactorRegistry 的盘中特征域。L7-003 Step2 修复: 加 intraday_* 前缀消除同名冲突。",
+        "known_redundancy": [
+          "intraday_volume_flow = -intraday_volume_ratio (完全负相关)",
+          "intraday_composite_score = 0.5*intraday_volume_ratio + 0.5*intraday_momentum_5d (线性组合)",
+          "有效独立维度约5"
+        ]
+      },
+
+      "output_contract": {
+        "type": "binary_classification_probability",
+        "range": "0-100 (probability × 100)",
+        "training_target": "FORWARD_DAYS=5, TOP_PCT=0.2 (top 20% = 1)",
+        "score_distribution": "std≈1.1 — 概率聚集在50附近，区分度弱",
+        "signal_levels": "Lv1(>=40) to Lv5(>=90)",
+        "outputs_to": "all_signals[sym]['xgb'] → signal_table.json"
+      },
+
+      "production_status": {
+        "signal_count_today": 30,
+        "score_range_today": "59.8 ~ 67.0",
+        "score_std": 1.1,
+        "known_issues": [
+          "训练为二分类器(top20%)，非回归模型，概率天然聚集",
+          "L2数据源缺失 — 使用OHLCV代理替代原设计 (status: DEGRADED)",
+          "intraday_volume_flow与intraday_volume_ratio完全负相关 — 冗余特征",
+          "Linear combo: intraday_composite_score = 0.5*vol_ratio + 0.5*mom_5d"
+        ]
+      },
+
+      "upgrade_path": {
+        "priority": "P1",
+        "action": "establish_capability_identity_then_retrain",
+        "steps": [
+          "1. 确认XGBoost身份: Intraday Timing (非Trend)",
+          "2. 定义Timing专用特征域 (区分于Trend特征)",
+          "3. 若L2仍不可用 → 从L1中选择盘中敏感因子 (量比/换手/波动等)",
+          "4. 重训模型，改为回归目标或更细粒度的分类",
+          "5. 更新Capability Contract至ACTIVE"
+        ],
+        "blockers": ["需先完成Capability身份确认"]
+      },
+
+      "assertions": [
+        {"id": "L10", "type": "FILE_EXISTS", "check": "模型文件存在", "pattern": "xgb_model.json"},
+        {"id": "L11", "type": "PATTERN_EXISTS", "check": "特征管道存在", "pattern": "_compute_stock_proxies"},
+        {"id": "L12", "type": "NO_NAME_COLLISION", "check": "与FactorRegistry无同名特征", "status": "PASS — L7-003 Step2 验证"},
+        {"id": "L13", "type": "FEATURE_DOMAIN", "check": "特征域声明为IntradayFeature", "expected": "IntradayFeature"}
+      ]
+    },
+
+    {
+      "id": "CAP-LEARN-003",
+      "capability": "ScoreCalibration",
+      "capability_version": "1.0",
+      "lifecycle": "ACTIVE",
+      "category": "Learning",
+      "owner": "Learning",
+      "criticality": "QUALITY",
+      "severity": "MANDATORY",
+      "description": "辅助评分校准 — 线性模型提供独立视角的评分参考",
+
+      "model": {
+        "name": "Ridge",
+        "algorithm": "Ridge Regression",
+        "implementation": "ridge_model.py",
+        "model_file": "(inline trained)",
+        "framework": "sklearn"
+      },
+
+      "purpose": {
+        "role": "score_calibration",
+        "horizon": "1-5 days",
+        "decision_role": "calibration_evidence",
+        "what_it_answers": "独立的线性视角是否支持Trend/Timing的判断？"
+      },
+
+      "data_contract": {
+        "source": "stock_data.parquet",
+        "frequency": "daily"
+      },
+
+      "feature_contract": {
+        "source": "independent feature set (ridge_model.py)",
+        "feature_count": "unknown (inline trained)",
+        "feature_domain": "Daily",
+        "ic_verified": false
+      },
+
+      "output_contract": {
+        "type": "regression_score",
+        "range": "0-100",
+        "outputs_to": "all_signals[sym]['ridge'] → signal_table.json"
+      },
+
+      "production_status": {
+        "signal_count_today": 30,
+        "known_issues": [
+          "特征集未文档化",
+          "inline trained — 无独立模型文件"
+        ]
+      },
+
+      "upgrade_path": {
+        "priority": "P2",
+        "action": "document_feature_set_and_save_model_artifact"
+      },
+
+      "assertions": [
+        {"id": "L20", "type": "FILE_EXISTS", "check": "实现文件存在", "pattern": "ridge_model.py"},
+        {"id": "L21", "type": "FEATURE_DOMAIN", "check": "特征域声明", "status": "PENDING — 特征集未文档化"}
+      ]
+    }
+  ],
+
+  "fusion_status": {
+    "current_mechanism": "n_models count (同质投票)",
+    "issue": "三个模型是不同的传感器(Trend/Timing/Calibration)，不应使用同质投票计数",
+    "proposed": "升级为异构 Evidence Fusion — trend_evidence + timing_evidence + calibration_evidence",
+    "blocked_by": "Model Capability Contract 冻结后方可设计 Fusion Contract"
+  },
+
+  "learning_assertions": {
+    "governance": "CR-006 — Every Mandatory Capability Must Be Verifiable",
+    "assertions": [
+      {"id": "L01", "check": "Feature Domain Exists", "rule": "每个Model Capability必须声明feature_domain"},
+      {"id": "L02", "check": "Model Artifact Exists", "rule": "每个Model Capability的模型文件必须存在于磁盘"},
+      {"id": "L03", "check": "Feature Contract Match", "rule": "模型声明的特征必须与Registry一致（无缺失、无伪造）"},
+      {"id": "L04", "check": "No Feature Name Collision", "rule": "不同feature_domain之间必须零同名冲突"}
+    ]
+  },
+
+  "phase_d_next": [
+    "1. ✅ Model Capability Registry v0.1 完善 (L7-003)",
+    "2. ✅ XGB Feature Identity 修复 (L7-003 Step2)",
+    "3. ✅ LGBM 默认模型路径修复 + 旧模型归档 (L7-003 Step3)",
+    "4. ⬜ L7-004: ML Health Re-evaluation (XGB score分布/LGBM ranking/三模型关系)",
+    "5. ⬜ XGB 重训决策 (基于L7-004结果)",
+    "6. ⬜ Fusion 从n_models升级为Evidence Role",
+    "7. ⬜ Model Capability Registry v1.0 FROZEN"
+  ]
+}

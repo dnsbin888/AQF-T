@@ -1,0 +1,162 @@
+{
+  "report_type": "market_sensor",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-09",
+  "timestamp": "2026-08-09 15:30:11",
+  "sensors": {
+    "margin": {
+      "total_balance": 26072.7,
+      "total_buy_amount": 2360.93,
+      "balance_change_5d_pct": 1.2,
+      "buy_change_5d_pct": 22.33,
+      "balance_change_20d_pct": -10.87,
+      "trend": "stable",
+      "strength_score": 43.9,
+      "latest_date": "2026-08-06"
+    },
+    "lhb": {
+      "total_buy": 23404199.42,
+      "total_sell": 22601637.25,
+      "net_flow": 802562.17,
+      "stocks_on_board": 235,
+      "institution_buy": 8446880.14,
+      "institution_sell": 7697196.58,
+      "institution_net": 749683.56,
+      "institution_records": 223,
+      "institution_flow": "positive",
+      "institution_participation_pct": 35.1
+    },
+    "etf": {
+      "etfs": {
+        "510050": {
+          "name": "上证50",
+          "category": "large",
+          "close": 30.66,
+          "change_pct": 0,
+          "volume": 5134712
+        },
+        "510300": {
+          "name": "沪深300",
+          "category": "large",
+          "close": 47.51,
+          "change_pct": 0,
+          "volume": 9435355
+        },
+        "510500": {
+          "name": "中证500",
+          "category": "mid",
+          "close": 79.87,
+          "change_pct": 0,
+          "volume": 3700688
+        },
+        "512100": {
+          "name": "中证1000",
+          "category": "small",
+          "close": 31.11,
+          "change_pct": 0,
+          "volume": 22052440
+        },
+        "588000": {
+          "name": "科创50",
+          "category": "small",
+          "close": 18.4,
+          "change_pct": 0,
+          "volume": 42528942
+        },
+        "159915": {
+          "name": "创业板",
+          "category": "small",
+          "close": 35.86,
+          "change_pct": 0,
+          "volume": 21234975
+        }
+      },
+      "avg_large_cap_chg": 0.0,
+      "avg_small_cap_chg": 0,
+      "risk_spread": 0.0,
+      "risk_appetite": "neutral",
+      "data_source": "pytdx"
+    },
+    "southbound": {
+      "channels": {
+        "sh2hk": {
+          "label": "沪市→港股通",
+          "recent_5d": [
+            {
+              "date": "2026-08-07",
+              "quota_remaining": 4200000.0
+            }
+          ]
+        },
+        "sz2hk": {
+          "label": "深市→港股通",
+          "recent_5d": []
+        }
+      },
+      "trend": "stable",
+      "note": "南向资金权重低，仅作为跨市场情绪辅助参考"
+    },
+    "sentiment": {
+      "market_sentiment": {
+        "score": 50,
+        "label": "数据不足",
+        "advance_ratio_pct": 0,
+        "breadth_pct": 0,
+        "limit_up": 0,
+        "limit_down": 0,
+        "limit_ratio": 0,
+        "total_stocks": 0,
+        "hot_sectors": [],
+        "cold_sectors": []
+      },
+      "cycle": {
+        "stage": "startup",
+        "label": "🌱 启动期(推定)",
+        "position_scale": 0.5,
+        "sentiment_score": 50,
+        "limit_up": 0,
+        "limit_down": 0,
+        "advance_ratio": 0.5,
+        "breadth": 50,
+        "regime": "unknown",
+        "advice": "轻仓试错首板, 等龙头出现"
+      },
+      "llm_sentiment": {
+        "score": 30,
+        "label": "乐观",
+        "reason": "新闻标题中包含了多个积极信号，如‘利好来袭’、‘爆买1300亿元’、‘养老金现身’、‘战略入股’等，同时CPI温和上涨和就业市场松动可能带来政策宽松预期，整体市场情绪偏正面。"
+      },
+      "sentiment_confidence": {
+        "value": 50.0,
+        "status": "neutral",
+        "signals": [
+          "周期:🌱 启动期(推定)"
+        ]
+      },
+      "sentiment_extreme": {
+        "state": "normal",
+        "description": "情绪在正常区间",
+        "score": 50,
+        "limit_up": 0,
+        "limit_down": 0
+      },
+      "sentiment_velocity": {
+        "change_1d": null,
+        "change_5d": null,
+        "note": ""
+      }
+    }
+  },
+  "summary": {
+    "risk_appetite": "mixed",
+    "confidence": 62.5,
+    "signals": [
+      "机构净买入",
+      "周期:🌱 启动期(推定)"
+    ],
+    "description": "市场资金信号分化，方向不明确",
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}

@@ -1,0 +1,223 @@
+{
+  "registry": "Protection Capability Registry",
+  "version": "1.0",
+  "status": "FROZEN",
+  "frozen_date": "2026-08-03",
+  "governance_rule": "CR-006",
+  "contract_ref": "protection_capability_contract_v1.0.md",
+
+  "capabilities": [
+    {
+      "id": "CAP-DEDUP-01",
+      "capability": "SignalIdDeduplication",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Execution Safety",
+      "owner": "Execution",
+      "criticality": "SAFETY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "RiskGuard",
+      "assertions": [
+        {"id": "P01", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "去重容器初始化", "pattern": "_executed_signals"},
+        {"id": "P02", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "当日切换清空旧记录", "pattern": "_executed_signals = {_today: set()}"},
+        {"id": "P03", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "signal_id存在时进入检查", "pattern": "if signal_id:"}
+      ]
+    },
+    {
+      "id": "CAP-DEDUP-02",
+      "capability": "TickLevelDeduplication",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Execution Safety",
+      "owner": "Execution",
+      "criticality": "SAFETY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "PaperEngine",
+      "assertions": [
+        {"id": "P04", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "tick防重容器初始化", "pattern": "_tick_sold = set()"},
+        {"id": "P05", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "出场循环入口检查", "pattern": "if sym in _tick_sold:"},
+        {"id": "P06", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "进场循环入口检查", "pattern": "if sym in _tick_sold:"},
+        {"id": "P07", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "买入成功后标记已处理", "pattern": "_tick_sold.add(sym)"}
+      ]
+    },
+    {
+      "id": "CAP-DEDUP-03",
+      "capability": "BuyCooldown",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Execution Safety",
+      "owner": "Execution",
+      "criticality": "SAFETY",
+      "runtime_mode": "BOTH",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "LiveTrader",
+      "assertions": [
+        {"id": "P08", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "冷却字典初始化", "pattern": "_BUY_COOLDOWN = {}"},
+        {"id": "P09", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "冷却时间检查(1800s)", "pattern": "time.time() - _BUY_COOLDOWN"},
+        {"id": "P10", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "买入后更新冷却", "pattern": "_BUY_COOLDOWN[_normalize_sym"}
+      ]
+    },
+    {
+      "id": "CAP-DEDUP-04",
+      "capability": "QMTCooldown",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Execution Safety",
+      "owner": "Execution",
+      "criticality": "SAFETY",
+      "runtime_mode": "BOTH",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "QMTFullStrategy",
+      "assertions": [
+        {"id": "P11", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "冷却字典初始化", "pattern": "_cooldown = {}"},
+        {"id": "P12", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "冷却检查跳过", "pattern": "if _ck in _cooldown:"},
+        {"id": "P13", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "命中后标记冷却", "pattern": "_cooldown[_ck] = time.time()"}
+      ]
+    },
+    {
+      "id": "CAP-DEDUP-05",
+      "capability": "SameDayNoRepeatBuy",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Execution Safety",
+      "owner": "Execution",
+      "criticality": "SAFETY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "PaperEngine",
+      "assertions": [
+        {"id": "P14", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "E303当日检查存在", "pattern": "当日同股票不重复买入"}
+      ]
+    },
+    {
+      "id": "CAP-STOP-01",
+      "capability": "ATRAdaptiveStopLoss",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Risk Protection",
+      "owner": "Risk",
+      "criticality": "SAFETY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "ATRStop",
+      "assertions": [
+        {"id": "P20", "severity": "MANDATORY", "type": "FILE_EXISTS", "check": "ATR模块文件存在", "pattern": "atr_stop.py"},
+        {"id": "P21", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "ATR计算函数存在", "pattern": "calc_atr"},
+        {"id": "P22", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "ATR被信号表消费(vol_atr)", "pattern": "vol_atr", "module": "SignalTableGenerator"}
+      ]
+    },
+    {
+      "id": "CAP-STOP-02",
+      "capability": "ThreeTierTrailingStop",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Risk Protection",
+      "owner": "Risk",
+      "criticality": "SAFETY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": ["CAP-STOP-01"],
+      "implementation_module": "TrailingStop",
+      "assertions": [
+        {"id": "P23", "severity": "MANDATORY", "type": "FILE_EXISTS", "check": "移动止盈模块文件存在", "pattern": "trailing_stop.py"},
+        {"id": "P24", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "T1规则已注册", "pattern": "AutoTrailingStopRule"}
+      ]
+    },
+    {
+      "id": "CAP-STOP-03",
+      "capability": "StrategyStateRouting",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Risk Protection",
+      "owner": "Risk",
+      "criticality": "QUALITY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "StateStrategyMap",
+      "assertions": [
+        {"id": "P25", "severity": "MANDATORY", "type": "FILE_EXISTS", "check": "状态路由模块文件存在", "pattern": "state_strategy_map.py"}
+      ]
+    },
+    {
+      "id": "CAP-PARAM-01",
+      "capability": "NoHardcodedStopLoss",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Parameter Governance",
+      "owner": "Parameter",
+      "criticality": "SECURITY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "LiveTrader",
+      "assertions": [
+        {"id": "P30", "severity": "MANDATORY", "type": "PATTERN_NOT_EXISTS", "check": "live_trader无硬编码止损值", "pattern": "stop_loss\\s*=\\s*-0\\.\\d+"},
+        {"id": "P31", "severity": "MANDATORY", "type": "PATTERN_NOT_EXISTS", "check": "paper_engine无硬编码止损值", "pattern": "stop_loss\\s*=\\s*-0\\.\\d+"}
+      ]
+    },
+    {
+      "id": "CAP-SIGNAL-01",
+      "capability": "StableSignalId",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Signal Integrity",
+      "owner": "Signal",
+      "criticality": "QUALITY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "SignalTableGenerator",
+      "assertions": [
+        {"id": "P40", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "稳定标签函数存在", "pattern": "_decision_label"},
+        {"id": "P41", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "signal_id引用标签函数", "pattern": "_decision_label(dp)"}
+      ]
+    },
+    {
+      "id": "CAP-SIGNAL-02",
+      "capability": "AccurateModelConsensus",
+      "capability_version": "1.0",
+      "lifecycle": "IMPLEMENTED",
+      "category": "Signal Integrity",
+      "owner": "Signal",
+      "criticality": "QUALITY",
+      "runtime_mode": "STATIC",
+      "verification_mode": "PATTERN",
+      "severity": "MANDATORY",
+      "assertion_policy": "ALL",
+      "depends_on": [],
+      "implementation_module": "SignalTableGenerator",
+      "assertions": [
+        {"id": "P42", "severity": "MANDATORY", "type": "PATTERN_EXISTS", "check": "n_models基于score>0计数", "pattern": "m.get('score_norm', m.get('score', 0)) > 0"}
+      ]
+    }
+  ]
+}

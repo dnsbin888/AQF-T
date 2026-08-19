@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "frozen": true,
+  "frozen_date": "2026-08-03",
+  "description": "Module Name → File Path mapping. Contract references Module Name only. Refactoring only changes this file.",
+  "modules": {
+    "RiskGuard":            {"file": "risk_guard.py",            "repo": "quant_framework"},
+    "PaperEngine":          {"file": "paper_engine.py",          "repo": "quant_framework"},
+    "LiveTrader":           {"file": "live_trader.py",           "repo": "quant_framework"},
+    "QMTFullStrategy":      {"file": "qmt_strategies/qmt_full_strategy.py", "repo": "quant_framework"},
+    "ATRStop":              {"file": "atr_stop.py",              "repo": "quant_framework"},
+    "TrailingStop":         {"file": "src/quant_framework/execution/rules/trailing_stop.py", "repo": "quant_framework"},
+    "StateStrategyMap":     {"file": "src/quant_framework/strategy/state_strategy_map.py", "repo": "quant_framework"},
+    "SignalTableGenerator": {"file": "generate_signal_table.py", "repo": "quant_web"},
+    "FactorHealth":         {"file": "factor_health.py",         "repo": "quant_framework"},
+    "TradeConfigMaster":    {"file": "trade_config_master.json", "repo": "quant_framework"}
+  }
+}

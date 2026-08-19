@@ -48,11 +48,7 @@ class ReplayPerception:
         down = self._market_stats["limit_down_count"]
         height = self._market_stats["max_board_height"]
         north = self._market_stats["north_bound_net"]
-        sentiment_score = up * 2 - down * 3 + height * 5
-        if north > 10:
-            sentiment_score += 10
-        elif north < -10:
-            sentiment_score -= 10
+        sentiment_score = up * 2 - down * 3 + height * 5  # B-2: 北向降级为辅助
 
         phase = "回暖期"
         if sentiment_score < 20:   phase = "冰点期"

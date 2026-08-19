@@ -1,0 +1,97 @@
+{
+  "report_type": "etf_share_flow",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-11",
+  "timestamp": "2026-08-11 05:57:17",
+  "etfs": {
+    "510050": {
+      "name": "上证50ETF",
+      "category": "large",
+      "close": 3.075,
+      "change_pct": 0.29,
+      "volume": 3211808,
+      "amount": 987199119.0,
+      "shares": 7107966720.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    },
+    "510300": {
+      "name": "沪深300ETF",
+      "category": "large",
+      "close": 4.759,
+      "change_pct": 0.17,
+      "volume": 5610852,
+      "amount": 2663755927.0,
+      "shares": 25705387776.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    },
+    "510500": {
+      "name": "中证500ETF",
+      "category": "mid",
+      "close": 8.037,
+      "change_pct": 0.63,
+      "volume": 3222276,
+      "amount": 2574612658.0,
+      "shares": 5732168704.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    },
+    "512100": {
+      "name": "中证1000ETF",
+      "category": "small",
+      "close": 3.129,
+      "change_pct": 0.58,
+      "volume": 14818637,
+      "amount": 4612481051.0,
+      "shares": 11873217536.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    },
+    "588000": {
+      "name": "科创50ETF",
+      "category": "small",
+      "close": 1.835,
+      "change_pct": -0.27,
+      "volume": 34364399,
+      "amount": 6255060479.0,
+      "shares": 50768668160.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    },
+    "159915": {
+      "name": "创业板ETF",
+      "category": "small",
+      "close": 3.559,
+      "change_pct": -0.75,
+      "volume": 16580700,
+      "amount": 5864196999.019,
+      "shares": 18339454976.0,
+      "share_change": 0,
+      "share_change_pct": 0,
+      "est_flow": 0,
+      "direction": "net_zero"
+    }
+  },
+  "summary": {
+    "overall_direction": "net_zero",
+    "inflow_count": 0,
+    "outflow_count": 0,
+    "large_cap_share_chg_pct": 0,
+    "small_cap_share_chg_pct": 0,
+    "divergence_signals": [],
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}

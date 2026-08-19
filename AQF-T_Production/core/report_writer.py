@@ -84,6 +84,7 @@ class ReportWriter:
                 "total_fills": state.total_fills,
                 "total_rejected": state.total_rejected,
                 "errors": [str(e) for e in state.errors],
+                "warnings": [str(w) for w in state.warnings],
             },
 
             # Signals detail

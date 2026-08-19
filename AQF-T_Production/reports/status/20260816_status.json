@@ -1,0 +1,29 @@
+{
+  "date": "20260816",
+  "timestamp": "2026-08-16T15:30:02.601358",
+  "source": "real",
+  "success": true,
+  "data_source": "AKSHARE_EOD",
+  "regime": {
+    "phase": "退潮期",
+    "score": 121,
+    "mode": "stop",
+    "path_a": false,
+    "path_b": false,
+    "max_position_pct": 0.0
+  },
+  "candidates": 0,
+  "signals": 0,
+  "fills": 0,
+  "rejected": 0,
+  "errors": [],
+  "warnings": [
+    "Regime=stop (退潮期), 今日不交易"
+  ],
+  "account": {
+    "cash": 1000000.0,
+    "positions": 0,
+    "total_value": 1000000.0,
+    "total_trades": 0
+  }
+}

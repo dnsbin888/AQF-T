@@ -5,3 +5,4 @@ pandas>=2.0
 numpy>=1.24
 pyyaml>=6.0
 psutil>=5.9
+akshare>=1.14  # Phase 1: AKSHARE EOD 真实数据

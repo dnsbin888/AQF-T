@@ -1,0 +1,192 @@
+{
+  "report_type": "market_sensor",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-13",
+  "timestamp": "2026-08-13 15:30:26",
+  "sensors": {
+    "margin": {
+      "total_balance": 26389.8,
+      "total_buy_amount": 2016.71,
+      "balance_change_5d_pct": 1.65,
+      "buy_change_5d_pct": -22.33,
+      "balance_change_20d_pct": -7.65,
+      "trend": "stable",
+      "strength_score": 48.9,
+      "latest_date": "2026-08-12"
+    },
+    "lhb": {
+      "total_buy": 18341857.08,
+      "total_sell": 18318335.68,
+      "net_flow": 23521.4,
+      "stocks_on_board": 215,
+      "institution_buy": 6220606.49,
+      "institution_sell": 6266108.06,
+      "institution_net": -45501.57,
+      "institution_records": 228,
+      "institution_flow": "negative",
+      "institution_participation_pct": 34.1
+    },
+    "etf": {
+      "etfs": {
+        "510050": {
+          "name": "上证50",
+          "category": "large",
+          "close": 30.37,
+          "change_pct": -0.2,
+          "volume": 4173045
+        },
+        "510300": {
+          "name": "沪深300",
+          "category": "large",
+          "close": 47.29,
+          "change_pct": -0.4,
+          "volume": 9155827
+        },
+        "510500": {
+          "name": "中证500",
+          "category": "mid",
+          "close": 79.8,
+          "change_pct": -0.91,
+          "volume": 3508877
+        },
+        "512100": {
+          "name": "中证1000",
+          "category": "small",
+          "close": 31.28,
+          "change_pct": -0.89,
+          "volume": 9293039
+        },
+        "588000": {
+          "name": "科创50",
+          "category": "small",
+          "close": 18.12,
+          "change_pct": -1.15,
+          "volume": 40287224
+        },
+        "159915": {
+          "name": "创业板",
+          "category": "small",
+          "close": 36.04,
+          "change_pct": -0.47,
+          "volume": 15868009
+        }
+      },
+      "avg_large_cap_chg": -0.3,
+      "avg_small_cap_chg": -0.85,
+      "risk_spread": -0.55,
+      "risk_appetite": "risk_off",
+      "data_source": "pytdx"
+    },
+    "southbound": {
+      "channels": {
+        "sh2hk": {
+          "label": "沪市→港股通",
+          "recent_5d": [
+            {
+              "date": "2026-08-13",
+              "quota_remaining": 0.0
+            }
+          ]
+        },
+        "sz2hk": {
+          "label": "深市→港股通",
+          "recent_5d": []
+        }
+      },
+      "trend": "stable",
+      "note": "南向资金权重低，仅作为跨市场情绪辅助参考"
+    },
+    "sentiment": {
+      "market_sentiment": {
+        "score": 75.2,
+        "label": "🔥 极乐",
+        "advance_ratio_pct": 57.9,
+        "breadth_pct": 73.6,
+        "limit_up": 98,
+        "limit_down": 25,
+        "limit_ratio": 3.92,
+        "total_stocks": 7144,
+        "hot_sectors": [
+          {
+            "name": "房地产",
+            "chg": 3.4
+          },
+          {
+            "name": "通信",
+            "chg": 2.5
+          },
+          {
+            "name": "综合",
+            "chg": 2.2
+          }
+        ],
+        "cold_sectors": [
+          {
+            "name": "石油石化",
+            "chg": -0.5
+          },
+          {
+            "name": "煤炭",
+            "chg": -0.4
+          },
+          {
+            "name": "银行",
+            "chg": -0.1
+          }
+        ],
+        "_source": "EOD-parquet"
+      },
+      "cycle": {
+        "stage": "ferment",
+        "label": "📈 发酵期(推定)",
+        "position_scale": 0.8,
+        "sentiment_score": 75.2,
+        "limit_up": 0,
+        "limit_down": 0,
+        "advance_ratio": 57.9,
+        "breadth": 73.6,
+        "regime": "bull",
+        "advice": "二板定龙, 重仓出击"
+      },
+      "llm_sentiment": {
+        "score": 30,
+        "label": "乐观",
+        "reason": "新闻标题中MLCC龙头纳入指数、上海重磅发布、光通信龙头月内涨近80%、DeepSeek V4 Pro正式版等积极信息占主导，市场情绪偏乐观。"
+      },
+      "sentiment_confidence": {
+        "value": 55.0,
+        "status": "neutral",
+        "signals": [
+          "市场情绪过热",
+          "周期:📈 发酵期(推定)"
+        ]
+      },
+      "sentiment_extreme": {
+        "state": "hot",
+        "description": "情绪偏热，注意高潮切换",
+        "score": 75.2,
+        "limit_up": 98,
+        "limit_down": 25
+      },
+      "sentiment_velocity": {
+        "change_1d": -0.2,
+        "change_5d": null,
+        "note": "情绪稳定"
+      }
+    }
+  },
+  "summary": {
+    "risk_appetite": "contracting",
+    "confidence": 26.2,
+    "signals": [
+      "机构净卖出",
+      "资金避险",
+      "市场情绪过热",
+      "周期:📈 发酵期(推定)"
+    ],
+    "description": "市场资金环境偏冷，多指标指向谨慎",
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}

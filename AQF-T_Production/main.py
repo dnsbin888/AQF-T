@@ -50,6 +50,7 @@ def cmd_run(args):
             pipeline,
             phase=args.phase,
             date=args.date,
+            use_real_data=(args.source == "real"),
         )
         print(pipeline.daily_summary(state))
 
@@ -158,6 +159,12 @@ def main():
     parser.add_argument("--end")
     parser.add_argument("--cash", type=float)
     parser.add_argument("--seed", "-s", type=int, default=42)
+    parser.add_argument(
+        "--source",
+        choices=["sim", "real"],
+        default="sim",
+        help="数据源: sim(模拟器) | real(AKSHARE EOD)"
+    )
 
     args = parser.parse_args()
 

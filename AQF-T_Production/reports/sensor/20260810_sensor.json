@@ -1,0 +1,193 @@
+{
+  "report_type": "market_sensor",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-10",
+  "timestamp": "2026-08-10 15:30:09",
+  "sensors": {
+    "margin": {
+      "total_balance": 26142.62,
+      "total_buy_amount": 2549.75,
+      "balance_change_5d_pct": 1.29,
+      "buy_change_5d_pct": 4.75,
+      "balance_change_20d_pct": -10.28,
+      "trend": "stable",
+      "strength_score": 44.9,
+      "latest_date": "2026-08-07"
+    },
+    "lhb": {
+      "error": "LHBSensor failed: HTTPSConnectionPool(host='vip.stock.finance.sina.com.cn', port=443): Max retries exceeded with url: /q/go.php/vLHBData/kind/jgmx/index.phtml?p=5 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))"
+    },
+    "etf": {
+      "etfs": {
+        "510050": {
+          "name": "上证50",
+          "category": "large",
+          "close": 30.75,
+          "change_pct": 0.29,
+          "volume": 3211808
+        },
+        "510300": {
+          "name": "沪深300",
+          "category": "large",
+          "close": 47.59,
+          "change_pct": 0.17,
+          "volume": 5610851
+        },
+        "510500": {
+          "name": "中证500",
+          "category": "mid",
+          "close": 80.37,
+          "change_pct": 0.63,
+          "volume": 3222276
+        },
+        "512100": {
+          "name": "中证1000",
+          "category": "small",
+          "close": 31.29,
+          "change_pct": 0.58,
+          "volume": 14818637
+        },
+        "588000": {
+          "name": "科创50",
+          "category": "small",
+          "close": 18.35,
+          "change_pct": -0.27,
+          "volume": 34364398
+        },
+        "159915": {
+          "name": "创业板",
+          "category": "small",
+          "close": 35.59,
+          "change_pct": -0.75,
+          "volume": 16580700
+        }
+      },
+      "avg_large_cap_chg": 0.23,
+      "avg_small_cap_chg": 0.05,
+      "risk_spread": -0.18,
+      "risk_appetite": "neutral",
+      "data_source": "pytdx"
+    },
+    "southbound": {
+      "channels": {
+        "sh2hk": {
+          "label": "沪市→港股通",
+          "recent_5d": [
+            {
+              "date": "2026-08-10",
+              "quota_remaining": 0.0
+            }
+          ]
+        },
+        "sz2hk": {
+          "label": "深市→港股通",
+          "recent_5d": []
+        }
+      },
+      "trend": "stable",
+      "note": "南向资金权重低，仅作为跨市场情绪辅助参考"
+    },
+    "sentiment": {
+      "market_sentiment": {
+        "score": 76.0,
+        "label": "🐂 乐观",
+        "advance_ratio_pct": 74.5,
+        "breadth_pct": 74.5,
+        "limit_up": 99,
+        "limit_down": 5,
+        "limit_ratio": 2.03,
+        "total_stocks": 5205,
+        "hot_sectors": [
+          {
+            "limit_up": 6,
+            "name": "电网设备"
+          },
+          {
+            "limit_up": 5,
+            "name": "医疗服务"
+          },
+          {
+            "limit_up": 5,
+            "name": "化学制药"
+          },
+          {
+            "limit_up": 5,
+            "name": "化学制品"
+          },
+          {
+            "limit_up": 4,
+            "name": "电力"
+          }
+        ],
+        "cold_sectors": [
+          {
+            "limit_down": 1,
+            "name": "水泥"
+          },
+          {
+            "limit_down": 1,
+            "name": "消费电子"
+          },
+          {
+            "limit_down": 1,
+            "name": "服装家纺"
+          }
+        ],
+        "_source": "V2-realtime",
+        "_news_time": "15:30",
+        "_news_label": "📰 中性"
+      },
+      "cycle": {
+        "stage": "ferment",
+        "label": "📈 发酵期(推定)",
+        "position_scale": 0.8,
+        "sentiment_score": 70.9,
+        "limit_up": 0,
+        "limit_down": 0,
+        "advance_ratio": 48.4,
+        "breadth": 71.9,
+        "regime": "bull",
+        "advice": "二板定龙, 重仓出击"
+      },
+      "llm_sentiment": {
+        "score": 65,
+        "label": "乐观",
+        "reason": "新闻标题中多次出现“申购”、“大涨”、“反攻”、“百舸争流”、“利好”、“买入”等积极词汇，且涉及AI、创新药、外资加仓等热门题材，整体市场情绪偏向乐观。"
+      },
+      "sentiment_confidence": {
+        "value": 55.0,
+        "status": "neutral",
+        "signals": [
+          "市场情绪过热",
+          "周期:📈 发酵期(推定)"
+        ]
+      },
+      "sentiment_extreme": {
+        "state": "hot",
+        "description": "情绪偏热，注意高潮切换",
+        "score": 76.0,
+        "limit_up": 99,
+        "limit_down": 5
+      },
+      "sentiment_velocity": {
+        "change_1d": 26.0,
+        "change_5d": null,
+        "note": "情绪急涨(+26.0)，注意加速赶顶"
+      }
+    }
+  },
+  "summary": {
+    "risk_appetite": "mixed",
+    "confidence": 51.7,
+    "signals": [
+      "市场情绪过热",
+      "周期:📈 发酵期(推定)",
+      "情绪急涨(+26.0)，注意加速赶顶",
+      "LLM:乐观(65)"
+    ],
+    "description": "市场资金信号分化，方向不明确",
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}

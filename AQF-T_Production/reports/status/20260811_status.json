@@ -1,0 +1,27 @@
+{
+  "date": "20260811",
+  "timestamp": "2026-08-11T17:08:52.927560",
+  "source": "real",
+  "success": true,
+  "data_source": "AKSHARE_EOD",
+  "regime": {
+    "phase": "高潮期",
+    "score": 143,
+    "mode": "normal",
+    "path_a": true,
+    "path_b": true,
+    "max_position_pct": 0.5
+  },
+  "candidates": 2,
+  "signals": 2,
+  "fills": 2,
+  "rejected": 0,
+  "errors": [],
+  "warnings": [],
+  "account": {
+    "cash": 925418.08,
+    "positions": 2,
+    "total_value": 999980.61,
+    "total_trades": 2
+  }
+}

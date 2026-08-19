@@ -1,0 +1,166 @@
+{
+  "report_type": "market_sensor",
+  "version": "1.0",
+  "status": "shadow",
+  "date": "2026-08-17",
+  "timestamp": "2026-08-17 15:30:25",
+  "sensors": {
+    "margin": {
+      "total_balance": 26395.29,
+      "total_buy_amount": 2003.36,
+      "balance_change_5d_pct": 0.97,
+      "buy_change_5d_pct": -21.43,
+      "balance_change_20d_pct": -3.99,
+      "trend": "stable",
+      "strength_score": 49.9,
+      "latest_date": "2026-08-14"
+    },
+    "lhb": {
+      "error": "LHBSensor failed: HTTPSConnectionPool(host='vip.stock.finance.sina.com.cn', port=443): Max retries exceeded with url: /q/go.php/vLHBData/kind/ggtj/index.phtml?last=5&p=1 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))"
+    },
+    "etf": {
+      "etfs": {
+        "510050": {
+          "name": "上证50",
+          "category": "large",
+          "close": 30.52,
+          "change_pct": 1.03,
+          "volume": 4315707
+        },
+        "510300": {
+          "name": "沪深300",
+          "category": "large",
+          "close": 48.01,
+          "change_pct": 1.59,
+          "volume": 8356561
+        },
+        "510500": {
+          "name": "中证500",
+          "category": "mid",
+          "close": 81.97,
+          "change_pct": 2.49,
+          "volume": 2791381
+        },
+        "512100": {
+          "name": "中证1000",
+          "category": "small",
+          "close": 32.25,
+          "change_pct": 2.54,
+          "volume": 8802898
+        },
+        "588000": {
+          "name": "科创50",
+          "category": "small",
+          "close": 18.88,
+          "change_pct": 4.08,
+          "volume": 42269337
+        },
+        "159915": {
+          "name": "创业板",
+          "category": "small",
+          "close": 37.56,
+          "change_pct": 3.05,
+          "volume": 14130469
+        }
+      },
+      "avg_large_cap_chg": 1.31,
+      "avg_small_cap_chg": 3.04,
+      "risk_spread": 1.73,
+      "risk_appetite": "recovering",
+      "data_source": "pytdx"
+    },
+    "southbound": {
+      "error": "SouthboundSensor failed: HTTPSConnectionPool(host='push2.eastmoney.com', port=443): Max retries exceeded with url: /api/qt/kamt.kline/get?fields1=f1%2Cf2&fields2=f51%2Cf52&klt=101&lmt=10&secid=1.000002 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))"
+    },
+    "sentiment": {
+      "market_sentiment": {
+        "score": 78.6,
+        "label": "🔥 极乐",
+        "advance_ratio_pct": 56.0,
+        "breadth_pct": 87.2,
+        "limit_up": 100,
+        "limit_down": 9,
+        "limit_ratio": 11.11,
+        "total_stocks": 8731,
+        "hot_sectors": [
+          {
+            "name": "房地产",
+            "chg": 3.4
+          },
+          {
+            "name": "通信",
+            "chg": 2.5
+          },
+          {
+            "name": "综合",
+            "chg": 2.2
+          }
+        ],
+        "cold_sectors": [
+          {
+            "name": "石油石化",
+            "chg": -0.5
+          },
+          {
+            "name": "煤炭",
+            "chg": -0.4
+          },
+          {
+            "name": "银行",
+            "chg": -0.1
+          }
+        ],
+        "_source": "EOD-parquet"
+      },
+      "cycle": {
+        "stage": "ferment",
+        "label": "📈 发酵期(推定)",
+        "position_scale": 0.8,
+        "sentiment_score": 78.6,
+        "limit_up": 0,
+        "limit_down": 0,
+        "advance_ratio": 56.0,
+        "breadth": 87.2,
+        "regime": "bull",
+        "advice": "二板定龙, 重仓出击"
+      },
+      "llm_sentiment": {
+        "score": 50,
+        "label": "中性",
+        "reason": "新闻标题中包含了市场变化的信息，如AI技术发展、IPO情况、市场竞争等，但没有明显的乐观或悲观情绪，整体呈现中性态度。"
+      },
+      "sentiment_confidence": {
+        "value": 55.0,
+        "status": "neutral",
+        "signals": [
+          "市场情绪过热",
+          "周期:📈 发酵期(推定)"
+        ]
+      },
+      "sentiment_extreme": {
+        "state": "hot",
+        "description": "情绪偏热，注意高潮切换",
+        "score": 78.6,
+        "limit_up": 100,
+        "limit_down": 9
+      },
+      "sentiment_velocity": {
+        "change_1d": 1.7,
+        "change_5d": 3.2,
+        "note": "情绪稳定"
+      }
+    }
+  },
+  "summary": {
+    "risk_appetite": "expanding",
+    "confidence": 68.3,
+    "signals": [
+      "风险偏好恢复",
+      "市场情绪过热",
+      "周期:📈 发酵期(推定)"
+    ],
+    "description": "市场资金环境偏暖，杠杆/机构/风险偏好共振向上",
+    "note": "AVP Shadow — 仅供参考，不参与交易决策"
+  },
+  "warnings": []
+}
