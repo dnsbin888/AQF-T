@@ -1,10 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
-chcp 65001 >nul 2>&1
-title AQF-T 决策大脑 v1.0
+title AQF-T One-Click Launcher v1.1 (port 8081)
 
 :: ============================================================
-::  AQF-T One-Click Launcher v1.0 - Dashboard + System Check + Data Refresh
+::  AQF-T One-Click Launcher v1.1 - ASCII only (codepage-safe)
+::  Dashboard + System Check + optional Data Refresh
+::  Port 8081 (QianLong owns 8080 - launch.bat never touches it)
 :: ============================================================
 
 set "PYTHON=C:\Program Files\Python312\python.exe"
@@ -23,13 +24,13 @@ if %errorlevel% neq 0 (
 
 echo.
 echo   ============================================================
-echo     [*] AQF-T 决策大脑 v1.0 — Unified Launcher
+echo     [*] AQF-T Unified Launcher v1.1 - ASCII-safe
 echo   ============================================================
 echo.
 echo     Mode: %~1
 echo.
 
-:: -- Step 1: Kill old processes --
+:: -- Step 1: Kill only AQF-T processes on port 8081 --
 echo   [1/6] Stopping old processes...
 for /f "tokens=5" %%a in ('netstat -ano 2^>nul ^| findstr ":%DASHBOARD_PORT% " ^| findstr LISTENING') do (
     echo         Killing PID %%a (port %DASHBOARD_PORT%)
@@ -47,7 +48,7 @@ echo   [3/6] Running system check...
 cd /d "%AQFT_DIR%"
 "%PYTHON%" check.py >nul 2>&1
 if %errorlevel% neq 0 (
-    echo         [WARN] Some checks failed — see check_result.txt
+    echo         [WARN] Some checks failed - see check_result.txt
     type check_result.txt 2>nul
 ) else (
     echo         [OK] All modules pass
@@ -70,10 +71,10 @@ if errorlevel 1 (
 
 :step5
 
-:: -- Step 5: Start Dashboard --
+:: -- Step 5: Start Dashboard (same construct as main launcher Step 9) --
 echo   [5/6] Starting Dashboard on port %DASHBOARD_PORT%...
 set "PYTHONUTF8=1"
-start "AQFT-Dashboard" cmd /c "chcp 65001 >nul && title AQF-T Dashboard :%DASHBOARD_PORT% && set PYTHONUTF8=1 && cd /d %AQFT_DIR% && "%PYTHON%" dashboard.py && pause"
+start "AQF-T-Dashboard" /min /D "%AQFT_DIR%" "%PYTHON%" -X utf8 dashboard.py
 
 :: -- Step 6: Wait for ready --
 echo   [6/6] Waiting for Dashboard (up to 30s)...
@@ -100,7 +101,7 @@ if %READY% equ 1 (
 :: -- Done --
 echo.
 echo   ============================================================
-echo     [*] AQF-T 决策大脑 v1.0 — Ready
+echo     [*] AQF-T Dashboard Ready
 echo   ============================================================
 echo.
 echo     Dashboard:  http://localhost:%DASHBOARD_PORT%
